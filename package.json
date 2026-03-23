@@ -1,0 +1,10 @@
+{
+  "name": "aguia-gestao",
+  "version": "1.0.0",
+  "description": "ÁGUIA — Sistema de Gestão Operacional",
+  "private": true,
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  }
+}
