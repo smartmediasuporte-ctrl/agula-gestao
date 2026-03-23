@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aguia-v1';
+const CACHE_NAME = 'aguia-v2';
 const ASSETS = ['/', '/index.html'];
 
 self.addEventListener('install', (e) => {
