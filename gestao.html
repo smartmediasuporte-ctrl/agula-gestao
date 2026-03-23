@@ -1794,10 +1794,10 @@ if (sessionStorage.getItem('aguia_auth') === '1') {
       <span class="icon">◉</span> Fechamento
     </button>
     <button class="nav-item" onclick="navigate('historico')" data-page="historico">
-      <span class="icon">☰</span> Histórico
+      <span class="icon">&mdash;</span> Histórico
     </button>
     <button class="nav-item" onclick="navigate('conselho')" data-page="conselho">
-      <span class="icon">🏛️</span> Conselho Digital
+      <span class="icon">&mdash;</span> Conselho Digital
     </button>
 
     <div class="nav-section">Empresas</div>
@@ -2014,19 +2014,19 @@ let DATA = loadData();
 // PARTIDO NOVO — ÁREAS OPERACIONAIS
 // ══════════════════════════════════════════════════════════
 const PN_AREAS = [
-  { id: 'comunicacao_whatsapp', nome: 'Comunicação WhatsApp', icon: '💬',
+  { id: 'comunicacao_whatsapp', nome: 'Comunicação WhatsApp', icon: '&bull;',
     cor: '#25D366',
     desc: '4 grupos: Filiados, Mulheres, Juventude, Comunidade NOVO DF' },
-  { id: 'emails_institucionais', nome: 'Emails Institucionais', icon: '📧',
+  { id: 'emails_institucionais', nome: 'Emails Institucionais', icon: '&bull;',
     cor: '#4285F4',
     desc: 'Agenda semanal, Relatório Mensal, Erratas via Google Forms' },
-  { id: 'gestao_filiados', nome: 'Gestão de Filiados', icon: '👥',
+  { id: 'gestao_filiados', nome: 'Gestão de Filiados', icon: '&bull;',
     cor: '#9333EA',
     desc: 'Boas-vindas, cobranças, gestao.novo.org.br — ciclo quinzenal' },
-  { id: 'eventos', nome: 'Eventos', icon: '📅',
+  { id: 'eventos', nome: 'Eventos', icon: '&bull;',
     cor: '#F59E0B',
     desc: 'Reunião Filiados, Novo se Apresenta, Grupos de Estudos, ad hoc' },
-  { id: 'administrativo', nome: 'Administrativo / Contas', icon: '🏛️',
+  { id: 'administrativo', nome: 'Administrativo / Contas', icon: '&bull;',
     cor: '#EF4444',
     desc: 'Contas da sede (Caesb, Claro), demandas do diretório' },
 ];
@@ -2244,7 +2244,7 @@ function toast(msg, type = 'success') {
   const container = document.getElementById('toasts');
   const el = document.createElement('div');
   el.className = `toast ${type}`;
-  el.innerHTML = `${type === 'success' ? '✓' : '✕'} ${msg}`;
+  el.innerHTML = `${type === 'success' ? '✓' : '&times;'} ${msg}`;
   container.appendChild(el);
   setTimeout(() => el.remove(), 3000);
 }
@@ -2537,7 +2537,7 @@ function renderReunioesPanel() {
   today.setHours(0,0,0,0);
 
   let html = '<div class="reunioes-panel">';
-  html += '<div class="reunioes-panel-title">📅 Reuniões da Semana</div>';
+  html += '<div class="reunioes-panel-title">Reuni&otilde;es da Semana</div>';
   html += '<div class="reunioes-grid">';
 
   // Render DOM(0) SEG(1) TER(2) QUA(3) QUI(4) SEX(5) SAB(6)
@@ -2926,7 +2926,7 @@ function openSmClienteModal(id) {
   const modalHtml = `
     <div class="modal-overlay" onclick="closeSmModal(event)">
       <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header"><div class="modal-title">${title}</div><button class="modal-close" onclick="document.querySelector('.modal-overlay').remove()">✕</button></div>
+        <div class="modal-header"><div class="modal-title">${title}</div><button class="modal-close" onclick="document.querySelector('.modal-overlay').remove()">&times;</button></div>
         <div class="modal-body">
           <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="smCliNome" value="${cli ? cli.nome : ''}"></div>
           <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="smCliTipo"><option value="fixo" ${cli && cli.tipo === 'fixo' ? 'selected' : ''}>Fixo</option><option value="pontual" ${cli && cli.tipo === 'pontual' ? 'selected' : ''}>Pontual</option></select></div>
@@ -2975,7 +2975,7 @@ function openSmFinanceiroModal(id) {
   const modalHtml = `
     <div class="modal-overlay" onclick="closeSmModal(event)">
       <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header"><div class="modal-title">${title}</div><button class="modal-close" onclick="document.querySelector('.modal-overlay').remove()">✕</button></div>
+        <div class="modal-header"><div class="modal-title">${title}</div><button class="modal-close" onclick="document.querySelector('.modal-overlay').remove()">&times;</button></div>
         <div class="modal-body">
           <div class="form-group"><label class="form-label">Mês (ex: 2026-03)</label><input class="form-input" id="smFinMes" type="month" value="${rec ? rec.mes || '' : ''}"></div>
           <div class="form-group"><label class="form-label">Receita Bruta (R$)</label><input class="form-input" id="smFinReceita" type="number" step="0.01" value="${rec ? rec.receita_bruta || '' : ''}"></div>
@@ -3029,7 +3029,7 @@ function openSmDocModal(id) {
   const modalHtml = `
     <div class="modal-overlay" onclick="closeSmModal(event)">
       <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header"><div class="modal-title">${title}</div><button class="modal-close" onclick="document.querySelector('.modal-overlay').remove()">✕</button></div>
+        <div class="modal-header"><div class="modal-title">${title}</div><button class="modal-close" onclick="document.querySelector('.modal-overlay').remove()">&times;</button></div>
         <div class="modal-body">
           <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="smDocTitulo" value="${doc ? doc.titulo : ''}"></div>
           <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="smDocTipo"><option value="proposta" ${doc && doc.tipo === 'proposta' ? 'selected' : ''}>Proposta</option><option value="contrato" ${doc && doc.tipo === 'contrato' ? 'selected' : ''}>Contrato</option><option value="relatório" ${doc && doc.tipo === 'relatório' ? 'selected' : ''}>Relatório</option></select></div>
@@ -3136,7 +3136,7 @@ function renderSmartMediaClientes() {
   let filtered = statusFilter === 'todos' ? clientes : clientes.filter(c => c.status_contrato === statusFilter);
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">👤</div><p>Nenhum cliente cadastrado.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum cliente cadastrado.</p></div>`;
   } else {
     filtered.forEach(c => {
       html += `<div class="sm-client-card">
@@ -3151,8 +3151,8 @@ function renderSmartMediaClientes() {
           </div>
         </div>
         <div style="display:flex;gap:4px;flex-shrink:0">
-          <button class="task-action-btn" onclick="openSmClienteModal('${c.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteSmCliente('${c.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openSmClienteModal('${c.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteSmCliente('${c.id}')" title="Excluir">&times;</button>
         </div>
       </div>`;
     });
@@ -3172,7 +3172,7 @@ function renderSmartMediaTarefas(tasks) {
 
   const filtered = statusFilter === 'todos' ? tasks : tasks.filter(t => t.status === statusFilter);
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">✅</div><p>Nenhuma tarefa nesta semana.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhuma tarefa nesta semana.</p></div>`;
   } else {
     const groups = { pendente: [], em_andamento: [], bloqueado: [], concluido: [] };
     filtered.forEach(t => { if (groups[t.status]) groups[t.status].push(t); });
@@ -3196,7 +3196,7 @@ function renderSmartMediaFinanceiro() {
   </div>`;
 
   if (registros.length === 0) {
-    html += `<div class="empty-state"><div class="icon">💰</div><p>Nenhum registro financeiro.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum registro financeiro.</p></div>`;
   } else {
     registros.forEach(r => {
       const saude = r.receita_bruta > 0 ? Math.min(100, Math.round((r.lucro_liquido / r.receita_bruta) * 100)) : 0;
@@ -3206,8 +3206,8 @@ function renderSmartMediaFinanceiro() {
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <div class="sm-month-title">${r.mes}</div>
           <div style="display:flex;gap:4px">
-            <button class="task-action-btn" onclick="openSmFinanceiroModal('${r.id}')" title="Editar">✎</button>
-            <button class="task-action-btn" onclick="deleteSmFinanceiro('${r.id}')" title="Excluir">✕</button>
+            <button class="task-action-btn" onclick="openSmFinanceiroModal('${r.id}')" title="Editar">&starf;</button>
+            <button class="task-action-btn" onclick="deleteSmFinanceiro('${r.id}')" title="Excluir">&times;</button>
           </div>
         </div>
         <div class="sm-finance-grid">
@@ -3232,7 +3232,7 @@ function renderSmartMediaDocumentos() {
   </div>`;
 
   if (docs.length === 0) {
-    html += `<div class="empty-state"><div class="icon">📁</div><p>Nenhum documento registrado.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum documento registrado.</p></div>`;
   } else {
     docs.forEach(d => {
       const clientes = loadSmClientes();
@@ -3245,8 +3245,8 @@ function renderSmartMediaDocumentos() {
             ${cli ? cli.nome : ''} ${d.data ? `· ${new Date(d.data + 'T12:00').toLocaleDateString('pt-BR')}` : ''}
           </div>
         </div>
-        <button class="task-action-btn" onclick="openSmDocModal('${d.id}')" title="Editar">✎</button>
-        <button class="task-action-btn" onclick="deleteSmDoc('${d.id}')" title="Excluir">✕</button>
+        <button class="task-action-btn" onclick="openSmDocModal('${d.id}')" title="Editar">&starf;</button>
+        <button class="task-action-btn" onclick="deleteSmDoc('${d.id}')" title="Excluir">&times;</button>
       </div>`;
     });
   }
@@ -3258,10 +3258,10 @@ function renderSmartMediaDocumentos() {
 // ══════════════════════════════════════════════════════════
 
 const ITO_AREAS = [
-  { id: 'conteudo',    nome: 'Conteúdo',    icon: '🎬', cor: '#e11d48', desc: 'Produção e publicação de vídeos (TikTok + YouTube)' },
-  { id: 'comercial',   nome: 'Comercial',   icon: '🤝', cor: '#f59e0b', desc: 'Prospecção e gestão de parcerias com marcas' },
-  { id: 'equipamento', nome: 'Equipamento', icon: '📷', cor: '#6366f1', desc: 'Câmeras, equipamentos de captação' },
-  { id: 'instagram',   nome: 'Instagram',   icon: '📱', cor: '#ec4899', desc: 'Estratégia e execução do canal institucional' },
+  { id: 'conteudo',    nome: 'Conteúdo',    icon: '&bull;', cor: '#e11d48', desc: 'Produção e publicação de vídeos (TikTok + YouTube)' },
+  { id: 'comercial',   nome: 'Comercial',   icon: '&bull;', cor: '#f59e0b', desc: 'Prospecção e gestão de parcerias com marcas' },
+  { id: 'equipamento', nome: 'Equipamento', icon: '&bull;', cor: '#6366f1', desc: 'Câmeras, equipamentos de captação' },
+  { id: 'instagram',   nome: 'Instagram',   icon: '&bull;', cor: '#ec4899', desc: 'Estratégia e execução do canal institucional' },
 ];
 
 let itoExpandedAreas = {};
@@ -3293,7 +3293,7 @@ function renderInTheOfficeAreas(tasks) {
   });
   const unclassifiedCount = tasks.filter(t => !classifyITOTask(t)).length;
   if (unclassifiedCount > 0) {
-    html += `<div class="ito-area-chip"><span>📌</span><span style="font-size:12px">Geral</span><span class="ito-chip-count">${unclassifiedCount}</span></div>`;
+    html += `<div class="ito-area-chip"><span>&bull;</span><span style="font-size:12px">Geral</span><span class="ito-chip-count">${unclassifiedCount}</span></div>`;
   }
   html += '</div>';
 
@@ -3351,7 +3351,7 @@ function renderInTheOfficeAreas(tasks) {
     const expanded = itoExpandedAreas['geral'] !== false;
     html += `<div class="pn-area-card" style="margin-bottom:12px">
       <div class="pn-area-header" style="--pn-area-color:var(--text-muted)" onclick="toggleITOArea('geral')">
-        <div class="pn-area-title"><span class="area-icon">📌</span> Geral</div>
+        <div class="pn-area-title"><span class="area-icon">&bull;</span> Geral</div>
         <div class="pn-area-badges">
           <span class="pn-badge pn-badge-count">${unclassified.length}</span>
           <span style="font-size:16px;color:var(--text-muted);transition:transform 0.2s;${expanded ? '' : 'transform:rotate(-90deg)'}">▾</span>
@@ -3371,12 +3371,12 @@ function renderInTheOfficeAreas(tasks) {
 // ══════════════════════════════════════════════════════════
 
 const ZELAR_AREAS = [
-  { id: 'produto',     nome: 'Produto & Tecnologia',    icon: '💻', cor: '#6366f1', desc: 'App, dev, MVP' },
-  { id: 'prestadores', nome: 'Prestadores',             icon: '👷', cor: '#14b8a6', desc: 'Recrutamento, onboarding, base fundadora' },
-  { id: 'marketing',   nome: 'Marketing & Conteúdo',    icon: '📣', cor: '#f59e0b', desc: 'Instagram, criativos, influenciadores' },
-  { id: 'operacao',    nome: 'Operação',                icon: '⚙️',  cor: '#64748b', desc: 'Processos, CRM, fluxos internos' },
-  { id: 'comercial',   nome: 'Comercial & Parcerias',   icon: '🤝', cor: '#22c55e', desc: 'B2B, condomínios, empresas' },
-  { id: 'financeiro',  nome: 'Financeiro & Jurídico',   icon: '⚖️',  cor: '#ef4444', desc: 'Contratos, CNPJ, caixa' },
+  { id: 'produto',     nome: 'Produto & Tecnologia',    icon: '&bull;', cor: '#6366f1', desc: 'App, dev, MVP' },
+  { id: 'prestadores', nome: 'Prestadores',             icon: '&bull;', cor: '#14b8a6', desc: 'Recrutamento, onboarding, base fundadora' },
+  { id: 'marketing',   nome: 'Marketing & Conteúdo',    icon: '&bull;', cor: '#f59e0b', desc: 'Instagram, criativos, influenciadores' },
+  { id: 'operacao',    nome: 'Operação',                icon: '&bull;',  cor: '#64748b', desc: 'Processos, CRM, fluxos internos' },
+  { id: 'comercial',   nome: 'Comercial & Parcerias',   icon: '&bull;', cor: '#22c55e', desc: 'B2B, condomínios, empresas' },
+  { id: 'financeiro',  nome: 'Financeiro & Jurídico',   icon: '&bull;',  cor: '#ef4444', desc: 'Contratos, CNPJ, caixa' },
 ];
 
 let zelarExpandedAreas = {};
@@ -3410,7 +3410,7 @@ function renderZelarAreas(tasks) {
   });
   const unclassifiedCount = tasks.filter(t => !classifyZelarTask(t)).length;
   if (unclassifiedCount > 0) {
-    html += `<div class="ito-area-chip"><span>📌</span><span style="font-size:12px">Geral</span><span class="ito-chip-count">${unclassifiedCount}</span></div>`;
+    html += `<div class="ito-area-chip"><span>&bull;</span><span style="font-size:12px">Geral</span><span class="ito-chip-count">${unclassifiedCount}</span></div>`;
   }
   html += '</div>';
 
@@ -3468,7 +3468,7 @@ function renderZelarAreas(tasks) {
     const expanded = zelarExpandedAreas['geral'] !== false;
     html += `<div class="pn-area-card" style="margin-bottom:12px">
       <div class="pn-area-header" style="--pn-area-color:var(--text-muted)" onclick="toggleZelarArea('geral')">
-        <div class="pn-area-title"><span class="area-icon">📌</span> Geral</div>
+        <div class="pn-area-title"><span class="area-icon">&bull;</span> Geral</div>
         <div class="pn-area-badges">
           <span class="pn-badge pn-badge-count">${unclassified.length}</span>
           <span style="font-size:16px;color:var(--text-muted);transition:transform 0.2s;${expanded ? '' : 'transform:rotate(-90deg)'}">▾</span>
@@ -3491,11 +3491,11 @@ function renderZelarAreas(tasks) {
 const HRM_PIPELINE_STAGES = ['lead', 'contato_feito', 'reuniao_agendada', 'reuniao_realizada', 'proposta_enviada', 'cliente'];
 const HRM_PIPELINE_LABELS = { lead: 'Lead', contato_feito: 'Contato Feito', reuniao_agendada: 'Reunião Agendada', reuniao_realizada: 'Reunião Realizada', proposta_enviada: 'Proposta Enviada', cliente: 'Cliente' };
 const HRM_AREAS = [
-  { id: 'captacao',    nome: 'Captação',    icon: '🎯', cor: '#2563eb' },
-  { id: 'relatorios',  nome: 'Relatórios',  icon: '📋', cor: '#7c3aed' },
-  { id: 'operacional', nome: 'Operacional', icon: '⚙️',  cor: '#059669' },
-  { id: 'marketing',   nome: 'Marketing',   icon: '📣', cor: '#d97706' },
-  { id: 'financeiro',  nome: 'Financeiro',  icon: '💰', cor: '#dc2626' },
+  { id: 'captacao',    nome: 'Captação',    icon: '&bull;', cor: '#2563eb' },
+  { id: 'relatorios',  nome: 'Relatórios',  icon: '&bull;', cor: '#7c3aed' },
+  { id: 'operacional', nome: 'Operacional', icon: '&bull;',  cor: '#059669' },
+  { id: 'marketing',   nome: 'Marketing',   icon: '&bull;', cor: '#d97706' },
+  { id: 'financeiro',  nome: 'Financeiro',  icon: '&bull;', cor: '#dc2626' },
 ];
 
 // ── HRM Data Layer ──
@@ -3685,7 +3685,7 @@ function renderHrmDashboard(tasks) {
   html += '<div class="hrm-panels">';
 
   // Left: Pipeline
-  html += '<div class="hrm-panel"><div class="hrm-panel-title">🎯 Pipeline de Captação</div>';
+  html += '<div class="hrm-panel"><div class="hrm-panel-title">Pipeline de Captação</div>';
   const sortedProspects = prospects.sort((a, b) => new Date(b.data_criacao) - new Date(a.data_criacao));
   if (sortedProspects.length === 0) {
     html += '<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:20px 0">Nenhum prospect no pipeline</div>';
@@ -3752,8 +3752,8 @@ function renderHrmClientes() {
         <span class="hrm-status-badge hrm-st-ativo">Ativo</span>
         <span class="hrm-perfil-badge hrm-perfil-${c.perfil_investidor}">${c.perfil_investidor}</span>
         ${c.aum > 0 ? `<span style="font-size:13px;font-weight:600;color:#4ade80">${formatAUM(c.aum)}</span>` : ''}
-        <button class="task-action-btn" onclick="openHrmClienteModal('${c.id}')" title="Editar">✎</button>
-        <button class="task-action-btn" onclick="deleteHrmCliente('${c.id}')" title="Excluir">✕</button>
+        <button class="task-action-btn" onclick="openHrmClienteModal('${c.id}')" title="Editar">&starf;</button>
+        <button class="task-action-btn" onclick="deleteHrmCliente('${c.id}')" title="Excluir">&times;</button>
       </div>`;
     });
   }
@@ -3777,8 +3777,8 @@ function renderHrmClientes() {
         <td><span class="hrm-pipeline-days ${overdue ? 'overdue' : ''}">${dias}d</span></td>
         <td style="display:flex;gap:4px">
           <button class="hrm-advance-btn" onclick="avancarEstagioPipeline('${p.id}')">Avançar ▸</button>
-          <button class="task-action-btn" onclick="openHrmClienteModal('${p.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteHrmCliente('${p.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openHrmClienteModal('${p.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteHrmCliente('${p.id}')" title="Excluir">&times;</button>
         </td>
       </tr>`;
     });
@@ -3793,7 +3793,7 @@ function renderHrmClientes() {
       html += `<div class="hrm-client-card" style="opacity:0.6">
         <div style="flex:1"><span style="font-weight:600;font-size:13px">${c.nome}</span></div>
         <span class="hrm-status-badge hrm-st-${c.status}">${c.status}</span>
-        <button class="task-action-btn" onclick="openHrmClienteModal('${c.id}')">✎</button>
+        <button class="task-action-btn" onclick="openHrmClienteModal('${c.id}')">&starf;</button>
       </div>`;
     });
   }
@@ -3853,7 +3853,7 @@ function renderHrmTarefas(tasks) {
     const expanded = hrmExpandedAreas['sem_area'] !== false;
     html += `<div class="hrm-area-card">
       <div class="hrm-area-header" style="border-left:4px solid var(--text-muted)" onclick="toggleHrmArea('sem_area')">
-        <div class="hrm-area-title"><span style="font-size:18px">📌</span> Sem Área Definida</div>
+        <div class="hrm-area-title"><span style="font-size:18px">&bull;</span> Sem Área Definida</div>
         <div style="display:flex;gap:6px;align-items:center">
           <span class="pn-badge pn-badge-count">${unclassified.length}</span>
           <span style="font-size:16px;color:var(--text-muted);transition:transform 0.2s;${expanded ? '' : 'transform:rotate(-90deg)'}">▾</span>
@@ -3901,7 +3901,7 @@ function renderHrmRelatorios() {
   // Global
   html += `<div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">🌍 Relatório Global</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">&bull; Relatório Global</div>
       <button class="btn btn-primary" style="font-size:11px;padding:5px 12px" onclick="openHrmRelatorioModal(null,'global')">+ Nova Edição</button>
     </div>`;
   if (globais.length === 0) {
@@ -3950,7 +3950,7 @@ function renderHrmAgenda() {
   });
 
   if (filtered.length === 0) {
-    html += '<div class="empty-state"><div class="icon">📅</div><p>Nenhum agendamento encontrado.</p></div>';
+    html += '<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum agendamento encontrado.</p></div>';
   } else {
     Object.entries(grouped).forEach(([date, items]) => {
       const isToday = date === today;
@@ -3976,8 +3976,8 @@ function renderHrmAgenda() {
           </div>
           <span class="hrm-agenda-badge hrm-ag-${a.status}">${a.status}</span>
           ${a.status === 'agendado' ? `<button class="hrm-advance-btn" onclick="event.stopPropagation();marcarHrmRealizado('${a.id}')">&check; Realizado</button>` : ''}
-          <button class="task-action-btn" onclick="openHrmAgendaModal('${a.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteHrmAgendamento('${a.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openHrmAgendaModal('${a.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteHrmAgendamento('${a.id}')" title="Excluir">&times;</button>
         </div>`;
       });
       html += '</div>';
@@ -4332,12 +4332,12 @@ function renderHaloDashboard(tasks) {
 
   if (pendingTasks.length > 0 || nextAgendamentos.length > 0) {
     html += `<div class="halo-next-actions">
-      <div class="action-title">⚡ Próximas Ações Pendentes</div>`;
+      <div class="action-title">Pr&oacute;ximas A&ccedil;&otilde;es Pendentes</div>`;
 
     nextAgendamentos.forEach(ag => {
       const dataFmt = ag.data ? new Date(ag.data + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' }) : '';
       html += `<div class="halo-action-item">
-        <span style="font-size:14px">📅</span>
+        <span style="font-size:14px">&bull;</span>
         <span style="flex:1;font-weight:500">${ag.titulo} — ${ag.contato || ''}</span>
         <span style="font-size:12px;color:var(--text-muted)">${dataFmt} ${ag.hora || ''}</span>
       </div>`;
@@ -4345,7 +4345,7 @@ function renderHaloDashboard(tasks) {
 
     pendingTasks.forEach(t => {
       html += `<div class="halo-action-item">
-        <span style="font-size:14px">✅</span>
+        <span style="font-size:14px">&check;</span>
         <span style="flex:1;font-weight:500">${t.titulo}</span>
         <span class="task-status-tag status-${t.status}">${statusLabel(t.status)}</span>
       </div>`;
@@ -4372,7 +4372,7 @@ function renderHaloClientes() {
   let filtered = statusFilter === 'todos' ? clientes : clientes.filter(c => c.funil === statusFilter);
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">👤</div><p>Nenhum cliente/lead cadastrado.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum cliente/lead cadastrado.</p></div>`;
   } else {
     filtered.forEach(c => {
       const desconto = calcHaloDesconto(c.volume || 0);
@@ -4388,8 +4388,8 @@ function renderHaloClientes() {
         </div>
         <div style="display:flex;gap:4px;flex-shrink:0">
           <button class="task-action-btn" onclick="cycleHaloFunil('${c.id}')" title="Avançar funil">→</button>
-          <button class="task-action-btn" onclick="openHaloClienteModal('${c.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="archiveHaloCliente('${c.id}')" title="Arquivar">✕</button>
+          <button class="task-action-btn" onclick="openHaloClienteModal('${c.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="archiveHaloCliente('${c.id}')" title="Arquivar">&times;</button>
         </div>
       </div>`;
     });
@@ -4411,7 +4411,7 @@ function renderHaloTarefas(tasks) {
   const filtered = statusFilter === 'todos' ? tasks : tasks.filter(t => t.status === statusFilter);
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">✅</div><p>Nenhuma tarefa nesta semana.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhuma tarefa nesta semana.</p></div>`;
   } else {
     const groups = { pendente: [], em_andamento: [], bloqueado: [], concluido: [] };
     filtered.forEach(t => { if (groups[t.status]) groups[t.status].push(t); });
@@ -4435,7 +4435,7 @@ function renderHaloDocumentos() {
   </div>`;
 
   if (docs.length === 0) {
-    html += `<div class="empty-state"><div class="icon">📁</div><p>Nenhum documento registrado.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum documento registrado.</p></div>`;
   } else {
     docs.forEach(d => {
       html += `<div class="halo-doc-item">
@@ -4446,8 +4446,8 @@ function renderHaloDocumentos() {
             ${d.cliente || ''} ${d.data ? `· ${new Date(d.data + 'T12:00').toLocaleDateString('pt-BR')}` : ''}
           </div>
         </div>
-        <button class="task-action-btn" onclick="openHaloDocModal('${d.id}')" title="Editar">✎</button>
-        <button class="task-action-btn" onclick="deleteHaloDoc('${d.id}')" title="Excluir">✕</button>
+        <button class="task-action-btn" onclick="openHaloDocModal('${d.id}')" title="Editar">&starf;</button>
+        <button class="task-action-btn" onclick="deleteHaloDoc('${d.id}')" title="Excluir">&times;</button>
       </div>`;
     });
   }
@@ -4472,7 +4472,7 @@ function renderHaloAgendamentos() {
   filtered.sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">📅</div><p>Nenhum agendamento.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum agendamento.</p></div>`;
   } else {
     filtered.forEach(ag => {
       const isToday = ag.data === today;
@@ -4484,7 +4484,7 @@ function renderHaloAgendamentos() {
         <div class="agenda-info">
           <div class="agenda-nome">${ag.titulo} ${ag.contato ? `<span style="color:var(--text-muted);font-weight:400">— ${ag.contato}</span>` : ''}</div>
           <div class="agenda-meta">
-            <span>📅 ${dataFmt} ${ag.hora || ''}</span>
+            <span>&bull; ${dataFmt} ${ag.hora || ''}</span>
             <span style="font-size:11px;color:var(--text-muted)">${ag.tipo || ''}</span>
             ${isToday ? '<span style="color:#F59E0B;font-weight:700;font-size:11px">HOJE</span>' : ''}
             ${isOverdue ? '<span style="color:#f87171;font-weight:700;font-size:11px">VENCIDO</span>' : ''}
@@ -4494,8 +4494,8 @@ function renderHaloAgendamentos() {
         <div style="display:flex;align-items:center;gap:6px">
           <span class="agenda-status ag-${ag.status}">${ag.status}</span>
           ${ag.status === 'agendado' ? `<button class="btn btn-sm btn-success" onclick="marcarHaloAgRealizado('${ag.id}')" style="font-size:11px">✓</button>` : ''}
-          <button class="task-action-btn" onclick="openHaloAgendamentoModal('${ag.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteHaloAgendamento('${ag.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openHaloAgendamentoModal('${ag.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteHaloAgendamento('${ag.id}')" title="Excluir">&times;</button>
         </div>
       </div>`;
     });
@@ -4513,7 +4513,7 @@ function renderHaloEventos() {
   </div>`;
 
   if (eventos.length === 0) {
-    html += `<div class="empty-state"><div class="icon">🎪</div><p>Nenhum evento registrado.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum evento registrado.</p></div>`;
   } else {
     eventos.forEach(ev => {
       const statusLabel = HALO_EVENTO_STATUS_LABELS[ev.status_evento] || ev.status_evento;
@@ -4523,18 +4523,18 @@ function renderHaloEventos() {
           <span class="halo-event-status evst-${ev.status_evento}">${statusLabel}</span>
         </div>
         <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-secondary)">
-          ${ev.organizador ? `<span>👤 ${ev.organizador}</span>` : ''}
-          ${ev.contato ? `<span>📱 ${ev.contato}</span>` : ''}
-          ${ev.data_prevista ? `<span>📅 ${new Date(ev.data_prevista + 'T12:00').toLocaleDateString('pt-BR')}</span>` : ''}
-          ${ev.cidade ? `<span>📍 ${ev.cidade}</span>` : ''}
-          ${ev.modelo ? `<span>🏷️ ${ev.modelo}</span>` : ''}
-          ${ev.qtd_aneis ? `<span>💍 ${ev.qtd_aneis} anéis</span>` : ''}
+          ${ev.organizador ? `<span>&bull; ${ev.organizador}</span>` : ''}
+          ${ev.contato ? `<span>&bull; ${ev.contato}</span>` : ''}
+          ${ev.data_prevista ? `<span>&bull; ${new Date(ev.data_prevista + 'T12:00').toLocaleDateString('pt-BR')}</span>` : ''}
+          ${ev.cidade ? `<span>&bull; ${ev.cidade}</span>` : ''}
+          ${ev.modelo ? `<span>&bull; ${ev.modelo}</span>` : ''}
+          ${ev.qtd_aneis ? `<span>&bull; ${ev.qtd_aneis} anéis</span>` : ''}
         </div>
         ${ev.contrapartidas ? `<div style="margin-top:8px;font-size:12px;color:var(--text-muted)"><strong>Contrapartidas:</strong> ${ev.contrapartidas}</div>` : ''}
         ${ev.observacoes ? `<div style="margin-top:4px;font-size:12px;color:var(--text-muted);font-style:italic">${ev.observacoes}</div>` : ''}
         <div style="display:flex;gap:4px;margin-top:8px">
-          <button class="task-action-btn" onclick="openHaloEventoModal('${ev.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteHaloEvento('${ev.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openHaloEventoModal('${ev.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteHaloEvento('${ev.id}')" title="Excluir">&times;</button>
         </div>
       </div>`;
     });
@@ -4665,7 +4665,7 @@ function renderEmpresa() {
     const filtered = statusFilter === 'todos' ? tasks : tasks.filter(t => t.status === statusFilter);
 
     if (filtered.length === 0) {
-      html += `<div class="empty-state"><div class="icon">✓</div><p>Nenhuma tarefa ${statusFilter !== 'todos' ? 'com esse status' : 'nesta semana'}</p></div>`;
+      html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhuma tarefa ${statusFilter !== 'todos' ? 'com esse status' : 'nesta semana'}</p></div>`;
     } else {
       const groups = { pendente: [], em_andamento: [], bloqueado: [], concluido: [] };
       filtered.forEach(t => { if (groups[t.status]) groups[t.status].push(t); });
@@ -4759,7 +4759,7 @@ function renderSemana() {
   });
 
   if (tasks.length === 0) {
-    html += `<div class="empty-state"><div class="icon">📋</div><p>Nenhuma tarefa nesta semana. Adicione tarefas ou crie uma nova semana.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhuma tarefa nesta semana. Adicione tarefas ou crie uma nova semana.</p></div>`;
   }
 
   html += '</div>';
@@ -4857,7 +4857,7 @@ function renderHistorico() {
   if (viewingWeekHistory) {
     html += renderWeekHistoryDetail(viewingWeekHistory);
   } else if (closedWeeks.length === 0) {
-    html += `<div class="empty-state"><div class="icon">☰</div><p>Nenhuma semana fechada ainda.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhuma semana fechada ainda.</p></div>`;
   } else {
     closedWeeks.forEach(w => {
       const tasks = getTasksForWeek(w.id);
@@ -4968,7 +4968,7 @@ function renderPartidoNovoAreas(tasks) {
   }
 
   html += `<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px">
-    <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px">💰 Financeiro</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px">&bull; Financeiro</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
       <div style="background:var(--bg);border-radius:8px;padding:14px;text-align:center">
         <div style="font-size:22px;font-weight:700;color:#4ade80">${formatBRL(totalAcumulado)}</div>
@@ -4995,7 +4995,7 @@ function renderPartidoNovoAreas(tasks) {
   // Weekly Priorities Panel
   if (priorities.length > 0) {
     html += `<div class="pn-priorities">
-      <div class="pn-priorities-title">⚡ Prioridades da Semana</div>
+      <div class="pn-priorities-title">Prioridades da Semana</div>
       ${priorities.map(p => {
         const area = getPNArea(p.area);
         return `<div class="pn-priority-item">
@@ -5042,7 +5042,7 @@ function renderPartidoNovoAreas(tasks) {
     // Flags for this area
     areaFlags.forEach(f => {
       html += `<div class="pn-flag pn-flag-${f.type}">
-        <span class="pn-flag-icon">${f.type === 'red' ? '🔴' : '🟡'}</span>
+        <span class="pn-flag-icon">${f.type === 'red' ? '&bull;' : '&bull;'}</span>
         ${f.msg}
       </div>`;
     });
@@ -5078,7 +5078,7 @@ function renderPartidoNovoAreas(tasks) {
     html += `<div class="pn-area-card">
       <div class="pn-area-header" style="--pn-area-color:var(--text-muted)" onclick="togglePNArea('sem_area')">
         <div class="pn-area-title">
-          <span class="area-icon">📌</span>
+          <span class="area-icon">&bull;</span>
           Sem Área Definida
         </div>
         <div class="pn-area-badges">
@@ -5118,8 +5118,8 @@ function renderTaskItem(task, showEmpresa) {
     </div>
     <div class="task-actions">
       <button class="task-action-btn" onclick="cycleStatus('${task.id}')" title="Mudar status">↻</button>
-      <button class="task-action-btn" onclick="openEditTaskModal('${task.id}')" title="Editar">✎</button>
-      <button class="task-action-btn" onclick="deleteTask('${task.id}')" title="Excluir">✕</button>
+      <button class="task-action-btn" onclick="openEditTaskModal('${task.id}')" title="Editar">&starf;</button>
+      <button class="task-action-btn" onclick="deleteTask('${task.id}')" title="Excluir">&times;</button>
     </div>
   </div>`;
 }
@@ -5132,7 +5132,7 @@ function renderConselho() {
   html += `<div class="page-header">
     <div>
       <div class="page-title" style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:22px">🏛️</span> Conselho Digital NOVO DF
+        <span style="font-size:22px">&loz;</span> Conselho Digital NOVO DF
       </div>
       <div class="page-subtitle">Programa de pré-candidatos — Acompanhamento completo</div>
     </div>
@@ -5204,7 +5204,7 @@ function renderConselhoAgenda() {
   filtered.sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">📅</div><p>Nenhum agendamento ${conselhoAgendaFilter !== 'todos' ? 'com esse status' : 'nesta semana'}.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum agendamento ${conselhoAgendaFilter !== 'todos' ? 'com esse status' : 'nesta semana'}.</p></div>`;
   } else {
     filtered.forEach(ag => {
       const cand = candidatos.find(c => c.id === ag.candidato_id);
@@ -5213,16 +5213,16 @@ function renderConselhoAgenda() {
         <div class="agenda-info">
           <div class="agenda-nome">${ag.nome_candidato || (cand ? cand.nome : 'Candidato')}</div>
           <div class="agenda-meta">
-            <span>📅 ${dataFmt} ${ag.hora || ''}</span>
-            ${ag.instagram ? `<span>📱 ${ag.instagram}</span>` : ''}
+            <span>&bull; ${dataFmt} ${ag.hora || ''}</span>
+            ${ag.instagram ? `<span>&bull; ${ag.instagram}</span>` : ''}
             ${ag.observacao ? `<span style="color:var(--text-muted);font-style:italic">${ag.observacao}</span>` : ''}
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:6px">
           <span class="agenda-status ag-${ag.status}">${ag.status}</span>
           ${ag.status === 'agendado' ? `<button class="btn btn-sm btn-success" onclick="marcarRealizado('${ag.id}')" style="font-size:11px">&check; Realizado</button>` : ''}
-          <button class="task-action-btn" onclick="openEditAgendamentoModal('${ag.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteAgendamento('${ag.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openEditAgendamentoModal('${ag.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteAgendamento('${ag.id}')" title="Excluir">&times;</button>
         </div>
       </div>`;
     });
@@ -5251,7 +5251,7 @@ function renderConselhoCandidatos() {
   </div>`;
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">👥</div><p>Nenhum candidato cadastrado.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum candidato cadastrado.</p></div>`;
   } else {
     html += `<div style="overflow-x:auto"><table class="cand-table">
       <thead><tr>
@@ -5285,8 +5285,8 @@ function renderConselhoCandidatos() {
         <td style="font-size:12px">${c.ultimo_atendimento || '—'}</td>
         <td>${notasMensais}</td>
         <td>
-          <button class="task-action-btn" onclick="openEditCandidatoModal('${c.id}')" title="Editar">✎</button>
-          <button class="task-action-btn" onclick="deleteCandidato('${c.id}')" title="Excluir">✕</button>
+          <button class="task-action-btn" onclick="openEditCandidatoModal('${c.id}')" title="Editar">&starf;</button>
+          <button class="task-action-btn" onclick="deleteCandidato('${c.id}')" title="Excluir">&times;</button>
         </td>
       </tr>`;
     });
@@ -5308,7 +5308,7 @@ function renderConselhoAcompanhamento() {
   html += '</div>';
 
   if (candidatos.length === 0) {
-    html += `<div class="empty-state"><div class="icon">📊</div><p>Cadastre candidatos ativos primeiro.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Cadastre candidatos ativos primeiro.</p></div>`;
     return html;
   }
 
@@ -5341,7 +5341,7 @@ function renderConselhoAcompanhamento() {
       <td><span class="risk-indicator ${riskDot}"></span><span style="font-size:12px;text-transform:uppercase">${ac.risco || 'baixo'}</span></td>
       <td style="font-size:12px;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(ac.compromissos || '').replace(/"/g,'&quot;')}">${ac.compromissos || '—'}</td>
       <td style="font-size:12px;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(ac.observacoes || '').replace(/"/g,'&quot;')}">${ac.observacoes || '—'}</td>
-      <td><button class="btn btn-sm" onclick="openAcompanhamentoModal('${c.id}','${conselhoMesAtual}')" style="font-size:11px">✎</button></td>
+      <td><button class="btn btn-sm" onclick="openAcompanhamentoModal('${c.id}','${conselhoMesAtual}')" style="font-size:11px">&starf;</button></td>
     </tr>`;
   });
 
@@ -5349,7 +5349,7 @@ function renderConselhoAcompanhamento() {
 
   // Comparativo de notas
   html += `<div class="relatorio-box" style="margin-top:20px">
-    <h3>📈 Evolução de Notas</h3>
+    <h3>Evolu&ccedil;&atilde;o de Notas</h3>
     <div style="overflow-x:auto"><table class="cand-table">
       <thead><tr><th>Candidato</th>${CONSELHO_MESES.map(m => `<th style="text-align:center">${m.label}</th>`).join('')}</tr></thead>
       <tbody>`;
@@ -5385,7 +5385,7 @@ function renderConselhoTarefas() {
   const filtered = statusFilter === 'todos' ? tasks : tasks.filter(t => t.status === statusFilter);
 
   if (filtered.length === 0) {
-    html += `<div class="empty-state"><div class="icon">✅</div><p>Nenhuma tarefa operacional nesta semana.</p></div>`;
+    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhuma tarefa operacional nesta semana.</p></div>`;
   } else {
     const groups = { pendente: [], em_andamento: [], bloqueado: [], concluido: [] };
     filtered.forEach(t => { if (groups[t.status]) groups[t.status].push(t); });
@@ -5431,7 +5431,7 @@ function renderConselhoRelatorio() {
 
   // Top 5
   html += `<div class="relatorio-box">
-    <h3>🏆 Top 5 — Maior Nota</h3>
+    <h3>Top 5 — Maior Nota</h3>
     ${top5.length > 0 ? top5.map((c, i) => `<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)">
       <span style="font-size:16px;font-weight:800;color:var(--text-muted);width:24px">${i + 1}.</span>
       <span style="flex:1;font-weight:600">${c.nome}</span>
@@ -5458,12 +5458,12 @@ function renderConselhoRelatorio() {
 
   // Text fields
   html += `<div class="relatorio-box">
-    <h3>📝 Diretrizes Gerais do Mês</h3>
+    <h3>Diretrizes Gerais do Mês</h3>
     <textarea class="form-textarea" id="relDiretrizes" placeholder="Diretrizes gerais do mês..." style="min-height:100px" onchange="saveRelatorioField('diretrizes', this.value)">${savedReport.diretrizes || ''}</textarea>
   </div>`;
 
   html += `<div class="relatorio-box">
-    <h3>🚨 Alertas Estratégicos</h3>
+    <h3>Alertas Estratégicos</h3>
     <textarea class="form-textarea" id="relAlertas" placeholder="Alertas estratégicos..." style="min-height:100px" onchange="saveRelatorioField('alertas', this.value)">${savedReport.alertas || ''}</textarea>
   </div>`;
 
@@ -5508,7 +5508,7 @@ function exportRelatorio() {
 
   if (criticos.length > 0) {
     text += `\n── SITUAÇÃO CRÍTICA ──\n`;
-    criticos.forEach(c => { text += `  ⚠ ${c.nome} — ${c.cargo || 'Cargo não definido'}\n`; });
+    criticos.forEach(c => { text += `  &loz; ${c.nome} — ${c.cargo || 'Cargo não definido'}\n`; });
   }
 
   if (saved.diretrizes) {
