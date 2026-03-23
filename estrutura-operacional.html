@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HALO B2B — Estrutura Operacional</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000000;
+    --bg-card: #0a0a0a;
+    --bg-card-hover: #0f0f0f;
+    --bg-elevated: #111111;
+    --border: #1a1a1a;
+    --border-hover: #252525;
+    --text-primary: #ffffff;
+    --text-secondary: #888888;
+    --text-muted: #444444;
+    --accent: #0066FF;
+    --accent-dim: rgba(0, 102, 255, 0.08);
+    --accent-glow: rgba(0, 102, 255, 0.12);
+    --accent-light: #3388FF;
+    --success: #00CC66;
+    --success-dim: rgba(0, 204, 102, 0.08);
+    --warning: #FF8800;
+    --warning-dim: rgba(255, 136, 0, 0.08);
+    --danger: #FF3333;
+    --danger-dim: rgba(255, 51, 51, 0.08);
+    --info: #0099CC;
+    --info-dim: rgba(0, 153, 204, 0.08);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* ── Top Accent Line ── */
+  .gradient-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    z-index: 1000;
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    top: 2px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    z-index: 999;
+    padding: 0 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .nav-logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 13px;
+    color: #000000;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-title {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-title span {
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 8px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text-primary);
+    background: var(--accent-dim);
+  }
+
+  /* ── Main ── */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 90px 2rem 4rem;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 3rem 0 4rem;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0, 102, 255, 0.15);
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 .highlight {
+    color: var(--accent-light);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-light);
+    background: var(--accent-dim);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  /* ── Metric Cards ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .metric-card:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-hover);
+  }
+
+  .metric-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    color: var(--text-primary);
+  }
+
+  .metric-value.accent { color: var(--accent-light); }
+  .metric-value.success { color: var(--success); }
+  .metric-value.warning { color: var(--warning); }
+  .metric-value.info { color: var(--info); }
+
+  .metric-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  /* ── Info Grid ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .info-cell {
+    background: var(--bg-card);
+    padding: 1.1rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .info-cell-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .info-cell-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  /* ── Pricing Table ── */
+  .pricing-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .pricing-table th {
+    background: var(--bg-elevated);
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pricing-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: background 0.15s;
+  }
+
+  .pricing-table tr:last-child td { border-bottom: none; }
+
+  .pricing-table tbody tr:hover td {
+    background: var(--bg-card-hover);
+  }
+
+  .pricing-table .volume {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .pricing-table .discount {
+    font-weight: 700;
+    color: var(--accent-light);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pricing-table .price {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pricing-table .bar-cell {
+    width: 30%;
+    padding-right: 2rem;
+  }
+
+  .pricing-bar-wrap {
+    height: 6px;
+    background: var(--bg-elevated);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .pricing-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: width 0.6s ease;
+  }
+
+  /* ── Team ── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .team-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .team-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+  }
+
+  .team-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .team-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .team-avatar.a1 { background: var(--accent); color: #fff; }
+  .team-avatar.a2 { background: #1a1a1a; color: var(--accent-light); border: 1px solid var(--border-hover); }
+  .team-avatar.a3 { background: #1a1a1a; color: var(--text-secondary); border: 1px solid var(--border-hover); }
+  .team-avatar.a4 { background: #1a1a1a; color: var(--text-secondary); border: 1px solid var(--border-hover); }
+
+  .team-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .team-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Funnel ── */
+  .funnel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 2rem;
+  }
+
+  .funnel-step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    transition: border-color 0.2s, background 0.2s;
+    align-items: start;
+  }
+
+  .funnel-step:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-hover);
+  }
+
+  .funnel-number {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--text-muted);
+    letter-spacing: -2px;
+    line-height: 1;
+    padding-top: 2px;
+    text-align: center;
+  }
+
+  .funnel-content h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .funnel-content h4 .owner {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+
+  .funnel-bullets {
+    list-style: none;
+  }
+
+  .funnel-bullets li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .funnel-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  /* ── Vertical Cards ── */
+  .verticals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 12px;
+  }
+
+  .vertical-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vertical-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .vertical-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+  }
+
+  .vertical-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .vertical-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .vertical-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .vertical-tag.hot {
+    color: var(--accent-light);
+    background: var(--accent-dim);
+  }
+
+  .vertical-card-uses {
+    list-style: none;
+    margin-bottom: 14px;
+  }
+
+  .vertical-card-uses li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .vertical-card-uses li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .vertical-profile {
+    padding: 10px 14px;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .vertical-profile-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .vertical-profile-value {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .vertical-decisor {
+    padding: 10px 14px;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .vertical-decisor-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .vertical-decisor-value {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .vertical-angle {
+    padding: 10px 14px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0, 102, 255, 0.1);
+    border-radius: 8px;
+  }
+
+  .vertical-angle-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .vertical-angle-value {
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── Insights Split ── */
+  .insights-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .insights-split { grid-template-columns: 1fr; }
+  }
+
+  .insight-column {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .insight-column::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+
+  .insight-column.positive::before { background: var(--success); }
+  .insight-column.negative::before { background: var(--danger); }
+
+  .insight-column h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .insight-column.positive h3 .dot { background: var(--success); }
+  .insight-column.negative h3 .dot { background: var(--danger); }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .insight-list {
+    list-style: none;
+  }
+
+  .insight-list li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+
+  .insight-list li:last-child { border-bottom: none; }
+
+  /* ── Gargalos ── */
+  .bottleneck-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .bottleneck-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warning);
+    border-radius: 12px;
+    padding: 1.3rem;
+  }
+
+  .bottleneck-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--warning);
+  }
+
+  .bottleneck-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Opportunities ── */
+  .opp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .opp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .opp-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .opp-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent-light);
+  }
+
+  .opp-card ul {
+    list-style: none;
+  }
+
+  .opp-card li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .opp-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .opp-highlight {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0, 102, 255, 0.1);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--accent-light);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* ── Objecoes ── */
+  .objection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .objection-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem;
+    transition: border-color 0.2s;
+  }
+
+  .objection-card:hover {
+    border-color: var(--border-hover);
+  }
+
+  .objection-quote {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .objection-response {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Materials ── */
+  .materials-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 8px;
+  }
+
+  .material-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .material-item:hover {
+    border-color: var(--border-hover);
+  }
+
+  .material-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--accent-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--accent-light);
+    flex-shrink: 0;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 3rem 0 2rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .footer-text strong {
+    color: var(--text-secondary);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    main { padding: 80px 1rem 3rem; }
+    .nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 2rem; }
+    .pricing-table .bar-cell { display: none; }
+    .funnel-step { grid-template-columns: 40px 1fr; }
+  }
+
+  /* ── Scroll animation ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="gradient-bar"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAIAAABEtEjdAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAFVWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpBdHRyaWI9J2h0dHA6Ly9ucy5hdHRyaWJ1dGlvbi5jb20vYWRzLzEuMC8nPgogIDxBdHRyaWI6QWRzPgogICA8cmRmOlNlcT4KICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogICAgIDxBdHRyaWI6Q3JlYXRlZD4yMDI2LTAyLTA4PC9BdHRyaWI6Q3JlYXRlZD4KICAgICA8QXR0cmliOkRhdGE+eyZxdW90O2RvYyZxdW90OzomcXVvdDtEQUdUcjJzY2s5NCZxdW90OywmcXVvdDt1c2VyJnF1b3Q7OiZxdW90O1VBQ2gtWDhPN0RnJnF1b3Q7LCZxdW90O2JyYW5kJnF1b3Q7OiZxdW90O0VxdWlwZSBQcml2YXRlJnF1b3Q7fTwvQXR0cmliOkRhdGE+CiAgICAgPEF0dHJpYjpFeHRJZD43N2RmMmFiMi1lMjMzLTQ5Y2QtOGZkZS02NmQzOTU3NDk0Nzc8L0F0dHJpYjpFeHRJZD4KICAgICA8QXR0cmliOkZiSWQ+NTI1MjY1OTE0MTc5NTgwPC9BdHRyaWI6RmJJZD4KICAgICA8QXR0cmliOlRvdWNoVHlwZT4yPC9BdHRyaWI6VG91Y2hUeXBlPgogICAgPC9yZGY6bGk+CiAgIDwvcmRmOlNlcT4KICA8L0F0dHJpYjpBZHM+CiA8L3JkZjpEZXNjcmlwdGlvbj4KCiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0nJwogIHhtbG5zOmRjPSdodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMv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" alt="HALO" style="width:32px;height:32px;border-radius:8px;object-fit:cover;">
+      <div class="nav-title">HALO B2B <span>Estrutura Operacional</span></div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#metricas">Metricas</a></li>
+      <li><a href="#produto">Produto</a></li>
+      <li><a href="#time">Time</a></li>
+      <li><a href="#funil">Funil</a></li>
+      <li><a href="#verticais">Verticais</a></li>
+      <li><a href="#insights">Insights</a></li>
+      <li><a href="#gargalos">Gargalos</a></li>
+      <li><a href="#oportunidades">Oportunidades</a></li>
+      <li><a href="#objecoes">Objecoes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Documento Interno &bull; Marco 2026</div>
+    <h1>Estrutura<br><span class="highlight">Operacional B2B</span></h1>
+    <p class="hero-sub">Norte completo para escala via trafego pago. Fluxo operacional, verticais, gargalos, angulos de conversao e playbook de objecoes — tudo que o time de performance precisa para criar campanhas que convertem.</p>
+  </section>
+
+  <!-- METRICAS -->
+  <section class="section fade-in" id="metricas">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Metricas de Referencia</h2>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Ticket Medio B2B</div>
+        <div class="metric-value accent">R$ 4k–15k</div>
+        <div class="metric-detail">Pedidos de 10 a 40 unidades</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Desconto Medio Aplicado</div>
+        <div class="metric-value info">15–20%</div>
+        <div class="metric-detail">Maioria na faixa 10–30 unidades</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Ciclo Medio de Venda</div>
+        <div class="metric-value warning">3–7 dias</div>
+        <div class="metric-detail">Do primeiro contato ao pagamento</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Vertical com Mais Leads</div>
+        <div class="metric-value accent">269</div>
+        <div class="metric-detail">Clinicas Medicas — BSB e SP</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Venda Mais Rapida</div>
+        <div class="metric-value success">&lt; 24h</div>
+        <div class="metric-detail">WhatsApp outbound direto com decisor</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Preco Unitario Varejo</div>
+        <div class="metric-value">R$ 447,90</div>
+        <div class="metric-detail">Base para desconto progressivo B2B</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUTO -->
+  <section class="section fade-in" id="produto">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Produto & Modelo</h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-cell">
+        <span class="info-cell-label">Produto</span>
+        <span class="info-cell-value">HALO Q-Ring — smart ring premium em titanio e aco inoxidavel</span>
+      </div>
+      <div class="info-cell">
+        <span class="info-cell-label">Monitoramento</span>
+        <span class="info-cell-value">Sono, recuperacao, HRV, frequencia cardiaca, temperatura, oxigenacao</span>
+      </div>
+      <div class="info-cell">
+        <span class="info-cell-label">Diferenciais</span>
+        <span class="info-cell-value">Sem tela, sem notificacoes, 6 dias de bateria</span>
+      </div>
+      <div class="info-cell">
+        <span class="info-cell-label">Minimo B2B</span>
+        <span class="info-cell-value">10 unidades (excecoes caso a caso)</span>
+      </div>
+      <div class="info-cell">
+        <span class="info-cell-label">Modelo de Entrega</span>
+        <span class="info-cell-value">Voucher corporativo com QR Code — colaborador escolhe cor, tamanho e endereco</span>
+      </div>
+      <div class="info-cell">
+        <span class="info-cell-label">Faturamento</span>
+        <span class="info-cell-value">NFS-e (Nota Fiscal de Servico Eletronica)</span>
+      </div>
+    </div>
+
+    <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;">Tabela de Precos B2B</h3>
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th>Volume</th>
+          <th>Desconto</th>
+          <th>Preco/un.</th>
+          <th class="bar-cell">Desconto visual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="volume">10–29 un.</td>
+          <td class="discount">15%</td>
+          <td class="price">R$ 380,72</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 33%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="volume">30–49 un.</td>
+          <td class="discount">20%</td>
+          <td class="price">R$ 358,32</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 44%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="volume">50–79 un.</td>
+          <td class="discount">25%</td>
+          <td class="price">R$ 335,93</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 55%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="volume">80–119 un.</td>
+          <td class="discount">30%</td>
+          <td class="price">R$ 313,53</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 66%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="volume">120–199 un.</td>
+          <td class="discount">35%</td>
+          <td class="price">R$ 291,14</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 77%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="volume">200–299 un.</td>
+          <td class="discount">40%</td>
+          <td class="price">R$ 268,74</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 88%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="volume">300+ un.</td>
+          <td class="discount">45%</td>
+          <td class="price">R$ 246,35</td>
+          <td class="bar-cell"><div class="pricing-bar-wrap"><div class="pricing-bar" style="width: 100%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TIME -->
+  <section class="section fade-in" id="time">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Estrutura do Time</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-avatar a1">PD</div>
+          <div class="team-name">Pedro Dolabella</div>
+        </div>
+        <div class="team-role">Negociacao direta com empresas, fechamento, disparos via WhatsApp, propostas e relatorios pos-venda</div>
+      </div>
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-avatar a2">DC</div>
+          <div class="team-name">Davi Chaves</div>
+        </div>
+        <div class="team-role">Captacao ativa de leads — pesquisa, qualificacao e alimentacao da planilha propria. Passa numeros para Pedro</div>
+      </div>
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-avatar a3">GS</div>
+          <div class="team-name">Gabriel Susu</div>
+        </div>
+        <div class="team-role">Captacao ativa de leads — planilha propria separada. Mesma funcao de Davi</div>
+      </div>
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-avatar a4">B</div>
+          <div class="team-name">Bessa</div>
+        </div>
+        <div class="team-role">Operacoes de meio de funil e conteudo comercial (PPTs). Entrando agora nos disparos com Pedro</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNIL -->
+  <section class="section fade-in" id="funil">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Fluxo Operacional — 8 Etapas</h2>
+    </div>
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="funnel-number">01</div>
+        <div class="funnel-content">
+          <h4>Captacao de Leads <span class="owner">Davi / Gabriel</span></h4>
+          <ul class="funnel-bullets">
+            <li>Pesquisa manual de empresas por segmento e cidade</li>
+            <li>Qualificacao: equipe real 8+ pessoas, decisor acessivel via WhatsApp, ticket compativel</li>
+            <li>Registro na planilha: Nome, Cidade, Contato, Site, Categoria, Status</li>
+            <li>Cidades zeradas progressivamente: SP &rarr; RJ &rarr; BH &rarr; Curitiba &rarr; POA &rarr; Campinas &rarr; Floripa</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">02</div>
+        <div class="funnel-content">
+          <h4>Disparos <span class="owner">Pedro</span></h4>
+          <ul class="funnel-bullets">
+            <li>Pedro recebe os numeros de Davi/Gabriel e faz os disparos via WhatsApp</li>
+            <li>Abordagem consultiva — nao apresenta preco no primeiro contato</li>
+            <li>Envia PPT + Tabela de Precos B2B</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">03</div>
+        <div class="funnel-content">
+          <h4>Qualificacao <span class="owner">Pedro</span></h4>
+          <ul class="funnel-bullets">
+            <li>Quantidade, finalidade (beneficio/incentivo/evento) e prazo</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">04</div>
+        <div class="funnel-content">
+          <h4>Tamanho do Anel <span class="owner">Pedro</span></h4>
+          <ul class="funnel-bullets">
+            <li>Guia de medicao enviado, confirmacao via video ou foto</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">05</div>
+        <div class="funnel-content">
+          <h4>Proposta Formal <span class="owner">Pedro</span></h4>
+          <ul class="funnel-bullets">
+            <li>Desconto progressivo aplicado, sem oferecer desconto espontaneamente</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">06</div>
+        <div class="funnel-content">
+          <h4>Pagamento <span class="owner">Pedro</span></h4>
+          <ul class="funnel-bullets">
+            <li>Link Mercado Pago</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">07</div>
+        <div class="funnel-content">
+          <h4>Acionamento HALO</h4>
+          <ul class="funnel-bullets">
+            <li>Pedido confirmado apos pagamento aprovado</li>
+          </ul>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-number">08</div>
+        <div class="funnel-content">
+          <h4>Pos-Venda <span class="owner">Pedro</span></h4>
+          <ul class="funnel-bullets">
+            <li>Follow-up 15–20 dias apos entrega, abertura para expansao do pedido</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERTICAIS -->
+  <section class="section fade-in" id="verticais">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2 class="section-title">Verticais, Decisores & Angulos</h2>
+    </div>
+    <div class="verticals-grid">
+
+      <div class="vertical-card">
+        <div class="vertical-card-header">
+          <h3>Clinicas Medicas</h3>
+          <span class="vertical-tag hot">Mais Ativa</span>
+        </div>
+        <ul class="vertical-card-uses">
+          <li>Brinde para pacientes estrategicos — fidelizacao e diferenciacao</li>
+          <li>Ferramenta clinica rotativa — paciente usa 1 semana, traz dados, medico cria protocolo. Anel devolvido e rotacionado</li>
+          <li>Monetizacao direta — clinica cria tratamento baseado nos dados, elevando ticket medio</li>
+        </ul>
+        <div class="vertical-profile">
+          <div class="vertical-profile-label">Perfil Ideal</div>
+          <div class="vertical-profile-value">Medicina preventiva, longevidade, performance executiva, saude integrativa, cardiologia preventiva</div>
+        </div>
+        <div class="vertical-decisor">
+          <div class="vertical-decisor-label">Decisor</div>
+          <div class="vertical-decisor-value">Medico socio-proprietario, gerente clinico, head de operacoes. Responde pelo WhatsApp. Decide sozinho em clinicas pequenas</div>
+        </div>
+        <div class="vertical-angle">
+          <div class="vertical-angle-label">Angulo de Conversao</div>
+          <div class="vertical-angle-value">"Eleve o ticket medio da sua clinica com dados reais de sono e recuperacao dos seus pacientes"</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-card-header">
+          <h3>Academias & Estudios</h3>
+        </div>
+        <ul class="vertical-card-uses">
+          <li>Programa de performance — aluno monitora recuperacao e sono entre treinos</li>
+          <li>Diferencial competitivo frente a academias convencionais</li>
+          <li>Integracao com personal trainers para ajuste de carga baseado em HRV</li>
+        </ul>
+        <div class="vertical-profile">
+          <div class="vertical-profile-label">Perfil Ideal</div>
+          <div class="vertical-profile-value">Academias High-End e Premium com mensalidade acima de R$ 300, foco em performance</div>
+        </div>
+        <div class="vertical-decisor">
+          <div class="vertical-decisor-label">Decisor</div>
+          <div class="vertical-decisor-value">Dono da franquia ou gerente da unidade. Alta autonomia. Decisao rapida para volumes menores</div>
+        </div>
+        <div class="vertical-angle">
+          <div class="vertical-angle-label">Angulo de Conversao</div>
+          <div class="vertical-angle-value">"Seus alunos treinando com dados reais de recuperacao — diferencial que nenhuma academia convencional oferece"</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-card-header">
+          <h3>Corporativo</h3>
+        </div>
+        <ul class="vertical-card-uses">
+          <li>Beneficio corporativo — presente de alto valor percebido para colaboradores</li>
+          <li>Programa de bem-estar — reducao de absenteismo, melhora de foco e engajamento</li>
+          <li>Onboarding — presente de boas-vindas para novos colaboradores</li>
+        </ul>
+        <div class="vertical-profile">
+          <div class="vertical-profile-label">Perfil Ideal</div>
+          <div class="vertical-profile-value">Empresas tech, financeiro, juridico com 50+ colaboradores e programa de beneficios ativo</div>
+        </div>
+        <div class="vertical-decisor">
+          <div class="vertical-decisor-label">Decisor</div>
+          <div class="vertical-decisor-value">Gerente de RH, Head of People, CEO em empresas menores. Processo mais longo, pode envolver procurement</div>
+        </div>
+        <div class="vertical-angle">
+          <div class="vertical-angle-label">Angulo de Conversao</div>
+          <div class="vertical-angle-value">"O presente corporativo que seus colaboradores vao usar todos os dias — 24 horas, sem tela, sem distracoes"</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-card-header">
+          <h3>Wellness & Turismo do Sono</h3>
+        </div>
+        <ul class="vertical-card-uses">
+          <li>Retiros e spas — hospede usa o anel durante a estadia como parte da experiencia</li>
+          <li>Programas de longevidade — integracao com protocolos de biohacking</li>
+          <li>Diferencial de posicionamento para centros premium</li>
+        </ul>
+        <div class="vertical-profile">
+          <div class="vertical-profile-label">Perfil Ideal</div>
+          <div class="vertical-profile-value">Proprietarios de espacos wellness, spas, retiros. Perfil empreendedor, decisao rapida. Hoteis/pousadas — sazonal</div>
+        </div>
+        <div class="vertical-decisor">
+          <div class="vertical-decisor-label">Decisor</div>
+          <div class="vertical-decisor-value">Proprietario do espaco ou socio / Proprietario do hotel/pousada ou gerente de operacoes</div>
+        </div>
+        <div class="vertical-angle">
+          <div class="vertical-angle-label">Angulo de Conversao</div>
+          <div class="vertical-angle-value">"Integre o monitoramento fisiologico continuo na experiencia dos seus clientes"</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section class="section fade-in" id="insights">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <h2 class="section-title">O Que Funcionou vs. O Que Nao Funcionou</h2>
+    </div>
+    <div class="insights-split">
+      <div class="insight-column positive">
+        <h3><span class="dot"></span> Funcionou</h3>
+        <ul class="insight-list">
+          <li>Prospeccao outbound direta via WhatsApp com decisor — maior taxa de conversao e comissao (10%)</li>
+          <li>Abordagem consultiva sem apresentar preco no primeiro contato — gera abertura antes da barreira de preco</li>
+          <li>Envio do PDF corporativo + tabela de precos juntos — qualifica o lead antes da negociacao</li>
+          <li>Modelo voucher para pedidos 10+ — resolve o gargalo de tamanhos individuais e reduz friccao operacional</li>
+          <li>Segmentacao por nicho na planilha de leads — facilita abordagem com linguagem especifica por vertical</li>
+          <li>Negociacoes de patrocinio de eventos sem presenca fisica — envio de aneis + cupom em troca de midia</li>
+          <li>Uso do anel como ferramenta clinica rotativa — argumento poderoso para clinicas com orcamento menor</li>
+        </ul>
+      </div>
+      <div class="insight-column negative">
+        <h3><span class="dot"></span> Nao Funcionou</h3>
+        <ul class="insight-list">
+          <li>Leads inbound sem qualificacao previa — chegam com expectativa de preco de varejo e resistencia alta</li>
+          <li>Prospeccao em redes nacionais com RH centralizado — decisor inatingivel via WhatsApp</li>
+          <li>Modelo de parceria sem custo — leads tentam sempre propor "patrocinio" (aneis gratis em troca de exposicao). A HALO nao opera nesse modelo</li>
+          <li>Disparos sem segmentacao de nicho — mensagem generica gera baixa taxa de resposta</li>
+          <li>Pedidos sem guia de tamanho enviada previamente — resultou em trocas e reenvios</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- GARGALOS -->
+  <section class="section fade-in" id="gargalos">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <h2 class="section-title">Gargalos Atuais</h2>
+    </div>
+    <div class="bottleneck-grid">
+      <div class="bottleneck-card">
+        <h4>Volume de Disparos</h4>
+        <p>Pedro acumula negociacao, fechamento, disparos e producao de relatorios. Bessa esta sendo integrada para dividir os disparos.</p>
+      </div>
+      <div class="bottleneck-card">
+        <h4>Ausencia de CRM</h4>
+        <p>Pipeline gerenciado em planilhas manuais (uma para Davi, uma para Gabriel). Sem visibilidade unificada do funil em tempo real. Leads quentes podem esfriar por falta de acompanhamento.</p>
+      </div>
+      <div class="bottleneck-card">
+        <h4>Ausencia de Landing Page B2B</h4>
+        <p>Nao existe pagina dedicada ao B2B. Todo lead inbound chega perdido. Trafego direcionado deixaria leads inbound mais aquecidos para negociacao.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPORTUNIDADES -->
+  <section class="section fade-in" id="oportunidades">
+    <div class="section-header">
+      <span class="section-number">08</span>
+      <h2 class="section-title">Oportunidades Identificadas</h2>
+    </div>
+    <div class="opp-grid">
+      <div class="opp-card">
+        <h4>Trafego Pago B2B</h4>
+        <ul>
+          <li>Landing page segmentada por nichos</li>
+          <li>Anuncio com angulo de ROI — "presente corporativo que aumenta produtividade" ou "ferramenta clinica que eleva ticket medio"</li>
+          <li>Lead magnet: material de como clinicas estao usando o HALO para criar protocolos baseados em dados e monetizando</li>
+        </ul>
+        <div class="opp-highlight">Alem da venda B2B, engatilhar cupom de desconto para cada clinica — paciente usa, ama e quer comprar</div>
+      </div>
+      <div class="opp-card">
+        <h4>Parcerias com Multiplicadores</h4>
+        <ul>
+          <li>Distribuidoras do setor farmaceutico e wellness</li>
+          <li>Associacoes medicas e conselhos profissionais — acesso direto a prescritores</li>
+          <li>Eventos B2B do setor — patrocinio com modelo cupom + midia</li>
+        </ul>
+      </div>
+      <div class="opp-card">
+        <h4>Upsell & Recompra</h4>
+        <ul>
+          <li>Clinicas que compraram para teste (2–5 aneis) tem potencial de expansao para protocolo completo (10–30 aneis)</li>
+          <li>Empresas que compraram como brinde tem potencial de recompra anual</li>
+          <li>Follow-up 15–20 dias pos-entrega ja mostrou abertura para expansao</li>
+        </ul>
+      </div>
+      <div class="opp-card">
+        <h4>Produto como Ferramenta</h4>
+        <ul>
+          <li>O angulo de ferramenta clinica rotativa (paciente usa e devolve) e o mais diferenciado</li>
+          <li>Gera mais interesse em clinicas com orcamento limitado</li>
+          <li>Esse argumento precisa estar no trafego pago — muda completamente a percepcao de custo</li>
+        </ul>
+        <div class="opp-highlight">Esse e o insight mais importante para o trafego: o anel nao e so um brinde — e uma ferramenta que gera receita recorrente para a clinica</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OBJECOES -->
+  <section class="section fade-in" id="objecoes">
+    <div class="section-header">
+      <span class="section-number">09</span>
+      <h2 class="section-title">Objecoes & Respostas</h2>
+    </div>
+    <div class="objection-grid">
+      <div class="objection-card">
+        <div class="objection-quote">"Preciso pensar"</div>
+        <div class="objection-response">Perguntar qual e a duvida especifica. Geralmente e preco ou tamanho do anel. Resolver a objecao concreta, nao deixar em aberto.</div>
+      </div>
+      <div class="objection-card">
+        <div class="objection-quote">"Quero como parceria"</div>
+        <div class="objection-response">A HALO nao opera com produto gratis se a empresa nao e relevante. O modelo e desconto corporativo com entrega de valor real — queremos venda!</div>
+      </div>
+      <div class="objection-card">
+        <div class="objection-quote">"Nao sei o tamanho"</div>
+        <div class="objection-response">Enviar guia de medicao. Para voucher, cada pessoa escolhe na hora do resgate — nao precisa coletar antes.</div>
+      </div>
+      <div class="objection-card">
+        <div class="objection-quote">"Quero menos de 10"</div>
+        <div class="objection-response">Excecoes aprovadas caso a caso para nichos especificos — ex: Jiu Jitsu, clinicas em fase de teste com chance alta de recompra.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATERIAIS -->
+  <section class="section fade-in" id="materiais">
+    <div class="section-header">
+      <span class="section-number">10</span>
+      <h2 class="section-title">Materiais Disponiveis</h2>
+    </div>
+    <div class="materials-list">
+      <div class="material-item">
+        <div class="material-icon">PDF</div>
+        PDF Corporativo — Corporativo
+      </div>
+      <div class="material-item">
+        <div class="material-icon">PDF</div>
+        PDF Corporativo — Gyms
+      </div>
+      <div class="material-item">
+        <div class="material-icon">PDF</div>
+        PDF Corporativo — Clinicas Medicas
+      </div>
+      <div class="material-item">
+        <div class="material-icon">PDF</div>
+        PDF Corporativo — Wellness
+      </div>
+      <div class="material-item">
+        <div class="material-icon">PDF</div>
+        PDF Corporativo — Turismo do Sono
+      </div>
+      <div class="material-item">
+        <div class="material-icon">PDF</div>
+        PDF Corporativo — Medicina Esportiva
+      </div>
+      <div class="material-item">
+        <div class="material-icon">DOC</div>
+        Guia de Retirada de Pedido / Voucher
+      </div>
+      <div class="material-item">
+        <div class="material-icon">PPT</div>
+        Propostas Comerciais Personalizadas
+      </div>
+      <div class="material-item">
+        <div class="material-icon">RPT</div>
+        Relatorios Pos-Venda HALO
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-text">Documento de uso interno — <strong>HALO Operacao Comercial B2B</strong> — Marco 2026</p>
+  </footer>
+
+</main>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (scrollY >= sectionTop - 120) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
