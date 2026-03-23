@@ -16,6 +16,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body, .app { border: none !important; outline: none !important; }
 
   :root {
     --bg: #080A0E;
@@ -140,8 +141,8 @@
   .nav-item:hover { background: var(--bg-card); color: var(--text); border-left-color: var(--accent); }
   .nav-item.active { background: rgba(0,212,255,0.06); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
 
-  .nav-item .icon { font-size: 15px; width: 22px; text-align: center; filter: grayscale(0.6) brightness(0.8); }
-  .nav-item.active .icon { filter: none; }
+  .nav-item .icon { font-size: 15px; width: 22px; text-align: center; filter: grayscale(1) brightness(0.7); }
+  .nav-item.active .icon { filter: grayscale(0) brightness(1); }
 
   .nav-section {
     font-family: var(--font-mono);
@@ -324,9 +325,13 @@
     border: 1px solid;
   }
 
-  .health-green { border-color: rgba(0,255,136,0.3); color: var(--success); background: rgba(0,255,136,0.06); }
-  .health-yellow { border-color: rgba(255,184,0,0.3); color: var(--warning); background: rgba(255,184,0,0.06); }
-  .health-red { border-color: rgba(255,68,68,0.3); color: var(--danger); background: rgba(255,68,68,0.06); }
+  .health-threat { border-color: #FF4444; color: #FF4444; background: transparent; }
+  .health-active { border-color: #00D4FF; color: #00D4FF; background: transparent; }
+  .health-standby { border-color: #374151; color: #374151; background: transparent; }
+  /* Legacy compat */
+  .health-green { border-color: rgba(0,255,136,0.3); color: var(--success); background: transparent; }
+  .health-yellow { border-color: rgba(255,184,0,0.3); color: var(--warning); background: transparent; }
+  .health-red { border-color: rgba(255,68,68,0.3); color: var(--danger); background: transparent; }
 
   .empresa-stats {
     display: grid;
@@ -361,15 +366,15 @@
   }
 
   .progress-bar {
-    height: 2px;
-    background: var(--border);
-    border-radius: 0;
+    height: 3px;
+    background: #1F2937;
+    border-radius: 2px;
     overflow: hidden;
   }
 
   .progress-fill {
     height: 100%;
-    border-radius: 0;
+    border-radius: 2px;
     transition: width 0.5s ease-out;
   }
 
@@ -2213,18 +2218,21 @@ function getStuckTasks() {
 
 function getHealth(empresaId) {
   const tasks = getTasksForEmpresa(empresaId);
-  if (tasks.length === 0) return 'green';
-  const done = tasks.filter(t => t.status === 'concluido').length;
+  if (tasks.length === 0) return 'standby';
   const stuck = tasks.filter(t => t.semanas_acumuladas >= 2 && t.status !== 'concluido').length;
-  if (stuck > 0) return 'red';
-  const pct = done / tasks.length;
-  if (pct >= 0.6) return 'green';
-  if (pct >= 0.3) return 'yellow';
-  return 'red';
+  if (stuck > 0) return 'threat';
+  const inProgress = tasks.filter(t => t.status === 'em_andamento' || t.status === 'pendente').length;
+  if (inProgress > 0) return 'active';
+  return 'standby';
 }
 
 function healthLabel(h) {
-  return h === 'green' ? 'Saudável' : h === 'yellow' ? 'Atenção' : 'Crítico';
+  const icons = {
+    threat: '<svg width="8" height="8" viewBox="0 0 8 8" style="vertical-align:middle;margin-right:4px"><circle cx="4" cy="4" r="3.5" fill="none" stroke="#FF4444" stroke-width="1"/><circle cx="4" cy="4" r="1.5" fill="#FF4444"/></svg>THREAT',
+    active: '<svg width="8" height="8" viewBox="0 0 8 8" style="vertical-align:middle;margin-right:4px"><circle cx="4" cy="4" r="3.5" fill="none" stroke="#00D4FF" stroke-width="1"/><circle cx="4" cy="4" r="1.5" fill="#00D4FF"/></svg>ACTIVE',
+    standby: '<svg width="8" height="8" viewBox="0 0 8 8" style="vertical-align:middle;margin-right:4px"><circle cx="4" cy="4" r="3.5" fill="none" stroke="#374151" stroke-width="1"/></svg>STANDBY'
+  };
+  return icons[h] || icons.standby;
 }
 
 function statusLabel(s) {
@@ -2349,7 +2357,7 @@ function renderDashboard() {
   // Stuck alert
   if (stuckTasks.length > 0) {
     html += `<div class="alert-bar alert-warning">
-      ⚠ ${stuckTasks.length} tarefa${stuckTasks.length > 1 ? 's' : ''} travada${stuckTasks.length > 1 ? 's' : ''} (2+ semanas sem conclusão)
+      <svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:middle;margin-right:4px"><path d="M7 1L13 12H1L7 1Z" fill="none" stroke="#FFB800" stroke-width="1.5"/><text x="7" y="10.5" text-anchor="middle" fill="#FFB800" font-size="8" font-weight="700">!</text></svg> ${stuckTasks.length} tarefa${stuckTasks.length > 1 ? 's' : ''} travada${stuckTasks.length > 1 ? 's' : ''} (2+ semanas sem conclus&atilde;o)
     </div>`;
   }
 
@@ -2365,8 +2373,8 @@ function renderDashboard() {
     const pct = total > 0 ? Math.round((done / total) * 100) : 0;
     const health = getHealth(e.id);
 
-    html += `<div class="card card-clickable empresa-card" style="cursor:pointer" onclick="navigate('empresa','${e.id}')">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${e.cor};border-radius:var(--radius) var(--radius) 0 0"></div>
+    html += `<div class="card card-clickable empresa-card" style="cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.4),0 0 0 1px #1F2937" onmouseenter="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.4),0 0 0 1px ${e.cor}99'" onmouseleave="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.4),0 0 0 1px #1F2937'" onclick="navigate('empresa','${e.id}')">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:${e.cor}"></div>
       <div class="empresa-card-header">
         <div class="empresa-name">
           <span class="empresa-dot" style="background:${e.cor}"></span>
@@ -2376,20 +2384,20 @@ function renderDashboard() {
       </div>
       <div class="empresa-stats">
         <div class="stat-item">
-          <div class="stat-value" style="color:#facc15">${pending}</div>
+          <div class="stat-value" style="color:var(--accent)">${pending}</div>
           <div class="stat-label">Pendentes</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value" style="color:#60a5fa">${inProgress + blocked}</div>
+          <div class="stat-value" style="color:var(--warning)">${inProgress + blocked}</div>
           <div class="stat-label">Andamento</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value" style="color:#4ade80">${done}</div>
+          <div class="stat-value" style="color:var(--success)">${done}</div>
           <div class="stat-label">Feitas</div>
         </div>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill" style="width:${pct}%;background:${e.cor}"></div>
+        <div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,${e.cor},#00D4FF)"></div>
       </div>
       <div class="progress-label">
         <span>Progresso</span>
@@ -3698,7 +3706,7 @@ function renderHrmDashboard(tasks) {
   html += '</div>';
 
   // Right: Urgent tasks
-  html += '<div class="hrm-panel"><div class="hrm-panel-title">⚠️ Tarefas Urgentes</div>';
+  html += '<div class="hrm-panel"><div class="hrm-panel-title">&loz; Tarefas Urgentes</div>';
   const urgent = tasks.filter(t => (t.semanas_acumuladas >= 2 || t.status === 'bloqueado') && t.status !== 'concluido')
     .sort((a, b) => (b.semanas_acumuladas || 0) - (a.semanas_acumuladas || 0))
     .slice(0, 5);
@@ -3967,7 +3975,7 @@ function renderHrmAgenda() {
             </div>
           </div>
           <span class="hrm-agenda-badge hrm-ag-${a.status}">${a.status}</span>
-          ${a.status === 'agendado' ? `<button class="hrm-advance-btn" onclick="event.stopPropagation();marcarHrmRealizado('${a.id}')">✓ Realizado</button>` : ''}
+          ${a.status === 'agendado' ? `<button class="hrm-advance-btn" onclick="event.stopPropagation();marcarHrmRealizado('${a.id}')">&check; Realizado</button>` : ''}
           <button class="task-action-btn" onclick="openHrmAgendaModal('${a.id}')" title="Editar">✎</button>
           <button class="task-action-btn" onclick="deleteHrmAgendamento('${a.id}')" title="Excluir">✕</button>
         </div>`;
@@ -4561,12 +4569,12 @@ function renderEmpresa() {
     if (!haloSalesFetched && !haloSalesLoading) fetchHaloSales();
 
     const haloTabs = [
-      { id: 'dashboard', label: '📊 Dashboard' },
-      { id: 'clientes', label: '👤 Clientes' },
-      { id: 'tarefas', label: '✅ Tarefas' },
-      { id: 'documentos', label: '📁 Documentos' },
-      { id: 'agendamentos', label: '📅 Agendamentos' },
-      { id: 'eventos', label: '🎪 Eventos' },
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'clientes', label: 'Clientes' },
+      { id: 'tarefas', label: 'Tarefas' },
+      { id: 'documentos', label: 'Documentos' },
+      { id: 'agendamentos', label: 'Agendamentos' },
+      { id: 'eventos', label: 'Eventos' },
     ];
 
     html += '<div class="halo-subnav">';
@@ -4588,11 +4596,11 @@ function renderEmpresa() {
   // SMARTMEDIA — Full module with sub-navigation
   else if (emp.id === 'smartmedia') {
     const smTabs = [
-      { id: 'dashboard', label: '📊 Dashboard' },
-      { id: 'clientes', label: '👤 Clientes' },
-      { id: 'tarefas', label: '✅ Tarefas' },
-      { id: 'financeiro', label: '💰 Financeiro' },
-      { id: 'documentos', label: '📁 Documentos' },
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'clientes', label: 'Clientes' },
+      { id: 'tarefas', label: 'Tarefas' },
+      { id: 'financeiro', label: 'Financeiro' },
+      { id: 'documentos', label: 'Documentos' },
     ];
 
     html += '<div class="sm-subnav">';
@@ -4613,11 +4621,11 @@ function renderEmpresa() {
   // HRM CAPITAL — Full module with sub-navigation
   else if (emp.id === 'hrm') {
     const hrmTabs = [
-      { id: 'dashboard', label: '📊 Dashboard' },
-      { id: 'clientes', label: '👤 Clientes' },
-      { id: 'tarefas', label: '✅ Tarefas' },
-      { id: 'relatorios', label: '📋 Relatórios' },
-      { id: 'agenda', label: '📅 Agenda' },
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'clientes', label: 'Clientes' },
+      { id: 'tarefas', label: 'Tarefas' },
+      { id: 'relatorios', label: 'Relat\u00f3rios' },
+      { id: 'agenda', label: 'Agenda' },
     ];
 
     html += '<div class="hrm-subnav">';
@@ -5132,11 +5140,11 @@ function renderConselho() {
 
   // Internal tabs
   const tabs = [
-    { id: 'agenda', label: '📅 Agenda da Semana' },
-    { id: 'candidatos', label: '👥 Candidatos' },
-    { id: 'acompanhamento', label: '📊 Acompanhamento Mensal' },
-    { id: 'tarefas_op', label: '✅ Tarefas da Operação' },
-    { id: 'relatorio', label: '📋 Relatório ao Diretório' },
+    { id: 'agenda', label: 'Agenda da Semana' },
+    { id: 'candidatos', label: 'Candidatos' },
+    { id: 'acompanhamento', label: 'Acompanhamento Mensal' },
+    { id: 'tarefas_op', label: 'Tarefas da Opera\u00e7\u00e3o' },
+    { id: 'relatorio', label: 'Relat\u00f3rio ao Diret\u00f3rio' },
   ];
 
   html += '<div class="conselho-tabs">';
@@ -5212,7 +5220,7 @@ function renderConselhoAgenda() {
         </div>
         <div style="display:flex;align-items:center;gap:6px">
           <span class="agenda-status ag-${ag.status}">${ag.status}</span>
-          ${ag.status === 'agendado' ? `<button class="btn btn-sm btn-success" onclick="marcarRealizado('${ag.id}')" style="font-size:11px">✓ Realizado</button>` : ''}
+          ${ag.status === 'agendado' ? `<button class="btn btn-sm btn-success" onclick="marcarRealizado('${ag.id}')" style="font-size:11px">&check; Realizado</button>` : ''}
           <button class="task-action-btn" onclick="openEditAgendamentoModal('${ag.id}')" title="Editar">✎</button>
           <button class="task-action-btn" onclick="deleteAgendamento('${ag.id}')" title="Excluir">✕</button>
         </div>
@@ -5435,7 +5443,7 @@ function renderConselhoRelatorio() {
   // Críticos
   if (criticos.length > 0) {
     html += `<div class="relatorio-box" style="border-color:rgba(239,68,68,0.3)">
-      <h3 style="color:#f87171">⚠️ Candidatos em Situação Crítica</h3>
+      <h3 style="color:#f87171">&loz; Candidatos em Situação Crítica</h3>
       ${criticos.map(c => {
         const acMes = acompanhamentos.filter(a => a.candidato_id === c.id).slice(-1)[0];
         return `<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)">
@@ -5461,7 +5469,7 @@ function renderConselhoRelatorio() {
 
   // Export button
   html += `<div style="text-align:center;margin-top:20px">
-    <button class="btn btn-primary" onclick="exportRelatorio()" style="font-size:14px;padding:12px 32px">📋 Exportar Relatório</button>
+    <button class="btn btn-primary" onclick="exportRelatorio()" style="font-size:14px;padding:12px 32px">Exportar Relat&oacute;rio</button>
   </div>`;
 
   return html;
