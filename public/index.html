@@ -1530,9 +1530,92 @@
 
   .toast.success { border-color: #16a34a; }
   .toast.error { border-color: #ef4444; }
+  /* ── Login Gate ── */
+  .login-gate {
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+  }
+  .login-gate.hidden { display: none; }
+  .login-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    width: 100%; max-width: 400px;
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
+  }
+  .login-box h1 {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+  }
+  .login-box p {
+    color: var(--text-secondary); font-size: 13px; text-align: center;
+  }
+  .login-input {
+    width: 100%; padding: 12px 16px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text);
+    font-family: inherit; font-size: 14px; text-align: center;
+    letter-spacing: 4px; outline: none; transition: border-color var(--transition);
+  }
+  .login-input:focus { border-color: #F59E0B; }
+  .login-input.shake {
+    animation: loginShake 0.4s ease;
+    border-color: #ef4444;
+  }
+  .login-btn {
+    width: 100%; padding: 12px;
+    background: #F59E0B; color: #000; font-weight: 600;
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer; font-family: inherit; font-size: 14px;
+    transition: opacity var(--transition);
+  }
+  .login-btn:hover { opacity: 0.9; }
+  @keyframes loginShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-4px); }
+  }
 </style>
 </head>
 <body>
+
+<!-- LOGIN GATE -->
+<div class="login-gate" id="loginGate">
+  <div class="login-box">
+    <h1>ÁGUIA</h1>
+    <p>Sistema de Gestão Operacional</p>
+    <input type="password" class="login-input" id="loginPassword" placeholder="••••••" autofocus
+      onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="login-btn" onclick="checkLogin()">Entrar</button>
+  </div>
+</div>
+
+<script>
+function checkLogin() {
+  const input = document.getElementById('loginPassword');
+  const hash = Array.from(new TextEncoder().encode(input.value))
+    .reduce((h, b) => ((h << 5) - h + b) | 0, 0);
+  // Hash of "MACHINE" = pre-computed
+  if (input.value === atob('TUFDSE lORQ=='.replace(' ',''))) {
+    sessionStorage.setItem('aguia_auth', '1');
+    document.getElementById('loginGate').classList.add('hidden');
+    input.value = '';
+  } else {
+    input.classList.add('shake');
+    input.value = '';
+    setTimeout(() => input.classList.remove('shake'), 400);
+  }
+}
+// Auto-skip if already authenticated this session
+if (sessionStorage.getItem('aguia_auth') === '1') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('loginGate').classList.add('hidden');
+  });
+}
+</script>
 
 <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
