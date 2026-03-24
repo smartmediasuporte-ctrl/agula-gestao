@@ -4688,7 +4688,6 @@ function renderEmpresa() {
       { id: 'dashboard', label: 'Dashboard' },
       { id: 'clientes', label: 'Clientes' },
       { id: 'tarefas', label: 'Tarefas' },
-      { id: 'relatorios', label: 'Relat\u00f3rios' },
       { id: 'agenda', label: 'Agenda' },
     ];
 
@@ -4702,7 +4701,6 @@ function renderEmpresa() {
       case 'dashboard': html += renderHrmDashboard(tasks); break;
       case 'clientes': html += renderHrmClientes(); break;
       case 'tarefas': html += renderHrmTarefas(tasks); break;
-      case 'relatorios': html += renderHrmRelatorios(); break;
       case 'agenda': html += renderHrmAgenda(); break;
       default: html += renderHrmDashboard(tasks);
     }
