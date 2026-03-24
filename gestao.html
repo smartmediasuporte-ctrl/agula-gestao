@@ -1951,6 +1951,70 @@ if ('serviceWorker' in navigator) {
 }
 
 // ══════════════════════════════════════════════════════════
+// PUSH NOTIFICATIONS — tarefas travadas e pendentes
+// ══════════════════════════════════════════════════════════
+
+let notificationsEnabled = false;
+
+function requestNotificationPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    notificationsEnabled = true;
+    return;
+  }
+  if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(perm => {
+      notificationsEnabled = perm === 'granted';
+    });
+  }
+}
+
+function checkAndNotify() {
+  if (!notificationsEnabled) return;
+  const data = loadData();
+  if (!data || !data.tarefas) return;
+  const currentWeek = data.currentWeek;
+  const tarefas = data.tarefas.filter(t => t.semana === currentWeek && t.status !== 'concluido');
+
+  // Tarefas travadas (2+ semanas)
+  const travadas = tarefas.filter(t => (t.semanas_acumuladas || 0) >= 2);
+
+  // Tarefas pendentes total
+  const pendentes = tarefas.filter(t => t.status === 'pendente');
+  const emAndamento = tarefas.filter(t => t.status === 'em_andamento');
+
+  // Notificar travadas
+  if (travadas.length > 0) {
+    new Notification('AGUIA — Tarefas Travadas', {
+      body: `${travadas.length} tarefa(s) com 2+ semanas sem conclusao. Acao necessaria.`,
+      icon: '/manifest-icon-192.png',
+      tag: 'travadas',
+      renotify: true
+    });
+  }
+
+  // Notificar resumo diario (1x ao abrir)
+  const lastNotify = localStorage.getItem('aguia_last_notify');
+  const today = new Date().toISOString().split('T')[0];
+  if (lastNotify !== today && (pendentes.length > 0 || emAndamento.length > 0)) {
+    setTimeout(() => {
+      new Notification('AGUIA — Resumo do Dia', {
+        body: `${pendentes.length} pendentes, ${emAndamento.length} em andamento. Foco na missao.`,
+        icon: '/manifest-icon-192.png',
+        tag: 'resumo',
+        renotify: true
+      });
+    }, 3000);
+    localStorage.setItem('aguia_last_notify', today);
+  }
+}
+
+// Pedir permissao ao carregar e verificar a cada 30 min
+requestNotificationPermission();
+setTimeout(checkAndNotify, 5000); // 5s apos carregar
+setInterval(checkAndNotify, 30 * 60 * 1000); // a cada 30 min
+
+// ══════════════════════════════════════════════════════════
 // DATA LAYER
 // ══════════════════════════════════════════════════════════
 
