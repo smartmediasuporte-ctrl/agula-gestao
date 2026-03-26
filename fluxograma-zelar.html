@@ -19,9 +19,10 @@
     padding: 40px 20px 60px;
   }
 
+  /* --- Header --- */
   .header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: 20px;
   }
 
   .header h1 {
@@ -40,6 +41,75 @@
     font-weight: 400;
   }
 
+  /* --- Controls bar --- */
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: 1px solid #27272a;
+    background: #111113;
+    color: #fafafa;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .btn:hover { border-color: #1A56C4; background: #18181b; }
+
+  .btn.primary {
+    background: #1A56C4;
+    border-color: #1A56C4;
+    color: #fff;
+  }
+
+  .btn.primary:hover { background: #1d62dd; }
+
+  .btn.primary.playing {
+    background: #ef4444;
+    border-color: #ef4444;
+  }
+
+  .btn.primary.playing:hover { background: #dc2626; }
+
+  .btn svg { flex-shrink: 0; }
+
+  /* --- Progress bar --- */
+  .progress-bar {
+    width: 100%;
+    max-width: 520px;
+    height: 4px;
+    background: #1c1c1f;
+    border-radius: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .progress-bar.visible { opacity: 1; }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1A56C4, #4ade80);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* --- Flowchart --- */
   .flowchart {
     position: relative;
     width: 100%;
@@ -58,12 +128,27 @@
     width: 100%;
     max-width: 380px;
     z-index: 2;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .node.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .node:hover {
     border-color: #1A56C4;
     box-shadow: 0 0 20px rgba(26, 86, 196, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .node.active {
+    border-color: #1A56C4 !important;
+    box-shadow: 0 0 30px rgba(26, 86, 196, 0.3) !important;
+    transform: scale(1.03);
   }
 
   .node .step {
@@ -93,6 +178,44 @@
     line-height: 1.4;
   }
 
+  /* Expanded detail panel */
+  .node .detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+    margin-top: 0;
+  }
+
+  .node.expanded .detail {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 12px;
+  }
+
+  .detail-inner {
+    background: rgba(26, 86, 196, 0.06);
+    border: 1px solid rgba(26, 86, 196, 0.15);
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  .detail-inner .detail-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1A56C4;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .detail-inner .detail-text {
+    font-size: 12px;
+    color: #a1a1aa;
+    line-height: 1.6;
+  }
+
   /* Start node */
   .node.start {
     background: linear-gradient(135deg, #1A56C4 0%, #1346a3 100%);
@@ -107,7 +230,15 @@
 
   .node.start .desc { color: rgba(255,255,255,0.7); }
 
-  .node.start:hover {
+  .node.start .detail-inner {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .node.start .detail-inner .detail-title { color: #93c5fd; }
+  .node.start .detail-inner .detail-text { color: rgba(255,255,255,0.7); }
+
+  .node.start:hover, .node.start.active {
     box-shadow: 0 4px 32px rgba(26, 86, 196, 0.45);
     border-color: #5b8ee6;
   }
@@ -126,24 +257,41 @@
 
   .node.end .desc { color: rgba(255,255,255,0.7); }
 
-  .node.end:hover {
+  .node.end .detail-inner {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .node.end .detail-inner .detail-title { color: #86efac; }
+  .node.end .detail-inner .detail-text { color: rgba(255,255,255,0.7); }
+
+  .node.end:hover, .node.end.active {
     box-shadow: 0 4px 32px rgba(22, 163, 74, 0.45);
     border-color: #4ade80;
   }
 
-  /* Decision diamond */
+  /* --- Decision diamond --- */
   .decision-wrapper {
     display: flex;
     justify-content: center;
     margin: 0 auto;
     position: relative;
     z-index: 2;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all 0.5s ease;
+  }
+
+  .decision-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .diamond {
     width: 180px;
     height: 180px;
     position: relative;
+    cursor: pointer;
   }
 
   .diamond-shape {
@@ -156,12 +304,18 @@
     top: 25px;
     left: 25px;
     border-radius: 12px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.3s ease;
   }
 
   .diamond:hover .diamond-shape {
     border-color: #fbbf24;
     box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
+  }
+
+  .diamond.active .diamond-shape {
+    border-color: #fbbf24;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.35);
+    transform: rotate(45deg) scale(1.05);
   }
 
   .diamond-content {
@@ -193,7 +347,7 @@
     color: #fafafa;
   }
 
-  /* Arrows (vertical connectors) */
+  /* --- Arrows --- */
   .arrow {
     display: flex;
     justify-content: center;
@@ -204,7 +358,16 @@
 
   .arrow svg { display: block; }
 
-  /* Branch labels */
+  .arrow line {
+    transition: stroke 0.5s ease;
+  }
+
+  .arrow.lit line {
+    stroke: #1A56C4 !important;
+    filter: drop-shadow(0 0 4px rgba(26,86,196,0.5));
+  }
+
+  /* --- Branch labels --- */
   .label-yes, .label-no {
     position: absolute;
     font-size: 12px;
@@ -213,6 +376,7 @@
     border-radius: 20px;
     z-index: 5;
     letter-spacing: 0.5px;
+    transition: transform 0.3s ease;
   }
 
   .label-yes {
@@ -227,7 +391,11 @@
     border: 1px solid rgba(239, 68, 68, 0.3);
   }
 
-  /* Loop-back path container */
+  .label-yes:hover, .label-no:hover {
+    transform: scale(1.1);
+  }
+
+  /* --- Loop path --- */
   .loop-section {
     position: relative;
   }
@@ -242,7 +410,7 @@
     pointer-events: none;
   }
 
-  /* Icon circles */
+  /* --- Icon circles --- */
   .icon-circle {
     width: 36px;
     height: 36px;
@@ -255,17 +423,88 @@
   }
 
   .icon-circle.blue { background: rgba(26, 86, 196, 0.15); }
-  .icon-circle.amber { background: rgba(245, 158, 11, 0.15); }
   .icon-circle.green { background: rgba(22, 163, 74, 0.15); }
 
-  /* Responsive */
+  /* --- Pulse animation --- */
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(26,86,196,0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(26,86,196,0); }
+    100% { box-shadow: 0 0 0 0 rgba(26,86,196,0); }
+  }
+
+  .node.playing {
+    animation: pulse-ring 1.5s ease-out infinite;
+  }
+
+  .node.start.playing { animation-name: pulse-ring-blue; }
+  @keyframes pulse-ring-blue {
+    0% { box-shadow: 0 0 0 0 rgba(26,86,196,0.5); }
+    70% { box-shadow: 0 0 0 18px rgba(26,86,196,0); }
+    100% { box-shadow: 0 0 0 0 rgba(26,86,196,0); }
+  }
+
+  .node.end.playing { animation-name: pulse-ring-green; }
+  @keyframes pulse-ring-green {
+    0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.5); }
+    70% { box-shadow: 0 0 0 18px rgba(22,163,74,0); }
+    100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+  }
+
+  @keyframes pulse-ring-amber {
+    0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(245,158,11,0); }
+    100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+  }
+
+  .diamond.playing .diamond-shape {
+    animation: pulse-ring-amber 1.5s ease-out infinite;
+  }
+
+  /* --- Step counter badge --- */
+  .step-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: #71717a;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    transition: all 0.3s;
+  }
+
+  .step-counter.active {
+    border-color: #1A56C4;
+    color: #1A56C4;
+    background: rgba(26,86,196,0.08);
+  }
+
+  /* --- Tooltip on click --- */
+  .click-hint {
+    font-size: 11px;
+    color: #52525b;
+    text-align: center;
+    margin-top: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .node:hover .click-hint { opacity: 1; }
+
+  /* --- Responsive --- */
   @media (max-width: 560px) {
+    body { padding: 24px 16px 40px; }
     .node { max-width: 320px; padding: 14px 18px; }
     .node .title { font-size: 14px; }
     .diamond { width: 150px; height: 150px; }
     .diamond-shape { width: 108px; height: 108px; top: 21px; left: 21px; }
     .loop-path { right: -40px; width: 40px; }
     .header h1 { font-size: 22px; }
+    .controls { gap: 8px; }
+    .btn { padding: 8px 16px; font-size: 12px; }
   }
 </style>
 </head>
@@ -276,63 +515,100 @@
   <p>Jornada completa da solicita&ccedil;&atilde;o at&eacute; a finaliza&ccedil;&atilde;o do servi&ccedil;o</p>
 </div>
 
+<!-- Controls -->
+<div class="controls">
+  <button class="btn primary" id="btnPlay" onclick="togglePlay()">
+    <svg id="iconPlay" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg>
+    <span id="btnPlayText">Simular Fluxo</span>
+  </button>
+  <button class="btn" onclick="resetAll()">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 2.64 6.36" stroke="#71717a" stroke-width="2" stroke-linecap="round"/><path d="M3 17V12h5" stroke="#71717a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Resetar
+  </button>
+  <button class="btn" onclick="expandAll()">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke="#71717a" stroke-width="2" stroke-linecap="round"/></svg>
+    <span id="btnExpandText">Expandir Tudo</span>
+  </button>
+</div>
+
+<!-- Step counter -->
+<div class="step-counter" id="stepCounter">Clique nos passos ou simule o fluxo</div>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
 <div class="flowchart">
 
   <!-- 1. Solicitacao -->
-  <div class="node start" id="step1">
+  <div class="node start" id="step1" data-step="1" onclick="toggleNode(this)">
     <div class="icon-circle blue">
       <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
     </div>
     <span class="step">Passo 1</span>
     <div class="title">Cliente faz a solicita&ccedil;&atilde;o</div>
     <div class="desc">Ponto de entrada no aplicativo</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">O cliente abre o app ZELAR, descreve o servi&ccedil;o desejado, seleciona a categoria, informa endere&ccedil;o e envia a solicita&ccedil;&atilde;o.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="1">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
   <!-- 2. Enviada aos prestadores -->
-  <div class="node" id="step2">
+  <div class="node" id="step2" data-step="2" onclick="toggleNode(this)">
     <span class="step">Passo 2</span>
     <div class="title">Solicita&ccedil;&atilde;o enviada aos prestadores</div>
     <div class="desc">Sistema distribui para prestadores dispon&iacute;veis</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">O algoritmo identifica prestadores dispon&iacute;veis na regi&atilde;o, com base em especialidade, avalia&ccedil;&atilde;o e proximidade.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="2">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
   <!-- 3. Notificacao -->
-  <div class="node" id="step3">
+  <div class="node" id="step3" data-step="3" onclick="toggleNode(this)">
     <span class="step">Passo 3</span>
     <div class="title">Prestador recebe notifica&ccedil;&atilde;o</div>
     <div class="desc">Push notification no dispositivo</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">Notifica&ccedil;&atilde;o push com resumo do servi&ccedil;o, valor estimado e localiza&ccedil;&atilde;o. O prestador tem tempo limitado para responder.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="3">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
-  <!-- Loop section: decision + loop-back arrow -->
+  <!-- Decision 1: Prestador aceita? -->
   <div class="loop-section">
-
-    <!-- Loop-back SVG path (NO branch going back to step 2) -->
     <svg class="loop-path" viewBox="0 0 60 500" preserveAspectRatio="none" fill="none">
       <path d="M 0 250 L 30 250 Q 55 250 55 225 L 55 25 Q 55 0 30 0 L 0 0"
             stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
-      <!-- Arrowhead at the end (pointing left into step 2) -->
       <polygon points="0,0 10,-5 10,5" fill="#ef4444" transform="translate(0, 0)"/>
     </svg>
+    <div class="label-no" style="position: absolute; top: 240px; right: -92px; z-index: 5;">N&Atilde;O</div>
 
-    <!-- NO label -->
-    <div class="label-no" style="position: absolute; top: 240px; right: -92px; z-index: 5;">
-      N&Atilde;O
-    </div>
-
-    <!-- 4. Decisao -->
-    <div class="decision-wrapper">
-      <div class="diamond" id="step4">
+    <div class="decision-wrapper" id="decision1">
+      <div class="diamond" id="step4" data-step="4">
         <div class="diamond-shape"></div>
         <div class="diamond-content">
           <span class="step">Passo 4</span>
@@ -340,76 +616,96 @@
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- YES label + arrow -->
-  <div class="arrow" style="position: relative;">
+  <div class="arrow" data-arrow="4" style="position: relative;">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
     <div class="label-yes" style="position: absolute; left: calc(50% + 12px); top: 14px;">SIM</div>
   </div>
 
   <!-- 5. Agenda -->
-  <div class="node" id="step5">
+  <div class="node" id="step5" data-step="5" onclick="toggleNode(this)">
     <span class="step">Passo 5</span>
     <div class="title">Agenda gerada automaticamente</div>
     <div class="desc">Data e hor&aacute;rio confirmados no sistema</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">O sistema cria automaticamente um agendamento com data, hor&aacute;rio e dura&ccedil;&atilde;o estimada do servi&ccedil;o.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="5">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
   <!-- 6. Cliente notificado -->
-  <div class="node" id="step6">
+  <div class="node" id="step6" data-step="6" onclick="toggleNode(this)">
     <span class="step">Passo 6</span>
     <div class="title">Cliente notificado</div>
     <div class="desc">Confirma&ccedil;&atilde;o com dados do prestador</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">Cliente recebe nome, foto, avalia&ccedil;&atilde;o do prestador e data/hora confirmada. Pode acompanhar em tempo real.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="6">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
   <!-- 7. Servico iniciado -->
-  <div class="node" id="step7">
+  <div class="node" id="step7" data-step="7" onclick="toggleNode(this)">
     <span class="step">Passo 7</span>
     <div class="title">Servi&ccedil;o iniciado</div>
     <div class="desc">Prestador em campo realizando o servi&ccedil;o</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">Prestador confirma chegada no local. Cliente acompanha status em tempo real. Timer de execu&ccedil;&atilde;o ativado.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="7">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
-  <!-- 8. Fotos anexadas -->
-  <div class="node" id="step8">
+  <!-- 8. Fotos -->
+  <div class="node" id="step8" data-step="8" onclick="toggleNode(this)">
     <span class="step">Passo 8</span>
     <div class="title">Fotos do servi&ccedil;o anexadas</div>
     <div class="desc">Registro fotogr&aacute;fico pelo prestador</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">Prestador anexa fotos do antes e depois. Registro com geolocaliza&ccedil;&atilde;o e timestamp para comprova&ccedil;&atilde;o.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
-  <div class="arrow">
+  <div class="arrow" data-arrow="8">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
   </div>
 
-  <!-- 9. Decisao do cliente -->
+  <!-- Decision 2: Cliente aprova? -->
   <div class="loop-section">
-
-    <!-- Loop-back SVG (NAO volta ao passo 7 - Servico iniciado) -->
     <svg class="loop-path" style="top: -186px; height: calc(100% + 186px);" viewBox="0 0 60 500" preserveAspectRatio="none" fill="none">
       <path d="M 0 250 L 30 250 Q 55 250 55 225 L 55 25 Q 55 0 30 0 L 0 0"
             stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
       <polygon points="0,0 10,-5 10,5" fill="#ef4444" transform="translate(0, 0)"/>
     </svg>
+    <div class="label-no" style="position: absolute; top: 240px; right: -92px; z-index: 5;">N&Atilde;O</div>
 
-    <!-- NO label -->
-    <div class="label-no" style="position: absolute; top: 240px; right: -92px; z-index: 5;">
-      N&Atilde;O
-    </div>
-
-    <div class="decision-wrapper">
-      <div class="diamond" id="step9">
+    <div class="decision-wrapper" id="decision2">
+      <div class="diamond" id="step9" data-step="9">
         <div class="diamond-shape"></div>
         <div class="diamond-content">
           <span class="step">Passo 9</span>
@@ -417,49 +713,180 @@
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- Descricao da decisao -->
-  <div class="node" style="margin-top: -8px; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
+  <!-- Description -->
+  <div class="node" style="margin-top: -8px; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); cursor: default;">
     <div class="desc" style="color: #a1a1aa; font-size: 13px;">Cliente avalia as fotos e o servi&ccedil;o realizado e decide se aprova ou solicita corre&ccedil;&atilde;o</div>
   </div>
 
-  <!-- YES label + arrow -->
-  <div class="arrow" style="position: relative;">
+  <div class="arrow" data-arrow="9" style="position: relative;">
     <svg width="2" height="48"><line x1="1" y1="0" x2="1" y2="48" stroke="#27272a" stroke-width="2"/></svg>
     <div class="label-yes" style="position: absolute; left: calc(50% + 12px); top: 14px;">SIM</div>
   </div>
 
   <!-- 10. Finalizado -->
-  <div class="node end" id="step10">
+  <div class="node end" id="step10" data-step="10" onclick="toggleNode(this)">
     <div class="icon-circle green">
       <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
     <span class="step">Passo 10</span>
     <div class="title">Servi&ccedil;o finalizado</div>
     <div class="desc">Avalia&ccedil;&atilde;o liberada para o cliente</div>
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-title">Detalhes</div>
+        <div class="detail-text">Cliente pode avaliar com estrelas e coment&aacute;rio. Pagamento processado. Hist&oacute;rico salvo no perfil de ambos.</div>
+      </div>
+    </div>
+    <div class="click-hint">Clique para detalhes</div>
   </div>
 
 </div>
 
 <script>
-  // Animate nodes on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.15 });
+  const TOTAL_STEPS = 10;
+  let isPlaying = false;
+  let playTimer = null;
+  let currentPlayStep = 0;
+  let allExpanded = false;
 
-  document.querySelectorAll('.node, .decision-wrapper').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.2s, box-shadow 0.2s';
-    observer.observe(el);
-  });
+  const stepNames = {
+    1: 'Cliente faz a solicitacao',
+    2: 'Solicitacao enviada aos prestadores',
+    3: 'Prestador recebe notificacao',
+    4: 'Decisao: Prestador aceita?',
+    5: 'Agenda gerada automaticamente',
+    6: 'Cliente notificado',
+    7: 'Servico iniciado',
+    8: 'Fotos do servico anexadas',
+    9: 'Decisao: Cliente aprova?',
+    10: 'Servico finalizado'
+  };
+
+  // Scroll-triggered entrance
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.node, .decision-wrapper').forEach(el => obs.observe(el));
+
+  // Toggle expand node detail
+  function toggleNode(el) {
+    el.classList.toggle('expanded');
+    const step = el.dataset.step;
+    if (step) updateCounter(step);
+  }
+
+  // Expand all / collapse all
+  function expandAll() {
+    allExpanded = !allExpanded;
+    document.querySelectorAll('.node[data-step]').forEach(n => {
+      if (allExpanded) n.classList.add('expanded');
+      else n.classList.remove('expanded');
+    });
+    document.getElementById('btnExpandText').textContent = allExpanded ? 'Recolher Tudo' : 'Expandir Tudo';
+  }
+
+  // Update step counter
+  function updateCounter(step) {
+    const counter = document.getElementById('stepCounter');
+    counter.textContent = 'Passo ' + step + ' de ' + TOTAL_STEPS + ' \u2014 ' + stepNames[step];
+    counter.classList.add('active');
+  }
+
+  // Simulate flow
+  function togglePlay() {
+    if (isPlaying) {
+      stopPlay();
+    } else {
+      startPlay();
+    }
+  }
+
+  function startPlay() {
+    isPlaying = true;
+    currentPlayStep = 0;
+    const btn = document.getElementById('btnPlay');
+    btn.classList.add('playing');
+    document.getElementById('btnPlayText').textContent = 'Parar';
+    document.getElementById('iconPlay').innerHTML = '<rect x="6" y="5" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#fff"/>';
+    document.getElementById('progressBar').classList.add('visible');
+
+    // Clear previous
+    clearHighlights();
+
+    advanceStep();
+  }
+
+  function stopPlay() {
+    isPlaying = false;
+    clearTimeout(playTimer);
+    const btn = document.getElementById('btnPlay');
+    btn.classList.remove('playing');
+    document.getElementById('btnPlayText').textContent = 'Simular Fluxo';
+    document.getElementById('iconPlay').innerHTML = '<path d="M8 5v14l11-7z" fill="#fff"/>';
+
+    document.querySelectorAll('.playing').forEach(el => el.classList.remove('playing'));
+  }
+
+  function advanceStep() {
+    if (!isPlaying) return;
+    currentPlayStep++;
+    if (currentPlayStep > TOTAL_STEPS) {
+      stopPlay();
+      return;
+    }
+
+    // Remove previous playing highlights
+    document.querySelectorAll('.node.playing, .diamond.playing').forEach(el => el.classList.remove('playing'));
+
+    // Highlight current step
+    const stepEl = document.getElementById('step' + currentPlayStep);
+    if (stepEl) {
+      if (stepEl.classList.contains('diamond')) {
+        stepEl.classList.add('playing');
+      } else {
+        stepEl.classList.add('playing', 'active', 'visible');
+      }
+      stepEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Light up arrow
+    const arrow = document.querySelector('[data-arrow="' + (currentPlayStep - 1) + '"]');
+    if (arrow) arrow.classList.add('lit');
+
+    // Update progress
+    const pct = (currentPlayStep / TOTAL_STEPS) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    updateCounter(currentPlayStep);
+
+    playTimer = setTimeout(advanceStep, 1800);
+  }
+
+  function clearHighlights() {
+    document.querySelectorAll('.node').forEach(n => {
+      n.classList.remove('active', 'playing', 'expanded');
+    });
+    document.querySelectorAll('.diamond').forEach(d => d.classList.remove('active', 'playing'));
+    document.querySelectorAll('.arrow').forEach(a => a.classList.remove('lit'));
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('progressBar').classList.remove('visible');
+    const counter = document.getElementById('stepCounter');
+    counter.textContent = 'Clique nos passos ou simule o fluxo';
+    counter.classList.remove('active');
+    allExpanded = false;
+    document.getElementById('btnExpandText').textContent = 'Expandir Tudo';
+  }
+
+  function resetAll() {
+    stopPlay();
+    clearHighlights();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 </script>
 </body>
 </html>
