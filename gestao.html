@@ -1840,7 +1840,7 @@ const db = firebase.firestore();
 // Sync status indicator
 let syncStatus = 'synced'; // 'synced' | 'saving' | 'offline'
 const pendingWrites = new Map();
-const DEBOUNCE_MS = 800;
+const DEBOUNCE_MS = 300; // Reduced for faster sync
 
 function updateSyncIndicator() {
   const el = document.getElementById('syncIndicator');
@@ -1855,20 +1855,33 @@ function updateSyncIndicator() {
   el.innerHTML = `<span style="font-family:var(--font-mono);font-size:8px;opacity:0.7;display:flex;align-items:center;gap:5px;cursor:default;letter-spacing:0.1em;text-transform:uppercase" title="${s.text}"><span style="width:6px;height:6px;border-radius:50%;background:${s.color};display:inline-block;box-shadow:0 0 6px ${s.color};animation:radarPulse 2s infinite"></span>${s.text}</span>`;
 }
 
-// Firestore write with debounce
+// Firestore write with debounce + retry
+const failedWrites = new Map(); // key -> {value, retries}
+
 function syncToFirestore(key, value) {
   clearTimeout(pendingWrites.get(key));
   syncStatus = 'saving';
   updateSyncIndicator();
 
   const timer = setTimeout(() => {
-    db.collection('data').doc(key).set({ value: value, updated_at: new Date().toISOString() })
+    const ts = new Date().toISOString();
+    db.collection('data').doc(key).set({ value: value, updated_at: ts })
       .then(() => {
+        failedWrites.delete(key);
         syncStatus = 'synced';
         updateSyncIndicator();
       })
       .catch((err) => {
         console.warn('Firestore write failed:', key, err);
+        // Queue for retry
+        const existing = failedWrites.get(key) || { retries: 0 };
+        if (existing.retries < 3) {
+          failedWrites.set(key, { value, retries: existing.retries + 1 });
+          setTimeout(() => {
+            const queued = failedWrites.get(key);
+            if (queued) syncToFirestore(key, queued.value);
+          }, 2000 * (existing.retries + 1)); // exponential backoff
+        }
         syncStatus = 'offline';
         updateSyncIndicator();
       });
@@ -1878,7 +1891,36 @@ function syncToFirestore(key, value) {
   pendingWrites.set(key, timer);
 }
 
-// Pull from Firestore on startup (merge with localStorage)
+// Flush pending writes before page unload
+window.addEventListener('beforeunload', () => {
+  pendingWrites.forEach((timer, key) => {
+    clearTimeout(timer);
+    const localData = localStorage.getItem(key);
+    if (localData) {
+      try {
+        // Use sendBeacon-style sync write
+        db.collection('data').doc(key).set({
+          value: JSON.parse(localData),
+          updated_at: new Date().toISOString()
+        });
+      } catch(e) {}
+    }
+  });
+});
+
+// Timestamp-based sync: local always wins if more recent
+const SYNC_TIMESTAMPS_KEY = 'aguia_sync_timestamps';
+
+function getSyncTimestamps() {
+  try { return JSON.parse(localStorage.getItem(SYNC_TIMESTAMPS_KEY) || '{}'); } catch(e) { return {}; }
+}
+function setSyncTimestamp(key) {
+  const ts = getSyncTimestamps();
+  ts[key] = Date.now();
+  localStorage.setItem(SYNC_TIMESTAMPS_KEY, JSON.stringify(ts));
+}
+
+// Pull from Firestore on startup — compare timestamps, newest wins
 async function initialSyncFromFirestore() {
   const KEYS = [
     'aguia_gestao_v1', 'conselho_candidatos', 'conselho_agendamentos',
@@ -1892,28 +1934,46 @@ async function initialSyncFromFirestore() {
   try {
     const snapshot = await db.collection('data').get();
     const firestoreData = {};
-    snapshot.forEach(doc => { firestoreData[doc.id] = doc.data().value; });
+    snapshot.forEach(doc => { firestoreData[doc.id] = doc.data(); });
 
-    // For each key: if Firestore has data, use it (cloud wins)
+    const localTimestamps = getSyncTimestamps();
+
     for (const key of KEYS) {
-      if (firestoreData[key] !== undefined) {
-        localStorage.setItem(key, typeof firestoreData[key] === 'string' ? firestoreData[key] : JSON.stringify(firestoreData[key]));
-      } else {
-        // Firestore empty for this key — push localStorage to cloud
-        const local = localStorage.getItem(key);
-        if (local) {
-          try {
-            syncToFirestore(key, JSON.parse(local));
-          } catch(e) {
-            syncToFirestore(key, local);
-          }
+      const cloudDoc = firestoreData[key];
+      const localData = localStorage.getItem(key);
+      const localTs = localTimestamps[key] || 0;
+      const cloudTs = cloudDoc && cloudDoc.updated_at ? new Date(cloudDoc.updated_at).getTime() : 0;
+
+      if (cloudDoc && cloudDoc.value !== undefined && cloudTs > localTs) {
+        // Cloud is newer — use cloud data
+        const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
+        const _orig = localStorage.setItem.__origSetItem || localStorage.setItem.bind(localStorage);
+        // Use original setItem to avoid re-triggering sync
+        Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, val);
+        localTimestamps[key] = cloudTs;
+      } else if (localData && localTs > cloudTs) {
+        // Local is newer — push to cloud
+        try {
+          syncToFirestore(key, JSON.parse(localData));
+        } catch(e) {
+          syncToFirestore(key, localData);
+        }
+      } else if (!cloudDoc && localData) {
+        // Cloud empty — push local
+        try {
+          syncToFirestore(key, JSON.parse(localData));
+        } catch(e) {
+          syncToFirestore(key, localData);
         }
       }
     }
 
+    // Save updated timestamps
+    localStorage.setItem(SYNC_TIMESTAMPS_KEY, JSON.stringify(localTimestamps));
+
     syncStatus = 'synced';
     updateSyncIndicator();
-    // Re-render with fresh data from cloud
+    // Re-render with fresh data
     DATA = loadData();
     render();
   } catch(err) {
@@ -1923,8 +1983,8 @@ async function initialSyncFromFirestore() {
   }
 }
 
-// Enhanced localStorage wrapper — writes to both localStorage and Firestore
-const _origSetItem = localStorage.setItem.bind(localStorage);
+// Enhanced localStorage wrapper — writes to both localStorage and Firestore + timestamps
+const _origSetItem = Object.getPrototypeOf(localStorage).setItem.bind(localStorage);
 localStorage.setItem = function(key, value) {
   _origSetItem(key, value);
   // Sync to Firestore for known keys
@@ -1937,6 +1997,8 @@ localStorage.setItem = function(key, value) {
     'hrm_clientes', 'hrm_relatorios', 'hrm_agenda'
   ];
   if (SYNC_KEYS.includes(key)) {
+    // Record local timestamp so we know this write is fresh
+    setSyncTimestamp(key);
     try {
       syncToFirestore(key, JSON.parse(value));
     } catch(e) {
