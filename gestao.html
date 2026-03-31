@@ -3641,7 +3641,6 @@ const HRM_PIPELINE_STAGES = ['lead', 'contato_feito', 'reuniao_agendada', 'reuni
 const HRM_PIPELINE_LABELS = { lead: 'Lead', contato_feito: 'Contato Feito', reuniao_agendada: 'Reunião Agendada', reuniao_realizada: 'Reunião Realizada', proposta_enviada: 'Proposta Enviada', cliente: 'Cliente' };
 const HRM_AREAS = [
   { id: 'captacao',    nome: 'Captação',    icon: '&bull;', cor: '#2563eb' },
-  { id: 'relatorios',  nome: 'Relatórios',  icon: '&bull;', cor: '#7c3aed' },
   { id: 'operacional', nome: 'Operacional', icon: '&bull;',  cor: '#059669' },
   { id: 'marketing',   nome: 'Marketing',   icon: '&bull;', cor: '#d97706' },
   { id: 'financeiro',  nome: 'Financeiro',  icon: '&bull;', cor: '#dc2626' },
@@ -3771,8 +3770,7 @@ function seedConselhoDigital() {
 function classifyHrmTask(task) {
   const t = task.titulo.toLowerCase();
   if (/reunião|pitch|prospect|captação|cliente|marcar|lead/.test(t)) return 'captacao';
-  if (/relatório|report|global|político|análise/.test(t)) return 'relatorios';
-  if (/operacional|processo|sistema|cadastro/.test(t)) return 'operacional';
+  if (/operacional|processo|sistema|cadastro|relatório|report|global|político|análise/.test(t)) return 'operacional';
   if (/instagram|conteúdo|post|marketing|evento/.test(t)) return 'marketing';
   if (/financeiro|pagamento|cobrança|taxa/.test(t)) return 'financeiro';
   return task.area_hrm || null;
