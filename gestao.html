@@ -1910,6 +1910,7 @@ window.addEventListener('beforeunload', () => {
 
 // Timestamp-based sync: local always wins if more recent
 const SYNC_TIMESTAMPS_KEY = 'aguia_sync_timestamps';
+let syncInProgress = false;
 
 function getSyncTimestamps() {
   try { return JSON.parse(localStorage.getItem(SYNC_TIMESTAMPS_KEY) || '{}'); } catch(e) { return {}; }
@@ -1917,11 +1918,13 @@ function getSyncTimestamps() {
 function setSyncTimestamp(key) {
   const ts = getSyncTimestamps();
   ts[key] = Date.now();
-  localStorage.setItem(SYNC_TIMESTAMPS_KEY, JSON.stringify(ts));
+  Object.getPrototypeOf(localStorage).setItem.call(localStorage, SYNC_TIMESTAMPS_KEY, JSON.stringify(ts));
 }
 
-// Pull from Firestore on startup — compare timestamps, newest wins
+// Pull from Firestore on startup — LOCAL ALWAYS WINS for aguia_gestao_v1
 async function initialSyncFromFirestore() {
+  if (syncInProgress) return;
+  syncInProgress = true;
   const KEYS = [
     'aguia_gestao_v1', 'conselho_candidatos', 'conselho_agendamentos',
     'conselho_acompanhamentos', 'conselho_relatorio',
@@ -1944,42 +1947,49 @@ async function initialSyncFromFirestore() {
       const localTs = localTimestamps[key] || 0;
       const cloudTs = cloudDoc && cloudDoc.updated_at ? new Date(cloudDoc.updated_at).getTime() : 0;
 
-      if (cloudDoc && cloudDoc.value !== undefined && cloudTs > localTs) {
-        // Cloud is newer — use cloud data
+      // CRITICAL: For task data, LOCAL ALWAYS WINS if it exists
+      // This prevents completed tasks from reverting
+      if (key === 'aguia_gestao_v1' && localData) {
+        // Always push local to cloud, never overwrite local
+        try {
+          syncToFirestore(key, JSON.parse(localData));
+        } catch(e) {
+          syncToFirestore(key, localData);
+        }
+        continue;
+      }
+
+      if (cloudDoc && cloudDoc.value !== undefined && cloudTs > localTs && !localData) {
+        // Cloud has data and local is empty — use cloud
         const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
-        const _orig = localStorage.setItem.__origSetItem || localStorage.setItem.bind(localStorage);
-        // Use original setItem to avoid re-triggering sync
         Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, val);
         localTimestamps[key] = cloudTs;
-      } else if (localData && localTs > cloudTs) {
-        // Local is newer — push to cloud
+      } else if (localData) {
+        // Local has data — always push to cloud (local wins)
         try {
           syncToFirestore(key, JSON.parse(localData));
         } catch(e) {
           syncToFirestore(key, localData);
         }
-      } else if (!cloudDoc && localData) {
-        // Cloud empty — push local
-        try {
-          syncToFirestore(key, JSON.parse(localData));
-        } catch(e) {
-          syncToFirestore(key, localData);
-        }
+      } else if (cloudDoc && cloudDoc.value !== undefined) {
+        // Only pull from cloud if local is completely empty
+        const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
+        Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, val);
+        localTimestamps[key] = cloudTs;
       }
     }
 
     // Save updated timestamps
-    localStorage.setItem(SYNC_TIMESTAMPS_KEY, JSON.stringify(localTimestamps));
+    Object.getPrototypeOf(localStorage).setItem.call(localStorage, SYNC_TIMESTAMPS_KEY, JSON.stringify(localTimestamps));
 
     syncStatus = 'synced';
     updateSyncIndicator();
-    // Re-render with fresh data
-    DATA = loadData();
-    render();
   } catch(err) {
     console.warn('Initial Firestore sync failed, using localStorage:', err);
     syncStatus = 'offline';
     updateSyncIndicator();
+  } finally {
+    syncInProgress = false;
   }
 }
 
@@ -2124,7 +2134,11 @@ function loadData() {
 }
 
 function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  // Immediate write — prevents sync from reverting task states
+  const json = JSON.stringify(data);
+  localStorage.setItem(STORAGE_KEY, json);
+  // Also force timestamp update to ensure local always wins
+  setSyncTimestamp(STORAGE_KEY);
 }
 
 function initializeData() {
