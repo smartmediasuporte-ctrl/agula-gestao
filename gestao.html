@@ -2628,18 +2628,27 @@ const REUNIAO_CORES = {
 };
 
 function seedReunioesSeAusente() {
-  if (loadReunioes().length > 0) return;
+  const REUNIOES_VERSION = 'v3';
+  if (localStorage.getItem('reunioes_seed_version') === REUNIOES_VERSION) return;
+  localStorage.setItem('reunioes_seed_version', REUNIOES_VERSION);
   const reunioes = [
-    { id: 'r01', titulo: '[ÁGUIA] SAAS VIV', empresa: 'aguia', dia: 1, horario: '13:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    { id: 'r02', titulo: '[HRM] WBR', empresa: 'hrm', dia: 1, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    { id: 'r03', titulo: '[HALO] Dra. Ully', empresa: 'halo', dia: 2, horario: '10:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
-    { id: 'r04', titulo: '[Pégaso] WBR', empresa: 'pegaso', dia: 2, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
+    // MON 30/03
+    { id: 'r01', titulo: '[HRM] WBR', empresa: 'hrm', dia: 1, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
+    { id: 'r10', titulo: '[NOVO] Evento KIKO', empresa: 'partido_novo', dia: 1, horario: '19:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    { id: 'r11', titulo: '[B2BHALO] WBR', empresa: 'b2bhalo', dia: 1, horario: '20:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
+    // TUE 31/03
+    { id: 'r02', titulo: '[HRM] Joao Novaes', empresa: 'hrm', dia: 2, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    { id: 'r03', titulo: '[Pegasus] WBR', empresa: 'pegaso', dia: 2, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
+    // WED 01/04
+    { id: 'r04', titulo: '[VIV] Gravacao de criativos', empresa: 'aguia', dia: 3, horario: '13:30', duracao: 60, local: '', status: 'agendado', recorrente: false },
     { id: 'r05', titulo: '[Zelar] WBR Presencial', empresa: 'zelar', dia: 3, horario: '15:00', duracao: 60, local: 'Presencial', status: 'agendado', recorrente: true },
-    { id: 'r06', titulo: '[ZELAR] WBR', empresa: 'zelar', dia: 4, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    { id: 'r07', titulo: '[Partido Novo] Conta CAESB', empresa: 'partido_novo', dia: 3, horario: '21:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
-    { id: 'r08', titulo: 'Pedro Dolabella e Nicolas', empresa: 'pessoal', dia: 5, horario: '11:00', duracao: 105, local: '', status: 'agendado', recorrente: false },
-    { id: 'r09', titulo: '[Partido Novo] WBR', empresa: 'partido_novo', dia: 5, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    { id: 'r10', titulo: '[B2BHALO] WBR', empresa: 'b2bhalo', dia: 1, horario: '20:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
+    { id: 'r06', titulo: '[AGUIA.AI] Guadalupe', empresa: 'aguia', dia: 3, horario: '16:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    { id: 'r07', titulo: 'Proposta | Zelar <> Aurora', empresa: 'zelar', dia: 3, horario: '17:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    // THU 02/04
+    { id: 'r08', titulo: '[HALO] Clinica', empresa: 'halo', dia: 4, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    { id: 'r09', titulo: '[ZELAR] WBR', empresa: 'zelar', dia: 4, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
+    // FRI 03/04
+    { id: 'r12', titulo: '[Partido Novo] WBR', empresa: 'partido_novo', dia: 5, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
   ];
   saveReunioes(reunioes);
 }
