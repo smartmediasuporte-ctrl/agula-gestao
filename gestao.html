@@ -3480,10 +3480,10 @@ function renderSmartMediaDocumentos() {
 // ══════════════════════════════════════════════════════════
 
 const ITO_AREAS = [
-  { id: 'conteudo',    nome: 'Conteúdo',    icon: '&bull;', cor: '#e11d48', desc: 'Produção e publicação de vídeos (TikTok + YouTube)' },
-  { id: 'comercial',   nome: 'Comercial',   icon: '&bull;', cor: '#f59e0b', desc: 'Prospecção e gestão de parcerias com marcas' },
-  { id: 'equipamento', nome: 'Equipamento', icon: '&bull;', cor: '#6366f1', desc: 'Câmeras, equipamentos de captação' },
-  { id: 'instagram',   nome: 'Instagram',   icon: '&bull;', cor: '#ec4899', desc: 'Estratégia e execução do canal institucional' },
+  { id: 'conteudo',    nome: 'Conte&uacute;do',    icon: '&bull;', cor: '#e11d48', desc: 'Pipeline: Gravados &rarr; Em Edi&ccedil;&atilde;o &rarr; Postados | Ideias e roteiros futuros' },
+  { id: 'comercial',   nome: 'Comercial',   icon: '&bull;', cor: '#f59e0b', desc: 'Propostas de parcerias, monetiza&ccedil;&atilde;o, infoprodutos, SaaS, distribui&ccedil;&atilde;o' },
+  { id: 'equipamento', nome: 'Equipamento', icon: '&bull;', cor: '#6366f1', desc: 'OSMO Pocket &mdash; sa&uacute;de das c&acirc;meras, micro SDs, meta de unidades' },
+  { id: 'instagram',   nome: 'Streaming / Instagram',   icon: '&bull;', cor: '#ec4899', desc: 'Cronograma de lan&ccedil;amento do streaming (pr&eacute;-Instagram)' },
 ];
 
 let itoExpandedAreas = {};
@@ -3593,12 +3593,11 @@ function renderInTheOfficeAreas(tasks) {
 // ══════════════════════════════════════════════════════════
 
 const ZELAR_AREAS = [
-  { id: 'produto',     nome: 'Produto & Tecnologia',    icon: '&bull;', cor: '#6366f1', desc: 'App, dev, MVP' },
-  { id: 'prestadores', nome: 'Prestadores',             icon: '&bull;', cor: '#14b8a6', desc: 'Recrutamento, onboarding, base fundadora' },
-  { id: 'marketing',   nome: 'Marketing & Conteúdo',    icon: '&bull;', cor: '#f59e0b', desc: 'Instagram, criativos, influenciadores' },
-  { id: 'operacao',    nome: 'Operação',                icon: '&bull;',  cor: '#64748b', desc: 'Processos, CRM, fluxos internos' },
-  { id: 'comercial',   nome: 'Comercial & Parcerias',   icon: '&bull;', cor: '#22c55e', desc: 'B2B, condomínios, empresas' },
-  { id: 'financeiro',  nome: 'Financeiro & Jurídico',   icon: '&bull;',  cor: '#ef4444', desc: 'Contratos, CNPJ, caixa' },
+  { id: 'negociacao',  nome: 'Negocia&ccedil;&atilde;o Beyond/Aurora', icon: '&bull;', cor: '#7C3AED', desc: 'Contraproposta, termos, vesting, due diligence — venda de 40%' },
+  { id: 'juridico',    nome: 'Jur&iacute;dico & Contrato',   icon: '&bull;', cor: '#ef4444', desc: 'Dados para contrato, assessoria jur&iacute;dica, assinatura' },
+  { id: 'produto',     nome: 'Produto & MVP',           icon: '&bull;', cor: '#6366f1', desc: 'Desenvolvimento, valida&ccedil;&atilde;o com Aurora, plataforma' },
+  { id: 'operacao',    nome: 'Opera&ccedil;&atilde;o & Onboarding', icon: '&bull;',  cor: '#64748b', desc: 'Kickoff, cronograma, prazos, integra&ccedil;&atilde;o com venture builder' },
+  { id: 'financeiro',  nome: 'Financeiro',              icon: '&bull;',  cor: '#22c55e', desc: 'Investimento R$ 1.035.000 (15 meses), vesting progressivo' },
 ];
 
 let zelarExpandedAreas = {};
@@ -3607,12 +3606,11 @@ function toggleZelarArea(areaId) { zelarExpandedAreas[areaId] = zelarExpandedAre
 function classifyZelarTask(task) {
   if (task.area_zelar) return task.area_zelar;
   const t = (task.titulo + ' ' + (task.observacao || '')).toLowerCase();
-  if (/app|dev|mvp|tech|código|deploy|api|plataforma|sistema/.test(t)) return 'produto';
-  if (/prestador|recrut|onboarding|fundador|profissional|cadastro/.test(t)) return 'prestadores';
-  if (/b2b|condomínio|parceria|empresa|proposta|beyond|comercial|negociação/.test(t)) return 'comercial';
-  if (/contrato|cnpj|caixa|jurídico|financeiro|pagamento|nota/.test(t)) return 'financeiro';
-  if (/instagram|criativo|conteúdo|influenciador|bessa|gravação|vídeo|post|marketing/.test(t)) return 'marketing';
-  if (/processo|crm|fluxo|operação|operacional|interno/.test(t)) return 'operacao';
+  if (/beyond|aurora|proposta|contraproposta|negociação|vesting|deal|equity|participação/.test(t)) return 'negociacao';
+  if (/contrato|cnpj|jurídico|assinatura|assessoria|cláusula|termos/.test(t)) return 'juridico';
+  if (/app|dev|mvp|tech|código|deploy|api|plataforma|sistema|validação/.test(t)) return 'produto';
+  if (/kickoff|cronograma|onboarding|integração|processo|operação|fluxo/.test(t)) return 'operacao';
+  if (/investimento|caixa|financeiro|pagamento|nota|receita|custo/.test(t)) return 'financeiro';
   return null;
 }
 
@@ -3701,6 +3699,93 @@ function renderZelarAreas(tasks) {
       </div>
     </div>`;
   }
+
+  return html;
+}
+
+// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// PESSOAL — PENDÊNCIAS E ORGANIZAÇÃO DE VIDA
+// ══════════════════════════════════════════════════════════
+const PESSOAL_AREAS = [
+  { id: 'documentos',  nome: 'Documentos Pendentes', icon: '&bull;', cor: '#ef4444', desc: 'RG, CPF, Passaporte, CNH, certid&otilde;es' },
+  { id: 'financas',    nome: 'Finan&ccedil;as Pessoais', icon: '&bull;', cor: '#22c55e', desc: 'Contas, investimentos, alavancagem, bancos' },
+  { id: 'saude',       nome: 'Sa&uacute;de & Bem-estar', icon: '&bull;', cor: '#60a5fa', desc: 'Consultas, exames, treino, alimenta&ccedil;&atilde;o' },
+  { id: 'habilitacao', nome: 'Detran / Habilita&ccedil;&atilde;o', icon: '&bull;', cor: '#f59e0b', desc: 'CNH vencida, multas, regulariza&ccedil;&atilde;o' },
+  { id: 'outros',      nome: 'Organiza&ccedil;&atilde;o Geral', icon: '&bull;', cor: '#8b5cf6', desc: 'Casa, rotina, projetos pessoais' },
+];
+
+let pessoalExpandedAreas = {};
+function togglePessoalArea(areaId) { pessoalExpandedAreas[areaId] = pessoalExpandedAreas[areaId] === false ? true : (pessoalExpandedAreas[areaId] === undefined ? false : !pessoalExpandedAreas[areaId]); render(); }
+
+function classifyPessoalTask(task) {
+  if (task.area_pessoal) return task.area_pessoal;
+  const t = (task.titulo + ' ' + (task.observacao || '')).toLowerCase();
+  if (/rg|cpf|passaporte|identidade|certidão|nascimento|documento|segunda via|2a via/.test(t)) return 'documentos';
+  if (/detran|cnh|habilitação|multa|carteira/.test(t)) return 'habilitacao';
+  if (/investimento|alavancagem|banco|inter|conta|10k|financ/.test(t)) return 'financas';
+  if (/saúde|médico|consulta|exame|treino|academia|dentista/.test(t)) return 'saude';
+  return 'outros';
+}
+
+function renderPessoalAreas(tasks) {
+  let html = '';
+
+  // Summary chips
+  html += '<div class="ito-area-summary">';
+  PESSOAL_AREAS.forEach(area => {
+    const count = tasks.filter(t => classifyPessoalTask(t) === area.id).length;
+    const pending = tasks.filter(t => classifyPessoalTask(t) === area.id && t.status !== 'concluido').length;
+    html += `<div class="ito-area-chip" style="border-left:3px solid ${area.cor}">
+      <span>${area.icon}</span><span style="font-size:12px">${area.nome}</span>
+      <span style="font-family:var(--font-mono);font-weight:700;color:${pending > 0 ? area.cor : 'var(--text-muted)'}">${pending}</span>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Render each area
+  html += '<div class="pn-areas">';
+  PESSOAL_AREAS.forEach(area => {
+    const areaTasks = tasks.filter(t => classifyPessoalTask(t) === area.id);
+    const pending = areaTasks.filter(t => t.status === 'pendente');
+    const inProgress = areaTasks.filter(t => t.status === 'em_andamento');
+    const done = areaTasks.filter(t => t.status === 'concluido');
+    const expanded = pessoalExpandedAreas[area.id] !== false;
+
+    html += `<div class="pn-area-card">
+      <div class="pn-area-header" style="--pn-area-color:${area.cor}" onclick="togglePessoalArea('${area.id}')">
+        <div class="pn-area-title"><span class="area-icon">${area.icon}</span> ${area.nome}</div>
+        <div class="pn-area-badges">
+          ${pending.length > 0 ? `<span class="pn-badge pn-badge-pending">${pending.length} pend.</span>` : ''}
+          ${inProgress.length > 0 ? `<span class="pn-badge pn-badge-progress">${inProgress.length} and.</span>` : ''}
+          ${done.length > 0 ? `<span class="pn-badge pn-badge-done">${done.length} &check;</span>` : ''}
+          <span style="font-size:16px;color:var(--text-muted);transition:transform 0.2s;${expanded ? '' : 'transform:rotate(-90deg)'}">&#9662;</span>
+        </div>
+      </div>
+      <div class="pn-area-body ${expanded ? '' : 'collapsed'}">
+        <div style="font-size:11px;color:var(--text-muted);padding:10px 0 6px">${area.desc}</div>`;
+
+    const statusOrder = [
+      { key: 'pendente', tasks: pending },
+      { key: 'em_andamento', tasks: inProgress },
+      { key: 'concluido', tasks: done },
+    ];
+    statusOrder.forEach(group => {
+      if (group.tasks.length === 0) return;
+      html += `<div style="margin-top:10px">
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px">${statusLabel(group.key)} (${group.tasks.length})</div>
+        ${group.tasks.map(t => renderTaskItem(t, true)).join('')}
+      </div>`;
+    });
+
+    if (areaTasks.length === 0) {
+      html += '<div style="padding:12px 0;text-align:center;color:var(--text-muted);font-size:12px">Nenhuma pend&ecirc;ncia nesta &aacute;rea</div>';
+    }
+
+    html += `<button class="pn-add-area-btn" onclick="openTaskModal('pessoal')">+ Nova pend&ecirc;ncia</button>`;
+    html += '</div></div>';
+  });
+  html += '</div>';
 
   return html;
 }
@@ -4863,6 +4948,10 @@ function renderEmpresa() {
   // PARTIDO NOVO — Specialized view by operational areas
   else if (emp.id === 'partido_novo') {
     html += renderPartidoNovoAreas(tasks);
+  }
+  // PESSOAL — Pendências e organização de vida
+  else if (emp.id === 'pessoal') {
+    html += renderPessoalAreas(tasks);
   } else {
     // Default: Filters + grouped task list
     html += `<div class="filters">
