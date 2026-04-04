@@ -583,6 +583,24 @@
     font-size: 10px;
   }
 
+  .task-prazo {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: var(--radius-sm);
+  }
+  .task-prazo.vencido {
+    border-color: var(--danger);
+    color: var(--danger);
+    animation: pulse-danger 2s infinite;
+  }
+  @keyframes pulse-danger { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
   .task-stuck {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -1796,10 +1814,6 @@ if (sessionStorage.getItem('aguia_auth') === '1') {
     <button class="nav-item" onclick="navigate('historico')" data-page="historico">
       <span class="icon">&mdash;</span> Histórico
     </button>
-    <button class="nav-item" onclick="navigate('conselho')" data-page="conselho">
-      <span class="icon">&mdash;</span> Conselho Digital
-    </button>
-
     <div class="nav-section">Empresas</div>
     <div id="sidebarEmpresas"></div>
 
@@ -2453,7 +2467,7 @@ function render() {
     case 'semana': main.innerHTML = renderSemana(); break;
     case 'fechamento': main.innerHTML = renderFechamento(); break;
     case 'historico': main.innerHTML = renderHistorico(); break;
-    case 'conselho': main.innerHTML = renderConselho(); break;
+    // conselho digital removed
     default: main.innerHTML = renderDashboard();
   }
 }
@@ -4717,11 +4731,7 @@ function renderEmpresa() {
 
     const haloTabs = [
       { id: 'dashboard', label: 'Dashboard' },
-      { id: 'clientes', label: 'Clientes' },
-      { id: 'tarefas', label: 'Tarefas' },
       { id: 'documentos', label: 'Documentos' },
-      { id: 'agendamentos', label: 'Agendamentos' },
-      { id: 'eventos', label: 'Eventos' },
     ];
 
     html += '<div class="halo-subnav">';
@@ -4732,11 +4742,7 @@ function renderEmpresa() {
 
     switch (haloSubPage) {
       case 'dashboard': html += renderHaloDashboard(tasks); break;
-      case 'clientes': html += renderHaloClientes(); break;
-      case 'tarefas': html += renderHaloTarefas(tasks); break;
       case 'documentos': html += renderHaloDocumentos(); break;
-      case 'agendamentos': html += renderHaloAgendamentos(); break;
-      case 'eventos': html += renderHaloEventos(); break;
       default: html += renderHaloDashboard(tasks);
     }
   }
@@ -5257,6 +5263,7 @@ function renderTaskItem(task, showEmpresa) {
       <div class="task-meta">
         ${showEmpresa === false && emp ? `<span class="task-empresa-tag" style="background:${emp.cor}">${emp.nome}</span>` : ''}
         <span class="task-status-tag status-${task.status}">${statusLabel(task.status)}</span>
+        ${task.prazo ? `<span class="task-prazo ${new Date(task.prazo + 'T23:59:59') < new Date() && !isChecked ? 'vencido' : ''}">${new Date(task.prazo + 'T12:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'short'})}</span>` : ''}
         ${task.semanas_acumuladas >= 2 && !isChecked ? `<span class="task-stuck">${task.semanas_acumuladas} semanas</span>` : ''}
         ${task.observacao ? `<span class="task-obs">${task.observacao}</span>` : ''}
       </div>
@@ -6572,6 +6579,10 @@ function openTaskModal(empresaId, areaPreset) {
       </select>
     </div>
     <div class="form-group">
+      <label class="form-label">Prazo</label>
+      <input type="date" class="form-select" id="taskPrazo" value="">
+    </div>
+    <div class="form-group">
       <label class="form-label">Status</label>
       <select class="form-select" id="taskStatus">
         <option value="pendente">Pendente</option>
@@ -6614,6 +6625,8 @@ function saveNewTask() {
   const areaZelarEl = document.getElementById('taskAreaZelar');
   const areaZelar = (empresaId === 'zelar' && areaZelarEl && areaZelarEl.value) ? areaZelarEl.value : undefined;
 
+  const prazoVal = document.getElementById('taskPrazo')?.value || '';
+
   const task = {
     id: uuid(),
     empresa_id: empresaId,
@@ -6624,6 +6637,7 @@ function saveNewTask() {
     criado_em: new Date().toISOString().slice(0, 10),
     concluido_em: null,
     semanas_acumuladas: 1,
+    prazo: prazoVal || null,
   };
   if (areaPn) task.area_pn = areaPn;
   if (areaIto) task.area_ito = areaIto;
@@ -6693,6 +6707,10 @@ function openEditTaskModal(id) {
       </select>
     </div>
     <div class="form-group">
+      <label class="form-label">Prazo</label>
+      <input type="date" class="form-select" id="editPrazo" value="${task.prazo || ''}">
+    </div>
+    <div class="form-group">
       <label class="form-label">Status</label>
       <select class="form-select" id="editStatus">${statusOptions}</select>
     </div>
@@ -6725,6 +6743,7 @@ function saveEditTask(id) {
   task.empresa_id = document.getElementById('editEmpresa').value;
   task.status = document.getElementById('editStatus').value;
   task.observacao = document.getElementById('editObs').value.trim();
+  task.prazo = document.getElementById('editPrazo')?.value || null;
   task.concluido_em = task.status === 'concluido' ? (task.concluido_em || new Date().toISOString().slice(0, 10)) : null;
 
   const areaPnEl = document.getElementById('editAreaPn');
