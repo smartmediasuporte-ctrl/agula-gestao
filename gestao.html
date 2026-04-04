@@ -2182,7 +2182,7 @@ const PN_AREAS = [
     desc: 'Reunião Filiados, Novo se Apresenta, Grupos de Estudos, ad hoc' },
   { id: 'administrativo', nome: 'Administrativo / Contas', icon: '&bull;',
     cor: '#EF4444',
-    desc: 'Contas da sede (Caesb, Claro), demandas do diretório' },
+    desc: 'Contas fixas mensais: CAESB e Claro (recorrentes todo m&ecirc;s), demandas do diret&oacute;rio' },
 ];
 
 function getPNArea(areaId) { return PN_AREAS.find(a => a.id === areaId); }
@@ -5201,6 +5201,44 @@ function renderPartidoNovoAreas(tasks) {
     </div>
   </div>`;
 
+  // Mensagem do Dia — WhatsApp Groups
+  const msgDia = localStorage.getItem('pn_mensagem_dia') || '';
+  const msgDiaData = localStorage.getItem('pn_mensagem_dia_data') || '';
+  const hoje = new Date().toISOString().slice(0,10);
+  const msgAtualizada = msgDiaData === hoje;
+  html += `<div style="background:var(--bg-card);border:1px solid ${msgAtualizada ? '#25D366' : 'var(--border)'};border-radius:var(--radius);padding:18px 20px;margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-family:var(--font-sans);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;display:flex;align-items:center;gap:8px">
+        <span style="color:#25D366">&bull;</span> Mensagem do Dia — WhatsApp
+        ${msgAtualizada ? '<span style="font-size:9px;padding:2px 6px;border:1px solid #25D366;color:#25D366;border-radius:2px;font-family:var(--font-mono)">ENVIADA HOJE</span>' : '<span style="font-size:9px;padding:2px 6px;border:1px solid var(--warning);color:var(--warning);border-radius:2px;font-family:var(--font-mono)">PENDENTE</span>'}
+      </div>
+      <button class="btn btn-primary" onclick="openPNMensagemModal()" style="font-size:11px;padding:4px 10px">${msgAtualizada ? 'Editar' : '+ Definir'} Mensagem</button>
+    </div>
+    ${msgDia ? `<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:var(--text);position:relative">${msgDia}<button onclick="navigator.clipboard.writeText(document.getElementById('pnMsgTexto')?.textContent || '${msgDia.replace(/'/g,"\\'")}');toast('Copiado!')" style="position:absolute;top:8px;right:8px;background:var(--accent);color:#000;border:none;padding:4px 8px;border-radius:var(--radius-sm);font-size:10px;cursor:pointer;font-family:var(--font-mono)">COPIAR</button></div>` : '<div style="color:var(--text-muted);font-size:12px;padding:8px 0">Defina a mensagem do dia para os grupos de filiados</div>'}
+  </div>`;
+
+  // Filiados — Alertas recorrentes
+  const daysSinceLastCheck = Math.floor((Date.now() - parseInt(localStorage.getItem('pn_filiados_check') || '0')) / 86400000);
+  const daysSinceCobranca = Math.floor((Date.now() - parseInt(localStorage.getItem('pn_inadimplentes_check') || '0')) / 86400000);
+  const precisaCheckFiliados = daysSinceLastCheck >= 1;
+  const precisaCobranca = daysSinceCobranca >= 3;
+  if (precisaCheckFiliados || precisaCobranca) {
+    html += '<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">';
+    if (precisaCheckFiliados) {
+      html += `<div style="flex:1;min-width:200px;background:rgba(255,184,0,0.06);border:1px solid rgba(255,184,0,0.3);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:12px;font-weight:600;color:var(--warning)">Verificar novos filiados</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px">Confira se houve filia&ccedil;&otilde;es novas e fa&ccedil;a o convite para os grupos</div></div>
+        <button class="btn" onclick="localStorage.setItem('pn_filiados_check',Date.now().toString());render();toast('Verificado!')" style="font-size:10px;padding:4px 8px;white-space:nowrap">Feito</button>
+      </div>`;
+    }
+    if (precisaCobranca) {
+      html += `<div style="flex:1;min-width:200px;background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.3);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:12px;font-weight:600;color:var(--danger)">Cobran&ccedil;a de inadimplentes</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px">&Uacute;ltima cobran&ccedil;a: ${daysSinceCobranca} dias atr&aacute;s (ciclo: 3 dias)</div></div>
+        <button class="btn" onclick="localStorage.setItem('pn_inadimplentes_check',Date.now().toString());render();toast('Cobran&ccedil;a registrada!')" style="font-size:10px;padding:4px 8px;white-space:nowrap">Feito</button>
+      </div>`;
+    }
+    html += '</div>';
+  }
+
   // Weekly Priorities Panel
   if (priorities.length > 0) {
     html += `<div class="pn-priorities">
@@ -6584,6 +6622,27 @@ function confirmCloseWeek() {
   const nextWeek = getNextWeekId();
   createNewWeek(nextWeek);
   toast('Semana fechada');
+}
+
+// ── Partido Novo — Mensagem do Dia Modal ──
+function openPNMensagemModal() {
+  const msg = localStorage.getItem('pn_mensagem_dia') || '';
+  showModal('Mensagem do Dia — WhatsApp', `
+    <div class="form-group">
+      <label class="form-label">Texto da mensagem (copiar e colar no WhatsApp)</label>
+      <textarea class="form-textarea" id="pnMsgTexto" rows="8" style="min-height:180px;font-size:13px;line-height:1.7">${msg}</textarea>
+    </div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Dica: escreva a mensagem completa aqui. Depois clique COPIAR direto no card.</div>
+  `, [
+    { label: 'Cancelar', class: 'btn', action: 'closeModal()' },
+    { label: 'Salvar Mensagem', class: 'btn btn-primary', action: 'savePNMensagem()' },
+  ]);
+}
+function savePNMensagem() {
+  const msg = document.getElementById('pnMsgTexto').value.trim();
+  localStorage.setItem('pn_mensagem_dia', msg);
+  localStorage.setItem('pn_mensagem_dia_data', new Date().toISOString().slice(0,10));
+  closeModal(); render(); toast('Mensagem salva');
 }
 
 // ── Task CRUD Modals ──
