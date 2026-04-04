@@ -2413,7 +2413,7 @@ function navigate(page, empresaId) {
   statusFilter = 'todos';
   viewingWeekHistory = null;
   if (page === 'empresa' && empresaId === 'halo') { /* keep haloSubPage */ } else { haloSubPage = 'dashboard'; }
-  if (page === 'empresa' && empresaId === 'smartmedia') { /* keep smSubPage */ } else { smSubPage = 'dashboard'; }
+  if (page === 'empresa' && empresaId === 'smartmedia') { /* keep smSubPage */ } else { smSubPage = 'financeiro'; }
   if (page === 'empresa' && empresaId === 'hrm') { /* keep hrmSubPage */ } else { hrmSubPage = 'dashboard'; }
   if (page !== 'conselho') { /* keep conselhoSubPage */ }
 
@@ -2640,7 +2640,16 @@ function saveSmDocs(d) { localStorage.setItem('sm_documentos', JSON.stringify(d)
 function loadSmFinanceiro() { return JSON.parse(localStorage.getItem('sm_financeiro') || '[]'); }
 // saveSmFinanceiro data layer — use saveSmFinanceiro_data() to avoid collision with CRUD function
 
-let smSubPage = 'dashboard';
+let smSubPage = 'financeiro';
+
+// Seed SmartMedia março fechamento
+(function seedSmMarco() {
+  const key = 'sm_financeiro';
+  const existing = JSON.parse(localStorage.getItem(key) || '[]');
+  if (existing.some(r => r.mes === '2026-03')) return;
+  existing.push({ id: 'sm-mar26', mes: '2026-03', receita_bruta: 20192, custos_fixos: 14566, lucro_liquido: 5626, reserva: 2019 });
+  localStorage.setItem(key, JSON.stringify(existing));
+})();
 let hrmSubPage = 'dashboard';
 let hrmExpandedAreas = {};
 
@@ -3236,53 +3245,9 @@ function closeSmModal(e) {
 }
 
 function renderSmartMediaDashboard(tasks) {
-  const clientes = loadSmClientes();
-  const financeiro = loadSmFinanceiro();
-  const ativos = clientes.filter(c => c.status_contrato === 'ativo');
-  const propostas = clientes.filter(c => c.status_contrato === 'proposta');
-
-  // Dados reais de março/2026
-  const faturamentoMes = 20192;
-  const lucroMes = 5626;
-  const clientesAtivosCount = 3;
-  const propostasCount = 2;
-
-  let html = `<div class="sm-metrics">
-    <div class="sm-metric-card"><div class="sm-val" style="color:#7C3AED">${formatBRL(faturamentoMes)}</div><div class="sm-label">Faturado no Mês</div></div>
-    <div class="sm-metric-card"><div class="sm-val" style="color:#4ade80">${clientesAtivosCount}</div><div class="sm-label">Clientes Ativos</div></div>
-    <div class="sm-metric-card"><div class="sm-val" style="color:#60a5fa">${formatBRL(lucroMes)}</div><div class="sm-label">Lucro Líquido</div></div>
-    <div class="sm-metric-card"><div class="sm-val" style="color:#facc15">${propostasCount}</div><div class="sm-label">Propostas em Aberto</div></div>
-  </div>`;
-
-  if (ativos.length > 0) {
-    html += `<div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Clientes Ativos</div>`;
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin-bottom:20px">';
-    ativos.forEach(c => {
-      html += `<div class="sm-client-card" style="cursor:default">
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:600;font-size:14px">${c.nome}</div>
-          <div style="display:flex;gap:8px;margin-top:4px;align-items:center">
-            <span class="sm-tipo-badge">${c.tipo || 'fixo'}</span>
-            <span style="font-size:12px;color:#7C3AED;font-weight:600">${formatBRL(c.valor_mensal || 0)}/mês</span>
-          </div>
-        </div>
-      </div>`;
-    });
-    html += '</div>';
-  }
-
-  const pending = tasks.filter(t => t.status === 'pendente').length;
-  const inProg = tasks.filter(t => t.status === 'em_andamento').length;
-  const done = tasks.filter(t => t.status === 'concluido').length;
-
-  html += `<div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Tarefas da Semana</div>
-  <div class="sm-metrics" style="grid-template-columns:repeat(3,1fr)">
-    <div class="sm-metric-card"><div class="sm-val" style="color:#facc15">${pending}</div><div class="sm-label">Pendentes</div></div>
-    <div class="sm-metric-card"><div class="sm-val" style="color:#60a5fa">${inProg}</div><div class="sm-label">Andamento</div></div>
-    <div class="sm-metric-card"><div class="sm-val" style="color:#4ade80">${done}</div><div class="sm-label">Concluídas</div></div>
-  </div>`;
-
-  return html;
+  // Redirect to financeiro — dashboard is now inside financeiro
+  smSubPage = 'financeiro';
+  return renderSmartMediaFinanceiroIntegrado(tasks);
 }
 
 function renderSmartMediaClientes() {
@@ -3351,40 +3316,134 @@ function renderSmartMediaTarefas(tasks) {
 }
 
 function renderSmartMediaFinanceiro() {
-  const registros = loadSmFinanceiro().sort((a, b) => b.mes.localeCompare(a.mes));
+  return renderSmartMediaFinanceiroIntegrado([]);
+}
 
-  let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <div style="font-size:13px;color:var(--text-muted)">Controle financeiro mensal</div>
-    <button class="btn btn-primary" onclick="openSmFinanceiroModal()">+ Registrar Mês</button>
+function renderSmartMediaFinanceiroIntegrado(tasks) {
+  const clientes = loadSmClientes();
+  const ativos = clientes.filter(c => c.status_contrato === 'ativo');
+  const propostas = clientes.filter(c => c.status_contrato === 'proposta');
+  const registros = loadSmFinanceiro().sort((a, b) => a.mes.localeCompare(b.mes));
+
+  // Mês atual
+  const now = new Date();
+  const mesAtualKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const mesAtualReg = registros.find(r => r.mes === mesAtualKey);
+
+  // Entradas do mês (sm_entradas_YYYY-MM)
+  const entradas = JSON.parse(localStorage.getItem('sm_entradas_' + mesAtualKey) || '[]');
+  const totalEntradas = entradas.reduce((sum, e) => sum + (e.valor || 0), 0);
+  const faturamentoMes = mesAtualReg ? mesAtualReg.receita_bruta : totalEntradas;
+  const lucroMes = mesAtualReg ? mesAtualReg.lucro_liquido : 0;
+
+  // KPIs do topo
+  let html = `<div class="sm-metrics" style="grid-template-columns:repeat(4,1fr)">
+    <div class="sm-metric-card"><div class="sm-val" style="color:#7C3AED;font-size:22px">${formatBRL(faturamentoMes)}</div><div class="sm-label">Faturado no M&ecirc;s</div></div>
+    <div class="sm-metric-card"><div class="sm-val" style="color:#4ade80;font-size:22px">${ativos.length}</div><div class="sm-label">Clientes Ativos</div></div>
+    <div class="sm-metric-card"><div class="sm-val" style="color:#60a5fa;font-size:22px">${formatBRL(lucroMes)}</div><div class="sm-label">Lucro L&iacute;quido</div></div>
+    <div class="sm-metric-card"><div class="sm-val" style="color:#facc15;font-size:22px">${propostas.length}</div><div class="sm-label">Propostas Abertas</div></div>
   </div>`;
 
-  if (registros.length === 0) {
-    html += `<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum registro financeiro.</p></div>`;
+  // Entradas do mês corrente
+  html += `<div style="display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px">
+    <div style="font-family:var(--font-sans);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary)">Entradas — ${now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</div>
+    <button class="btn btn-primary" onclick="openSmEntradaModal()">+ Nova Entrada</button>
+  </div>`;
+  if (entradas.length > 0) {
+    html += '<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:16px">';
+    entradas.forEach(e => {
+      html += `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius)">
+        <div><span style="font-weight:600">${e.descricao}</span><span style="color:var(--text-muted);font-size:11px;margin-left:8px">${e.data ? new Date(e.data+'T12:00').toLocaleDateString('pt-BR') : ''}</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-family:var(--font-mono);font-weight:600;color:#4ade80">${formatBRL(e.valor)}</span>
+        <button class="task-action-btn" onclick="deleteSmEntrada('${e.id}')">&times;</button></div>
+      </div>`;
+    });
+    html += `<div style="text-align:right;font-family:var(--font-mono);font-size:13px;color:var(--accent);margin-top:4px">Total: ${formatBRL(totalEntradas)}</div>`;
+    html += '</div>';
   } else {
+    html += '<div style="color:var(--text-muted);font-size:12px;margin-bottom:16px;padding:12px;border:1px dashed var(--border);border-radius:var(--radius);text-align:center">Nenhuma entrada registrada este m&ecirc;s</div>';
+  }
+
+  // Calendário anual
+  html += `<div style="font-family:var(--font-sans);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);margin:20px 0 10px">Calend&aacute;rio Financeiro 2026</div>`;
+  const mesesNomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">';
+  for (let m = 0; m < 12; m++) {
+    const key = `2026-${String(m+1).padStart(2,'0')}`;
+    const reg = registros.find(r => r.mes === key);
+    const isCurrent = m === now.getMonth() && now.getFullYear() === 2026;
+    const isPast = m < now.getMonth() || now.getFullYear() > 2026;
+    const borderColor = isCurrent ? '#7C3AED' : reg ? '#4ade80' : '#1F2937';
+    const bgColor = reg ? 'rgba(74,222,128,0.05)' : 'var(--bg-card)';
+    html += `<div style="background:${bgColor};border:1px solid ${borderColor};border-radius:var(--radius);padding:10px;cursor:${reg ? 'pointer' : 'default'}" ${reg ? `onclick="openSmFinanceiroModal('${reg.id}')"` : isPast && !reg ? `onclick="openSmFinanceiroModal(null,'${key}')"` : ''}>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-family:var(--font-mono);font-size:11px;font-weight:600;text-transform:uppercase;${isCurrent ? 'color:#7C3AED' : 'color:var(--text-secondary)'}">${mesesNomes[m]}</span>
+        ${reg ? '<span style="color:#4ade80;font-size:9px;font-family:var(--font-mono)">FECHADO</span>' : isCurrent ? '<span style="color:#7C3AED;font-size:9px;font-family:var(--font-mono)">ATIVO</span>' : ''}
+      </div>
+      ${reg ? `<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:#7C3AED;margin-top:4px">${formatBRL(reg.receita_bruta)}</div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:#4ade80;margin-top:2px">Lucro: ${formatBRL(reg.lucro_liquido)}</div>` : `<div style="font-size:10px;color:var(--text-muted);margin-top:6px">${isCurrent ? formatBRL(totalEntradas) : '—'}</div>`}
+    </div>`;
+  }
+  html += '</div>';
+
+  // Fechamentos detalhados
+  if (registros.length > 0) {
+    html += `<div style="font-family:var(--font-sans);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);margin:10px 0">Fechamentos</div>`;
     registros.forEach(r => {
       const saude = r.receita_bruta > 0 ? Math.min(100, Math.round((r.lucro_liquido / r.receita_bruta) * 100)) : 0;
       const saudeCor = saude >= 30 ? '#4ade80' : saude >= 15 ? '#facc15' : '#f87171';
-
       html += `<div class="sm-finance-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <div class="sm-month-title">${r.mes}</div>
           <div style="display:flex;gap:4px">
-            <button class="task-action-btn" onclick="openSmFinanceiroModal('${r.id}')" title="Editar">&starf;</button>
-            <button class="task-action-btn" onclick="deleteSmFinanceiro('${r.id}')" title="Excluir">&times;</button>
+            <button class="task-action-btn" onclick="openSmFinanceiroModal('${r.id}')">&starf;</button>
+            <button class="task-action-btn" onclick="deleteSmFinanceiro('${r.id}')">&times;</button>
           </div>
         </div>
         <div class="sm-finance-grid">
           <div class="sm-finance-item"><div class="sf-val" style="color:#7C3AED">${formatBRL(r.receita_bruta)}</div><div class="sf-label">Receita Bruta</div></div>
           <div class="sm-finance-item"><div class="sf-val" style="color:#f87171">${formatBRL(r.custos_fixos)}</div><div class="sf-label">Custos Fixos</div></div>
-          <div class="sm-finance-item"><div class="sf-val" style="color:#4ade80">${formatBRL(r.lucro_liquido)}</div><div class="sf-label">Lucro Líquido</div></div>
+          <div class="sm-finance-item"><div class="sf-val" style="color:#4ade80">${formatBRL(r.lucro_liquido)}</div><div class="sf-label">Lucro L&iacute;quido</div></div>
           <div class="sm-finance-item"><div class="sf-val" style="color:#60a5fa">${formatBRL(r.reserva)}</div><div class="sf-label">Reserva (10%)</div></div>
         </div>
-        <div class="sm-health-bar"><div class="sm-health-fill" style="width:${Math.max(0, saude)}%;background:${saudeCor}"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:4px"><span>Saúde Financeira</span><span style="color:${saudeCor}">${saude}%</span></div>
+        <div class="sm-health-bar"><div class="sm-health-fill" style="width:${Math.max(0,saude)}%;background:${saudeCor}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:4px"><span>Sa&uacute;de Financeira</span><span style="color:${saudeCor}">${saude}%</span></div>
       </div>`;
     });
   }
   return html;
+}
+
+// SmartMedia Entradas (faturamento parcial do mês)
+function openSmEntradaModal() {
+  const now = new Date();
+  showModal('Nova Entrada', `
+    <div class="form-group"><label class="form-label">Descri&ccedil;&atilde;o</label><input class="form-input" id="smEntradaDesc" placeholder="Ex: Recupefy, VIV..."></div>
+    <div class="form-group"><label class="form-label">Valor (R$)</label><input class="form-input" id="smEntradaValor" type="number" step="0.01" placeholder="0.00"></div>
+    <div class="form-group"><label class="form-label">Data</label><input class="form-select" id="smEntradaData" type="date" value="${now.toISOString().slice(0,10)}"></div>
+  `, [
+    { label: 'Cancelar', class: 'btn', action: 'closeModal()' },
+    { label: 'Adicionar', class: 'btn btn-primary', action: 'saveSmEntrada()' },
+  ]);
+}
+function saveSmEntrada() {
+  const desc = document.getElementById('smEntradaDesc').value.trim();
+  const valor = parseFloat(document.getElementById('smEntradaValor').value) || 0;
+  const data = document.getElementById('smEntradaData').value;
+  if (!desc || valor <= 0) return toast('Preencha descri&ccedil;&atilde;o e valor', 'error');
+  const now = new Date();
+  const mesKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const entradas = JSON.parse(localStorage.getItem('sm_entradas_' + mesKey) || '[]');
+  entradas.push({ id: uuid(), descricao: desc, valor, data });
+  localStorage.setItem('sm_entradas_' + mesKey, JSON.stringify(entradas));
+  closeModal(); render(); toast('Entrada registrada');
+}
+function deleteSmEntrada(id) {
+  const now = new Date();
+  const mesKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const entradas = JSON.parse(localStorage.getItem('sm_entradas_' + mesKey) || '[]').filter(e => e.id !== id);
+  localStorage.setItem('sm_entradas_' + mesKey, JSON.stringify(entradas));
+  render(); toast('Entrada removida');
 }
 
 function renderSmartMediaDocumentos() {
@@ -4749,10 +4808,9 @@ function renderEmpresa() {
   // SMARTMEDIA — Full module with sub-navigation
   else if (emp.id === 'smartmedia') {
     const smTabs = [
-      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'financeiro', label: 'Financeiro' },
       { id: 'clientes', label: 'Clientes' },
       { id: 'tarefas', label: 'Tarefas' },
-      { id: 'financeiro', label: 'Financeiro' },
       { id: 'documentos', label: 'Documentos' },
     ];
 
