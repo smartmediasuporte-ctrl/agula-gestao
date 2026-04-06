@@ -2696,26 +2696,19 @@ const REUNIAO_CORES = {
 };
 
 function seedReunioesSeAusente() {
-  const REUNIOES_VERSION = 'v3';
+  const REUNIOES_VERSION = 'v4';
   if (localStorage.getItem('reunioes_seed_version') === REUNIOES_VERSION) return;
   localStorage.setItem('reunioes_seed_version', REUNIOES_VERSION);
   const reunioes = [
-    // MON 30/03
+    // MON 06/04
     { id: 'r01', titulo: '[HRM] WBR', empresa: 'hrm', dia: 1, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    { id: 'r10', titulo: '[NOVO] Evento KIKO', empresa: 'partido_novo', dia: 1, horario: '19:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
-    { id: 'r11', titulo: '[B2BHALO] WBR', empresa: 'b2bhalo', dia: 1, horario: '20:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    // TUE 31/03
-    { id: 'r02', titulo: '[HRM] Joao Novaes', empresa: 'hrm', dia: 2, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
-    { id: 'r03', titulo: '[Pegasus] WBR', empresa: 'pegaso', dia: 2, horario: '14:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    // WED 01/04
-    { id: 'r04', titulo: '[VIV] Gravacao de criativos', empresa: 'aguia', dia: 3, horario: '13:30', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    // TUE 07/04
+    { id: 'r02', titulo: 'Ver Evelyn', empresa: 'pessoal', dia: 2, horario: '13:30', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    // WED 08/04
     { id: 'r05', titulo: '[Zelar] WBR Presencial', empresa: 'zelar', dia: 3, horario: '15:00', duracao: 60, local: 'Presencial', status: 'agendado', recorrente: true },
-    { id: 'r06', titulo: '[AGUIA.AI] Guadalupe', empresa: 'aguia', dia: 3, horario: '16:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
-    { id: 'r07', titulo: 'Proposta | Zelar <> Aurora', empresa: 'zelar', dia: 3, horario: '17:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
-    // THU 02/04
-    { id: 'r08', titulo: '[HALO] Clinica', empresa: 'halo', dia: 4, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: false },
+    // THU 09/04
     { id: 'r09', titulo: '[ZELAR] WBR', empresa: 'zelar', dia: 4, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
-    // FRI 03/04
+    // FRI 10/04
     { id: 'r12', titulo: '[Partido Novo] WBR', empresa: 'partido_novo', dia: 5, horario: '15:00', duracao: 60, local: '', status: 'agendado', recorrente: true },
   ];
   saveReunioes(reunioes);
