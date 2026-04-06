@@ -1961,14 +1961,32 @@ async function initialSyncFromFirestore() {
       const localTs = localTimestamps[key] || 0;
       const cloudTs = cloudDoc && cloudDoc.updated_at ? new Date(cloudDoc.updated_at).getTime() : 0;
 
-      // CRITICAL: For task data, LOCAL ALWAYS WINS if it exists
-      // This prevents completed tasks from reverting
-      if (key === 'aguia_gestao_v1' && localData) {
-        // Always push local to cloud, never overwrite local
-        try {
-          syncToFirestore(key, JSON.parse(localData));
-        } catch(e) {
-          syncToFirestore(key, localData);
+      // CRITICAL: For task data
+      if (key === 'aguia_gestao_v1') {
+        // Check if local data is real user data or just seed data
+        let localIsRealData = false;
+        if (localData) {
+          try {
+            const parsed = JSON.parse(localData);
+            // If any task has been modified (concluido, different status), it's real data
+            localIsRealData = parsed.tarefas && parsed.tarefas.some(t => t.status === 'concluido' || t.concluido_em);
+          } catch(e) {}
+          if (!localIsRealData) localIsRealData = (localTs > 0); // has been saved before
+        }
+
+        if (localIsRealData || (localData && localTs > cloudTs)) {
+          // Local is real — push to cloud, never overwrite
+          try { syncToFirestore(key, JSON.parse(localData)); } catch(e) {}
+          continue;
+        } else if (cloudDoc && cloudDoc.value !== undefined && cloudTs > 0) {
+          // Cloud has data and local is seed — restore from cloud
+          const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
+          _origSetItem(key, val);
+          localTimestamps[key] = cloudTs;
+          // Reload DATA from restored cloud data
+          DATA = JSON.parse(typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value));
+          render();
+          continue;
         }
         continue;
       }
@@ -2143,16 +2161,29 @@ const STORAGE_KEY = 'aguia_gestao_v1';
 
 function loadData() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.tarefas && Array.isArray(parsed.tarefas)) return parsed;
+    } catch(e) {}
+  }
+  // Only use seed data if localStorage is truly empty AND Firestore hasn't loaded yet
+  // The seed is just a fallback — Firestore sync will fix this on next load
   return initializeData();
 }
 
 function saveData(data) {
-  // Immediate write — prevents sync from reverting task states
+  // Immediate write to localStorage — this is the source of truth
   const json = JSON.stringify(data);
-  localStorage.setItem(STORAGE_KEY, json);
-  // Also force timestamp update to ensure local always wins
+  _origSetItem(STORAGE_KEY, json);
+  // Force Firestore sync immediately (no debounce for task data)
   setSyncTimestamp(STORAGE_KEY);
+  try {
+    const ts = new Date().toISOString();
+    db.collection('data').doc(STORAGE_KEY).set({ value: data, updated_at: ts }).catch(() => {});
+  } catch(e) {}
+  // Also trigger the normal sync path
+  try { syncToFirestore(STORAGE_KEY, data); } catch(e) {}
 }
 
 function initializeData() {
