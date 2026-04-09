@@ -7097,6 +7097,45 @@ setTimeout(() => {
   initialSyncFromFirestore();
   updateSyncIndicator();
 }, 500);
+
+// REAL-TIME SYNC — listen for changes from other devices
+(function setupRealtimeSync() {
+  try {
+    db.collection('data').onSnapshot((snapshot) => {
+      if (syncInProgress) return; // don't react to our own writes
+      let needsRender = false;
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'modified') {
+          const key = change.doc.id;
+          const cloudData = change.doc.data();
+          const localTs = getSyncTimestamps()[key] || 0;
+          const cloudTs = cloudData.updated_at ? new Date(cloudData.updated_at).getTime() : 0;
+
+          // Only apply if cloud is newer than our last write
+          if (cloudTs > localTs + 2000) { // 2s buffer to avoid echo
+            const val = typeof cloudData.value === 'string' ? cloudData.value : JSON.stringify(cloudData.value);
+            _origSetItem(key, val);
+            // Update timestamp without triggering sync back
+            const ts = getSyncTimestamps();
+            ts[key] = cloudTs;
+            _origSetItem(SYNC_TIMESTAMPS_KEY, JSON.stringify(ts));
+
+            if (key === STORAGE_KEY) {
+              DATA = loadData();
+              needsRender = true;
+            }
+          }
+        }
+      });
+      if (needsRender) {
+        render();
+        toast('Sincronizado de outro dispositivo');
+      }
+    });
+  } catch(e) {
+    console.warn('Real-time sync not available:', e);
+  }
+})();
 </script>
 </body>
 </html>
