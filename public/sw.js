@@ -1,32 +1,36 @@
-const CACHE_NAME = 'aguia-v2';
-const ASSETS = ['/', '/index.html'];
+const CACHE_NAME = 'aguia-v5-' + Date.now();
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-    ))
+    Promise.all([
+      caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))),
+      self.clients.claim()
+    ])
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (e) => {
-  // Network first, fallback to cache (for offline support)
+  const url = new URL(e.request.url);
+  // Always fetch HTML from network — never cache
+  if (e.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/') {
+    e.respondWith(
+      fetch(e.request, { cache: 'no-store' })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+  // For other assets: network first, cache fallback
   e.respondWith(
     fetch(e.request)
       .then(res => {
         const clone = res.clone();
-        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+        caches.open(CACHE_NAME).then(c => c.put(e.request, clone)).catch(() => {});
         return res;
       })
       .catch(() => caches.match(e.request))
   );
 });
-// force redeploy 1774242022
-// v3 1774242438
-// v4 1774242561

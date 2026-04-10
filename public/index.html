@@ -2051,7 +2051,28 @@ localStorage.setItem = function(key, value) {
 
 // Register service worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    // Check for updates every time
+    reg.update();
+    // When a new SW is installed, activate it immediately and reload
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // New version available — reload to get it
+          window.location.reload();
+        }
+      });
+    });
+  }).catch(() => {});
+  // Listen for controller change (new SW took over)
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloaded) return;
+    reloaded = true;
+    window.location.reload();
+  });
 }
 
 // ══════════════════════════════════════════════════════════
