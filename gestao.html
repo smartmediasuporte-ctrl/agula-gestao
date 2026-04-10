@@ -2049,30 +2049,19 @@ localStorage.setItem = function(key, value) {
   }
 };
 
-// Register service worker
+// UNREGISTER all service workers and clear all caches
+// This ensures mobile devices always get the latest version from network
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(reg => {
-    // Check for updates every time
-    reg.update();
-    // When a new SW is installed, activate it immediately and reload
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-      if (!newWorker) return;
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          // New version available — reload to get it
-          window.location.reload();
-        }
-      });
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    const hadSW = regs.length > 0;
+    Promise.all(regs.map(r => r.unregister())).then(() => {
+      if ('caches' in window) {
+        caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
+          if (hadSW) window.location.reload();
+        });
+      }
     });
   }).catch(() => {});
-  // Listen for controller change (new SW took over)
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloaded) return;
-    reloaded = true;
-    window.location.reload();
-  });
 }
 
 // ══════════════════════════════════════════════════════════
