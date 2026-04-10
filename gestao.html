@@ -1955,61 +1955,39 @@ async function initialSyncFromFirestore() {
 
     const localTimestamps = getSyncTimestamps();
 
+    // Last-write-wins: compare timestamps, newest wins
     for (const key of KEYS) {
       const cloudDoc = firestoreData[key];
       const localData = localStorage.getItem(key);
       const localTs = localTimestamps[key] || 0;
       const cloudTs = cloudDoc && cloudDoc.updated_at ? new Date(cloudDoc.updated_at).getTime() : 0;
 
-      // CRITICAL: For task data
-      if (key === 'aguia_gestao_v1') {
-        // Check if local data is real user data or just seed data
-        let localIsRealData = false;
-        if (localData) {
-          try {
-            const parsed = JSON.parse(localData);
-            // If any task has been modified (concluido, different status), it's real data
-            localIsRealData = parsed.tarefas && parsed.tarefas.some(t => t.status === 'concluido' || t.concluido_em);
-          } catch(e) {}
-          if (!localIsRealData) localIsRealData = (localTs > 0); // has been saved before
-        }
-
-        if (localIsRealData || (localData && localTs > cloudTs)) {
-          // Local is real — push to cloud, never overwrite
-          try { syncToFirestore(key, JSON.parse(localData)); } catch(e) {}
-          continue;
-        } else if (cloudDoc && cloudDoc.value !== undefined && cloudTs > 0) {
-          // Cloud has data and local is seed — restore from cloud
-          const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
-          _origSetItem(key, val);
-          localTimestamps[key] = cloudTs;
-          // Reload DATA from restored cloud data
-          DATA = JSON.parse(typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value));
-          render();
-          continue;
-        }
-        continue;
-      }
-
-      if (cloudDoc && cloudDoc.value !== undefined && cloudTs > localTs && !localData) {
-        // Cloud has data and local is empty — use cloud
+      if (cloudTs > localTs && cloudDoc && cloudDoc.value !== undefined) {
+        // Cloud is newer — pull from cloud
         const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
-        Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, val);
+        _origSetItem(key, val);
         localTimestamps[key] = cloudTs;
-      } else if (localData) {
-        // Local has data — always push to cloud (local wins)
-        try {
-          syncToFirestore(key, JSON.parse(localData));
-        } catch(e) {
-          syncToFirestore(key, localData);
+        if (key === STORAGE_KEY) {
+          try { DATA = JSON.parse(val); } catch(e) {}
         }
-      } else if (cloudDoc && cloudDoc.value !== undefined) {
-        // Only pull from cloud if local is completely empty
+      } else if (localData && localTs > cloudTs) {
+        // Local is newer — push to cloud
+        try { syncToFirestore(key, JSON.parse(localData)); } catch(e) { syncToFirestore(key, localData); }
+      } else if (localData && cloudTs === 0) {
+        // Cloud is empty — push local
+        try { syncToFirestore(key, JSON.parse(localData)); } catch(e) { syncToFirestore(key, localData); }
+      } else if (!localData && cloudDoc && cloudDoc.value !== undefined) {
+        // Local is empty — pull from cloud
         const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
-        Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, val);
+        _origSetItem(key, val);
         localTimestamps[key] = cloudTs;
+        if (key === STORAGE_KEY) {
+          try { DATA = JSON.parse(val); } catch(e) {}
+        }
       }
     }
+    // Re-render with fresh data
+    render();
 
     // Save updated timestamps
     Object.getPrototypeOf(localStorage).setItem.call(localStorage, SYNC_TIMESTAMPS_KEY, JSON.stringify(localTimestamps));
