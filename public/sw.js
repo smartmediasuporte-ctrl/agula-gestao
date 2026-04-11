@@ -16,3 +16,4 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', () => {
   // Do nothing — let the browser handle all requests directly
 });
+/* trigger 1775865927 */
