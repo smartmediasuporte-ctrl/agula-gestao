@@ -2122,6 +2122,51 @@ function initializeData() {
 let DATA = loadData();
 
 // ══════════════════════════════════════════════════════════
+// TAREFAS RECORRENTES FIXAS — geradas automaticamente por mês
+// ══════════════════════════════════════════════════════════
+function ensureRecurringTasks() {
+  const now = new Date();
+  const mesAtualKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const currentWeek = DATA.currentWeek;
+
+  const RECORRENTES = [
+    { empresa_id: 'partido_novo', titulo: 'Conta CAESB', area_pn: 'administrativo', fixo: true },
+    { empresa_id: 'partido_novo', titulo: 'Conta Claro', area_pn: 'administrativo', fixo: true },
+  ];
+
+  let created = false;
+  RECORRENTES.forEach(tmpl => {
+    // Check if this recurring task already exists for current month
+    const existsThisMonth = DATA.tarefas.some(t => {
+      if (t.empresa_id !== tmpl.empresa_id) return false;
+      if (t.titulo !== tmpl.titulo) return false;
+      const taskMonth = t.criado_em ? t.criado_em.slice(0, 7) : '';
+      return taskMonth === mesAtualKey;
+    });
+
+    if (!existsThisMonth) {
+      DATA.tarefas.push({
+        id: uuid(),
+        empresa_id: tmpl.empresa_id,
+        titulo: tmpl.titulo,
+        status: 'pendente',
+        semana: currentWeek,
+        observacao: 'Conta fixa mensal — recorrente todo mês',
+        criado_em: new Date().toISOString().slice(0, 10),
+        concluido_em: null,
+        semanas_acumuladas: 1,
+        area_pn: tmpl.area_pn,
+        recorrente: true,
+      });
+      created = true;
+    }
+  });
+
+  if (created) saveData(DATA);
+}
+ensureRecurringTasks();
+
+// ══════════════════════════════════════════════════════════
 // PARTIDO NOVO — ÁREAS OPERACIONAIS
 // ══════════════════════════════════════════════════════════
 const PN_AREAS = [
