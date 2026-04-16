@@ -1940,6 +1940,16 @@ async function initialSyncFromFirestore() {
     updateSyncIndicator();
   } finally {
     syncInProgress = false;
+    // CRITICAL: cloud sync done — release queued saves
+    cloudSyncReady = true;
+    if (pendingSaves.length > 0) {
+      // Process the LATEST pending save (with all accumulated changes)
+      const latest = pendingSaves[pendingSaves.length - 1];
+      pendingSaves = [];
+      doSave(latest);
+    }
+    // Now safe to ensure recurring tasks (after we have real cloud data)
+    try { ensureRecurringTasks(); } catch(e) {}
   }
 }
 
@@ -2085,6 +2095,10 @@ function uuid() {
 
 const STORAGE_KEY = 'aguia_gestao_v1';
 
+// Block writes until cloud sync finishes (prevents seed from overwriting cloud)
+let cloudSyncReady = false;
+let pendingSaves = [];
+
 function loadData() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw) {
@@ -2093,29 +2107,47 @@ function loadData() {
       if (parsed && parsed.tarefas && Array.isArray(parsed.tarefas)) return parsed;
     } catch(e) {}
   }
-  // Only use seed data if localStorage is truly empty AND Firestore hasn't loaded yet
-  // The seed is just a fallback — Firestore sync will fix this on next load
-  return initializeData();
+  // localStorage empty — return seed in memory ONLY (don't save anywhere)
+  // Cloud sync will overwrite if cloud has real data
+  return initializeDataInMemory();
 }
 
 function saveData(data) {
-  // Immediate write to localStorage — this is the source of truth
+  // If cloud sync hasn't finished yet, queue the save
+  if (!cloudSyncReady) {
+    pendingSaves.push(data);
+    return;
+  }
+  doSave(data);
+}
+
+function doSave(data) {
   const json = JSON.stringify(data);
   _origSetItem(STORAGE_KEY, json);
-  // Force Firestore sync immediately (no debounce for task data)
   setSyncTimestamp(STORAGE_KEY);
   try {
     const ts = new Date().toISOString();
-    db.collection('data').doc(STORAGE_KEY).set({ value: data, updated_at: ts }).catch(() => {});
+    db.collection('data').doc(STORAGE_KEY).set({ value: data, updated_at: ts, device_id: DEVICE_ID }).catch(() => {});
   } catch(e) {}
-  // Also trigger the normal sync path
   try { syncToFirestore(STORAGE_KEY, data); } catch(e) {}
 }
 
-function initializeData() {
-  // Seed from backup
+// Device ID — to skip our own writes in realtime listener
+const DEVICE_ID = (function() {
+  let id = localStorage.getItem('aguia_device_id');
+  if (!id) {
+    id = 'dev-' + Math.random().toString(36).substring(2, 12);
+    _origSetItem ? _origSetItem('aguia_device_id', id) : localStorage.setItem('aguia_device_id', id);
+  }
+  return id;
+})();
+
+function initializeDataInMemory() {
+  // Seed from backup — IN MEMORY ONLY
+  // Does NOT save to localStorage or Firestore (prevents seed from overwriting cloud)
   const data = {"tarefas":[{"id":"0226-8f58","empresa_id":"smartmedia","titulo":"Reunião VIV","status":"pendente","semana":"2026-W13","observacao":"Possível fechamento de contrato e do Saas para todas franquias","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fa93-a6cd","empresa_id":"smartmedia","titulo":"Vídeos Recupefy","status":"pendente","semana":"2026-W13","observacao":"Edição dos vídeos captados","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b70-835b","empresa_id":"partido_novo","titulo":"Reagendamentos","status":"pendente","semana":"2026-W13","observacao":"Candidatos que não foram atendidos na semana 1","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a3b7-5630","empresa_id":"partido_novo","titulo":"Encontros individuais - Semana 2","status":"pendente","semana":"2026-W13","observacao":"Organizar atendimentos, contatos no grupo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"63c7-e4c0","empresa_id":"partido_novo","titulo":"Montar documento do primeiro coletivo presencial","status":"pendente","semana":"2026-W13","observacao":"Palestra, Traco - POV - SM, alinhar dinamicas, assuntos abordados, apresentações","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"013f-b141","empresa_id":"intheoffice","titulo":"Levantar caixa","status":"pendente","semana":"2026-W13","observacao":"Comprar camera 3","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"31e9-d454","empresa_id":"intheoffice","titulo":"Pegar cameras quebradas","status":"pendente","semana":"2026-W13","observacao":"1- Feira dos importados \n2- Thiago Corazza","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"80d0-8451","empresa_id":"pessoal","titulo":"2a via RG","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0da2-184a","empresa_id":"pessoal","titulo":"Arrumar CPF - Data de nascimento","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"22e6-6e42","empresa_id":"pessoal","titulo":"2a via Passaporte","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a431-b863","empresa_id":"pessoal","titulo":"Apagar conta INTER","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"220e-9e1e","empresa_id":"pessoal","titulo":"DETRAN","status":"pendente","semana":"2026-W13","observacao":"Conferir statuts atual","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"157d-d3f9","empresa_id":"pessoal","titulo":"Organizar alavancagem 10k","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"534c-afd3","empresa_id":"zelar","titulo":"Proposta - BEYOND","status":"em_andamento","semana":"2026-W13","observacao":"Começar negociação","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"e7cf-27b1","empresa_id":"zelar","titulo":"Reunião Robson","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"operacao"},{"id":"b872-c064","empresa_id":"zelar","titulo":"Gravação do criativo 1","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"436c-1841","empresa_id":"halo","titulo":"Pah Ferreira","status":"pendente","semana":"2026-W13","observacao":"Follow up sobre os vouchers","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b6f-af7e","empresa_id":"halo","titulo":"Fernando Colares","status":"pendente","semana":"2026-W13","observacao":"Elaborar proposta sobre o white label da versão 1 do aplicativo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"c5ea-9871","empresa_id":"halo","titulo":"CI&T","status":"pendente","semana":"2026-W13","observacao":"Follow up sobre o voucher \nData do evento \nPossibilidade de material midiático","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"f528-4ba6","empresa_id":"halo","titulo":"Kelly","status":"em_andamento","semana":"2026-W13","observacao":"Follow up sobre voucher \nMaterial midiático no evento \nExplicar que correios atrasou","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a36d-a78a","empresa_id":"halo","titulo":"Medicina Tática","status":"pendente","semana":"2026-W13","observacao":"Conferir possibilidade de enviar um halo","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"cb19-1a14","empresa_id":"halo","titulo":"Luis Guilhermo","status":"pendente","semana":"2026-W13","observacao":"Follow up para reunião","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"ebe0-9da4","empresa_id":"halo","titulo":"Soul Health","status":"pendente","semana":"2026-W13","observacao":"Mandar 2 opções de agendamentos","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"7b6b-55c9","empresa_id":"halo","titulo":"Sovitá Evento","status":"pendente","semana":"2026-W13","observacao":"Cobrar resposta","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fe33-bce9","empresa_id":"halo","titulo":"Dr Vinicius","status":"em_andamento","semana":"2026-W13","observacao":"Recebimento dos HALOS","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"7e37-3a94","empresa_id":"halo","titulo":"Evento Daniel Coimbra","status":"em_andamento","semana":"2026-W13","observacao":"Cobrar resposta","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"6072-2164","empresa_id":"halo","titulo":"Dr Renato","status":"pendente","semana":"2026-W13","observacao":"Follow up","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0942-8a87","empresa_id":"halo","titulo":"Dr Lucas Fraga","status":"pendente","semana":"2026-W13","observacao":"Cobrar posição","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"f4f4-2952","empresa_id":"halo","titulo":"Toshio Enokibara","status":"pendente","semana":"2026-W13","observacao":"Mandar proposta comercial","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"bc08-b9ba","empresa_id":"halo","titulo":"280 Leads Davi Chaves","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"1768-4599","empresa_id":"partido_novo","titulo":"Conta Caesb","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"6f93-abb7","empresa_id":"partido_novo","titulo":"Conta Claro","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"414e-ee9f","empresa_id":"partido_novo","titulo":"Boas vindas","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"},{"id":"35b5-b6ce","empresa_id":"partido_novo","titulo":"Inadimplentes","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"}],"semanas":[{"id":"2026-W12","label":"16/03 → 22/03","fechada":false,"diagnostico":""},{"id":"2026-W13","label":"23/03 → 29/03","fechada":false,"diagnostico":""}],"currentWeek":"2026-W13"};
-  saveData(data);
+  // DO NOT call saveData here! That would overwrite cloud data with seed.
+  // Cloud sync (initialSyncFromFirestore) will pull real data shortly.
   return data;
 }
 
@@ -2164,7 +2196,8 @@ function ensureRecurringTasks() {
 
   if (created) saveData(DATA);
 }
-ensureRecurringTasks();
+// Run after cloud sync completes (not on initial seed data)
+// ensureRecurringTasks() — moved to after initialSyncFromFirestore
 
 // ══════════════════════════════════════════════════════════
 // PARTIDO NOVO — ÁREAS OPERACIONAIS
@@ -5989,26 +6022,30 @@ setTimeout(() => {
 (function setupRealtimeSync() {
   try {
     db.collection('data').onSnapshot((snapshot) => {
-      if (syncInProgress) return; // don't react to our own writes
+      if (syncInProgress) return;
+      if (!cloudSyncReady) return; // wait for initial sync
       let needsRender = false;
       snapshot.docChanges().forEach(change => {
-        if (change.type === 'modified') {
+        if (change.type === 'modified' || change.type === 'added') {
           const key = change.doc.id;
           const cloudData = change.doc.data();
+
+          // CRITICAL: skip our own writes by device_id
+          if (cloudData.device_id === DEVICE_ID) return;
+
           const localTs = getSyncTimestamps()[key] || 0;
           const cloudTs = cloudData.updated_at ? new Date(cloudData.updated_at).getTime() : 0;
 
-          // Only apply if cloud is newer than our last write
-          if (cloudTs > localTs + 2000) { // 2s buffer to avoid echo
+          // Apply if cloud is newer (from another device)
+          if (cloudTs > localTs) {
             const val = typeof cloudData.value === 'string' ? cloudData.value : JSON.stringify(cloudData.value);
             _origSetItem(key, val);
-            // Update timestamp without triggering sync back
             const ts = getSyncTimestamps();
             ts[key] = cloudTs;
             _origSetItem(SYNC_TIMESTAMPS_KEY, JSON.stringify(ts));
 
             if (key === STORAGE_KEY) {
-              DATA = loadData();
+              try { DATA = JSON.parse(val); } catch(e) {}
               needsRender = true;
             }
           }
