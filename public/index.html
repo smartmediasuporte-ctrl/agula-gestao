@@ -3814,6 +3814,56 @@ function renderPessoalAreas(tasks) {
   return html;
 }
 
+// ── HALO — Dashboard & Documentos ──
+function renderHaloDashboard(tasks) {
+  // Reuses the Google Sheets-powered sales dashboard
+  return renderHaloSalesDashboard();
+}
+
+function renderHaloDocumentos() {
+  const docs = loadHaloDocs();
+  let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="font-size:13px;color:var(--text-muted)">Propostas, contratos, fichas t&eacute;cnicas e materiais</div>
+    <button class="btn btn-primary" onclick="openHaloDocModal()">+ Novo Documento</button>
+  </div>`;
+
+  if (docs.length === 0) {
+    html += '<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum documento registrado.</p></div>';
+    return html;
+  }
+
+  // Group by tipo
+  const grouped = {};
+  docs.forEach(d => {
+    const tipo = d.tipo || 'Outros';
+    if (!grouped[tipo]) grouped[tipo] = [];
+    grouped[tipo].push(d);
+  });
+
+  Object.entries(grouped).forEach(([tipo, items]) => {
+    html += `<div style="font-family:var(--font-sans);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);margin:14px 0 6px">${tipo}</div>`;
+    items.sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+    items.forEach(d => {
+      const dataFmt = d.data ? new Date(d.data + 'T12:00').toLocaleDateString('pt-BR') : '';
+      html += `<div class="halo-doc-item">
+        <span class="halo-doc-type">${d.tipo || 'doc'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:14px">${d.link ? `<a href="${d.link}" target="_blank" style="color:var(--text);text-decoration:underline">${d.nome}</a>` : d.nome}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">
+            ${d.cliente || ''}${d.cliente && dataFmt ? ' &bull; ' : ''}${dataFmt}
+          </div>
+        </div>
+        <button class="task-action-btn" onclick="openHaloDocModal('${d.id}')" title="Editar">&starf;</button>
+        <button class="task-action-btn" onclick="deleteHaloDoc('${d.id}')" title="Excluir">&times;</button>
+      </div>`;
+    });
+  });
+
+  return html;
+}
+
+function setHaloTab(tab) { haloSubPage = tab; render(); }
+
 // ── Empresa Detail ──
 function renderEmpresa() {
   const emp = getEmpresa(currentEmpresa);
