@@ -881,7 +881,6 @@
   .empty-state p { font-size: 14px; }
 
   /* ── Sales Dashboard ── */
-  .sales-dashboard {
     margin-bottom: 28px;
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -889,7 +888,6 @@
     overflow: hidden;
   }
 
-  .sales-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -897,7 +895,6 @@
     border-bottom: 1px solid var(--border);
   }
 
-  .sales-header-title {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
@@ -909,7 +906,6 @@
     color: var(--accent);
   }
 
-  .sales-header-title .live-dot {
     width: 6px;
     height: 6px;
     background: var(--success);
@@ -927,20 +923,17 @@
     50% { opacity: 0.4; }
   }
 
-  .sales-kpis {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1px;
     background: var(--border);
   }
 
-  .sales-kpi {
     background: var(--bg-card);
     padding: 16px 20px;
     text-align: center;
   }
 
-  .sales-kpi-value {
     font-family: var(--font-mono);
     font-size: 22px;
     font-weight: 700;
@@ -948,7 +941,6 @@
     color: var(--accent);
   }
 
-  .sales-kpi-label {
     font-family: var(--font-mono);
     font-size: 8px;
     color: var(--text-muted);
@@ -957,12 +949,10 @@
     font-weight: 500;
   }
 
-  .sales-table {
     width: 100%;
     border-collapse: collapse;
   }
 
-  .sales-table th {
     font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
@@ -974,51 +964,38 @@
     background: var(--bg-elevated);
   }
 
-  .sales-table td {
     font-size: 13px;
     padding: 10px 16px;
     border-bottom: 1px solid var(--border);
     color: var(--text-secondary);
   }
 
-  .sales-table tr:last-child td {
     border-bottom: none;
     font-weight: 700;
     color: var(--text);
     background: var(--bg-elevated);
   }
 
-  .sales-table .val { text-align: right; font-variant-numeric: tabular-nums; }
-  .sales-table .canal { text-align: center; color: #F59E0B; font-weight: 600; font-size: 12px; }
-  .sales-table .cliente-name { font-weight: 500; color: var(--text); }
-
-  .sales-loading {
     padding: 40px;
     text-align: center;
     color: var(--text-muted);
     font-size: 13px;
   }
 
-  .sales-error {
     padding: 20px;
     text-align: center;
     color: var(--text-muted);
     font-size: 13px;
   }
 
-  .sales-error a {
     color: #F59E0B;
     text-decoration: underline;
     cursor: pointer;
   }
 
   @media (max-width: 768px) {
-    .sales-kpis { grid-template-columns: repeat(2, 1fr); }
-    .sales-table th, .sales-table td { padding: 8px 10px; font-size: 12px; }
   }
 
-  /* ── HALO Module Sub-nav ── */
-  .halo-subnav {
     display: flex;
     gap: 4px;
     margin-bottom: 20px;
@@ -1026,7 +1003,6 @@
     overflow-x: auto;
   }
 
-  .halo-subnav-btn {
     padding: 10px 16px;
     font-size: 12px;
     font-weight: 600;
@@ -1042,18 +1018,12 @@
     font-family: inherit;
   }
 
-  .halo-subnav-btn { font-family: var(--font-mono); }
-  .halo-subnav-btn:hover { color: var(--text); }
-  .halo-subnav-btn.active { color: #F59E0B; border-bottom-color: #F59E0B; }
-
-  .halo-pipeline {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 8px;
     margin-bottom: 20px;
   }
 
-  .halo-pipeline-stage {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -1062,11 +1032,6 @@
     position: relative;
   }
 
-  .halo-pipeline-stage .stage-val { font-size: 22px; font-weight: 700; }
-  .halo-pipeline-stage .stage-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-  .halo-pipeline-stage .stage-total { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
-
-  .halo-funnel-tag {
     font-size: 10px;
     font-weight: 700;
     padding: 2px 8px;
@@ -1084,7 +1049,6 @@
   .funnel-fechado { background: rgba(22,163,74,0.12); color: #4ade80; }
   .funnel-perdido { background: rgba(239,68,68,0.12); color: #f87171; }
 
-  .halo-client-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -1096,9 +1060,6 @@
     transition: all var(--transition);
   }
 
-  .halo-client-card:hover { border-color: var(--border-hover); }
-
-  .halo-segment-tag {
     font-size: 10px;
     font-weight: 600;
     padding: 2px 8px;
@@ -1113,7 +1074,6 @@
   .seg-corporativo { background: rgba(37,99,235,0.12); color: #60a5fa; }
   .seg-turismo { background: rgba(234,179,8,0.12); color: #facc15; }
 
-  .halo-doc-item {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -1125,9 +1085,6 @@
     transition: all var(--transition);
   }
 
-  .halo-doc-item:hover { border-color: var(--border-hover); }
-
-  .halo-doc-type {
     font-size: 10px;
     font-weight: 700;
     padding: 3px 8px;
@@ -1137,7 +1094,6 @@
     color: var(--text-secondary);
   }
 
-  .halo-event-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -1146,9 +1102,6 @@
     transition: all var(--transition);
   }
 
-  .halo-event-card:hover { border-color: var(--border-hover); }
-
-  .halo-event-status {
     font-size: 10px;
     font-weight: 700;
     padding: 3px 10px;
@@ -1162,7 +1115,6 @@
   .evst-confirmado { background: rgba(22,163,74,0.12); color: #4ade80; }
   .evst-cancelado { background: rgba(239,68,68,0.12); color: #f87171; }
 
-  .halo-next-actions {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -1170,7 +1122,6 @@
     margin-bottom: 20px;
   }
 
-  .halo-next-actions .action-title {
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 600;
@@ -1182,7 +1133,6 @@
     gap: 8px;
   }
 
-  .halo-action-item {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1190,8 +1140,6 @@
     font-size: 13px;
     border-bottom: 1px solid var(--border);
   }
-
-  .halo-action-item:last-child { border-bottom: none; }
 
   /* ── SmartMedia Module ── */
   .sm-subnav { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); overflow-x: auto; }
@@ -1221,7 +1169,6 @@
   .sm-doc-item:hover { border-color: var(--border-hover); }
   .sm-doc-type { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; background: rgba(124,58,237,0.12); color: #a78bfa; }
   @media (max-width: 768px) { .sm-finance-grid { grid-template-columns: repeat(2, 1fr); } }
-
 
   /* ── In The Office Module ── */
   .ito-area-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
@@ -1883,7 +1830,6 @@ async function initialSyncFromFirestore() {
   const KEYS = [
     'aguia_gestao_v1', 'conselho_candidatos', 'conselho_agendamentos',
     'conselho_acompanhamentos', 'conselho_relatorio',
-    'halo_clientes', 'halo_documentos', 'halo_agendamentos', 'halo_eventos',
     'sm_clientes', 'sm_documentos', 'sm_financeiro',
     'gestao_reunioes',
   ];
@@ -1961,7 +1907,6 @@ localStorage.setItem = function(key, value) {
   const SYNC_KEYS = [
     'aguia_gestao_v1', 'conselho_candidatos', 'conselho_agendamentos',
     'conselho_acompanhamentos', 'conselho_relatorio',
-    'halo_clientes', 'halo_documentos', 'halo_agendamentos', 'halo_eventos',
     'sm_clientes', 'sm_documentos', 'sm_financeiro',
     'gestao_reunioes',
   ];
@@ -2064,7 +2009,6 @@ const EMPRESAS = [
   { id: 'partido_novo', nome: 'Partido Novo', cor: '#15803D' },
   { id: 'intheoffice', nome: 'In The Office', cor: '#111111' },
   { id: 'zelar', nome: 'Zelar', cor: '#1D4ED8' },
-  { id: 'halo', nome: 'HALO', cor: '#F59E0B' },
   { id: 'pessoal', nome: 'Pessoal / Operacional', cor: '#92400E' },
 ];
 
@@ -2145,7 +2089,7 @@ const DEVICE_ID = (function() {
 function initializeDataInMemory() {
   // Seed from backup — IN MEMORY ONLY
   // Does NOT save to localStorage or Firestore (prevents seed from overwriting cloud)
-  const data = {"tarefas":[{"id":"0226-8f58","empresa_id":"smartmedia","titulo":"Reunião VIV","status":"pendente","semana":"2026-W13","observacao":"Possível fechamento de contrato e do Saas para todas franquias","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fa93-a6cd","empresa_id":"smartmedia","titulo":"Vídeos Recupefy","status":"pendente","semana":"2026-W13","observacao":"Edição dos vídeos captados","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b70-835b","empresa_id":"partido_novo","titulo":"Reagendamentos","status":"pendente","semana":"2026-W13","observacao":"Candidatos que não foram atendidos na semana 1","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a3b7-5630","empresa_id":"partido_novo","titulo":"Encontros individuais - Semana 2","status":"pendente","semana":"2026-W13","observacao":"Organizar atendimentos, contatos no grupo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"63c7-e4c0","empresa_id":"partido_novo","titulo":"Montar documento do primeiro coletivo presencial","status":"pendente","semana":"2026-W13","observacao":"Palestra, Traco - POV - SM, alinhar dinamicas, assuntos abordados, apresentações","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"013f-b141","empresa_id":"intheoffice","titulo":"Levantar caixa","status":"pendente","semana":"2026-W13","observacao":"Comprar camera 3","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"31e9-d454","empresa_id":"intheoffice","titulo":"Pegar cameras quebradas","status":"pendente","semana":"2026-W13","observacao":"1- Feira dos importados \n2- Thiago Corazza","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"80d0-8451","empresa_id":"pessoal","titulo":"2a via RG","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0da2-184a","empresa_id":"pessoal","titulo":"Arrumar CPF - Data de nascimento","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"22e6-6e42","empresa_id":"pessoal","titulo":"2a via Passaporte","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a431-b863","empresa_id":"pessoal","titulo":"Apagar conta INTER","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"220e-9e1e","empresa_id":"pessoal","titulo":"DETRAN","status":"pendente","semana":"2026-W13","observacao":"Conferir statuts atual","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"157d-d3f9","empresa_id":"pessoal","titulo":"Organizar alavancagem 10k","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"534c-afd3","empresa_id":"zelar","titulo":"Proposta - BEYOND","status":"em_andamento","semana":"2026-W13","observacao":"Começar negociação","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"e7cf-27b1","empresa_id":"zelar","titulo":"Reunião Robson","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"operacao"},{"id":"b872-c064","empresa_id":"zelar","titulo":"Gravação do criativo 1","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"436c-1841","empresa_id":"halo","titulo":"Pah Ferreira","status":"pendente","semana":"2026-W13","observacao":"Follow up sobre os vouchers","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b6f-af7e","empresa_id":"halo","titulo":"Fernando Colares","status":"pendente","semana":"2026-W13","observacao":"Elaborar proposta sobre o white label da versão 1 do aplicativo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"c5ea-9871","empresa_id":"halo","titulo":"CI&T","status":"pendente","semana":"2026-W13","observacao":"Follow up sobre o voucher \nData do evento \nPossibilidade de material midiático","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"f528-4ba6","empresa_id":"halo","titulo":"Kelly","status":"em_andamento","semana":"2026-W13","observacao":"Follow up sobre voucher \nMaterial midiático no evento \nExplicar que correios atrasou","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a36d-a78a","empresa_id":"halo","titulo":"Medicina Tática","status":"pendente","semana":"2026-W13","observacao":"Conferir possibilidade de enviar um halo","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"cb19-1a14","empresa_id":"halo","titulo":"Luis Guilhermo","status":"pendente","semana":"2026-W13","observacao":"Follow up para reunião","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"ebe0-9da4","empresa_id":"halo","titulo":"Soul Health","status":"pendente","semana":"2026-W13","observacao":"Mandar 2 opções de agendamentos","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"7b6b-55c9","empresa_id":"halo","titulo":"Sovitá Evento","status":"pendente","semana":"2026-W13","observacao":"Cobrar resposta","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fe33-bce9","empresa_id":"halo","titulo":"Dr Vinicius","status":"em_andamento","semana":"2026-W13","observacao":"Recebimento dos HALOS","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"7e37-3a94","empresa_id":"halo","titulo":"Evento Daniel Coimbra","status":"em_andamento","semana":"2026-W13","observacao":"Cobrar resposta","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"6072-2164","empresa_id":"halo","titulo":"Dr Renato","status":"pendente","semana":"2026-W13","observacao":"Follow up","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0942-8a87","empresa_id":"halo","titulo":"Dr Lucas Fraga","status":"pendente","semana":"2026-W13","observacao":"Cobrar posição","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"f4f4-2952","empresa_id":"halo","titulo":"Toshio Enokibara","status":"pendente","semana":"2026-W13","observacao":"Mandar proposta comercial","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"bc08-b9ba","empresa_id":"halo","titulo":"280 Leads Davi Chaves","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"1768-4599","empresa_id":"partido_novo","titulo":"Conta Caesb","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"6f93-abb7","empresa_id":"partido_novo","titulo":"Conta Claro","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"414e-ee9f","empresa_id":"partido_novo","titulo":"Boas vindas","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"},{"id":"35b5-b6ce","empresa_id":"partido_novo","titulo":"Inadimplentes","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"}],"semanas":[{"id":"2026-W12","label":"16/03 → 22/03","fechada":false,"diagnostico":""},{"id":"2026-W13","label":"23/03 → 29/03","fechada":false,"diagnostico":""}],"currentWeek":"2026-W13"};
+  const data = {"tarefas":[{"id":"0226-8f58","empresa_id":"smartmedia","titulo":"Reunião VIV","status":"pendente","semana":"2026-W13","observacao":"Possível fechamento de contrato e do Saas para todas franquias","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fa93-a6cd","empresa_id":"smartmedia","titulo":"Vídeos Recupefy","status":"pendente","semana":"2026-W13","observacao":"Edição dos vídeos captados","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b70-835b","empresa_id":"partido_novo","titulo":"Reagendamentos","status":"pendente","semana":"2026-W13","observacao":"Candidatos que não foram atendidos na semana 1","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a3b7-5630","empresa_id":"partido_novo","titulo":"Encontros individuais - Semana 2","status":"pendente","semana":"2026-W13","observacao":"Organizar atendimentos, contatos no grupo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"63c7-e4c0","empresa_id":"partido_novo","titulo":"Montar documento do primeiro coletivo presencial","status":"pendente","semana":"2026-W13","observacao":"Palestra, Traco - POV - SM, alinhar dinamicas, assuntos abordados, apresentações","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"013f-b141","empresa_id":"intheoffice","titulo":"Levantar caixa","status":"pendente","semana":"2026-W13","observacao":"Comprar camera 3","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"31e9-d454","empresa_id":"intheoffice","titulo":"Pegar cameras quebradas","status":"pendente","semana":"2026-W13","observacao":"1- Feira dos importados \n2- Thiago Corazza","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"80d0-8451","empresa_id":"pessoal","titulo":"2a via RG","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0da2-184a","empresa_id":"pessoal","titulo":"Arrumar CPF - Data de nascimento","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"22e6-6e42","empresa_id":"pessoal","titulo":"2a via Passaporte","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a431-b863","empresa_id":"pessoal","titulo":"Apagar conta INTER","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"220e-9e1e","empresa_id":"pessoal","titulo":"DETRAN","status":"pendente","semana":"2026-W13","observacao":"Conferir statuts atual","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"157d-d3f9","empresa_id":"pessoal","titulo":"Organizar alavancagem 10k","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"534c-afd3","empresa_id":"zelar","titulo":"Proposta - BEYOND","status":"em_andamento","semana":"2026-W13","observacao":"Começar negociação","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"e7cf-27b1","empresa_id":"zelar","titulo":"Reunião Robson","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"operacao"},{"id":"b872-c064","empresa_id":"zelar","titulo":"Gravação do criativo 1","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"1768-4599","empresa_id":"partido_novo","titulo":"Conta Caesb","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"6f93-abb7","empresa_id":"partido_novo","titulo":"Conta Claro","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"414e-ee9f","empresa_id":"partido_novo","titulo":"Boas vindas","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"},{"id":"35b5-b6ce","empresa_id":"partido_novo","titulo":"Inadimplentes","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"}],"semanas":[{"id":"2026-W12","label":"16/03 → 22/03","fechada":false,"diagnostico":""},{"id":"2026-W13","label":"23/03 → 29/03","fechada":false,"diagnostico":""}],"currentWeek":"2026-W13"};
   // DO NOT call saveData here! That would overwrite cloud data with seed.
   // Cloud sync (initialSyncFromFirestore) will pull real data shortly.
   return data;
@@ -2442,12 +2386,10 @@ function toast(msg, type = 'success') {
 // NAVIGATION
 // ══════════════════════════════════════════════════════════
 function navigate(page, empresaId) {
-  if (!(page === 'empresa' && empresaId === 'halo')) stopHaloAutoRefresh();
   currentPage = page;
   currentEmpresa = empresaId || null;
   statusFilter = 'todos';
   viewingWeekHistory = null;
-  if (page === 'empresa' && empresaId === 'halo') { /* keep haloSubPage */ } else { haloSubPage = 'dashboard'; }
   if (page === 'empresa' && empresaId === 'smartmedia') { /* keep smSubPage */ } else { smSubPage = 'financeiro'; }
   if (page !== 'conselho') { /* keep conselhoSubPage */ }
 
@@ -2597,75 +2539,6 @@ function renderDashboard() {
   return html;
 }
 
-// ── HALO Sales Dashboard (Google Sheets Integration) ──
-const HALO_SHEET_ID = '1iuT7cma85fmREJgbSz0C-9NMyKzL6She';
-const HALO_SHEET_GID = '0';
-let haloSalesCache = {
-  vendas: [
-    { cliente: 'Alliance Jiu Jitsu', valor: 761.43, comissao: 38.07, canal: '5%' },
-    { cliente: 'Gregory', valor: 447.90, comissao: 44.79, canal: '10%' },
-    { cliente: 'Dr. Vinicius', valor: 806.22, comissao: 80.62, canal: '10%' },
-    { cliente: 'CI&T', valor: 12541.20, comissao: 627.06, canal: '5%' },
-    { cliente: 'Meriene', valor: 403.11, comissao: 20.16, canal: '5%' },
-  ],
-  totalBruto: 35115.36,
-  totalComissao: 1818.47,
-  ticketMedio: 5852.56,
-  qtdVendas: 6,
-  lastUpdate: null,
-  offline: true,
-};
-let haloSalesLoading = false;
-let haloSalesError = null;
-let haloSalesFetched = false;
-let haloAutoRefreshTimer = null;
-const HALO_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutos
-
-// HALO Module Data Layer
-const HALO_PRECO_BASE = 447.90;
-const HALO_DESCONTOS = [
-  { min: 10, max: 29, pct: 15 },
-  { min: 30, max: 49, pct: 20 },
-  { min: 50, max: 79, pct: 25 },
-  { min: 80, max: 119, pct: 30 },
-  { min: 120, max: 199, pct: 35 },
-  { min: 200, max: 299, pct: 40 },
-  { min: 300, max: Infinity, pct: 45 },
-];
-
-const HALO_SEGMENTOS = ['clínicas', 'academias', 'wellness', 'corporativo', 'turismo'];
-const HALO_FUNNEL = ['mapeado', 'contato_feito', 'conversando', 'proposta_enviada', 'follow_up', 'fechado', 'perdido'];
-const HALO_FUNNEL_LABELS = { mapeado: 'Mapeado', contato_feito: 'Contato Feito', conversando: 'Conversando', proposta_enviada: 'Proposta Enviada', follow_up: 'Follow-Up', fechado: 'Fechado', perdido: 'Perdido' };
-const HALO_DOC_TIPOS = ['proposta', 'relatório pós-venda', 'apresentação', 'planilha'];
-const HALO_AG_TIPOS = ['reunião', 'follow-up', 'call', 'evento'];
-const HALO_EVENTO_STATUS = ['em_analise', 'proposta_enviada', 'confirmado', 'cancelado'];
-const HALO_EVENTO_STATUS_LABELS = { em_analise: 'Em Análise', proposta_enviada: 'Proposta Enviada', confirmado: 'Confirmado', cancelado: 'Cancelado' };
-const HALO_EVENTO_MODELOS = ['patrocínio', 'ativação', 'stand'];
-
-function calcHaloValor(qty) {
-  if (qty < 10) return qty * HALO_PRECO_BASE;
-  const faixa = HALO_DESCONTOS.find(f => qty >= f.min && qty <= f.max);
-  if (!faixa) return qty * HALO_PRECO_BASE;
-  return qty * HALO_PRECO_BASE * (1 - faixa.pct / 100);
-}
-
-function calcHaloDesconto(qty) {
-  if (qty < 10) return 0;
-  const faixa = HALO_DESCONTOS.find(f => qty >= f.min && qty <= f.max);
-  return faixa ? faixa.pct : 0;
-}
-
-function loadHaloClientes() { return JSON.parse(localStorage.getItem('halo_clientes') || '[]'); }
-function saveHaloClientes(d) { localStorage.setItem('halo_clientes', JSON.stringify(d)); }
-function loadHaloDocs() { return JSON.parse(localStorage.getItem('halo_documentos') || '[]'); }
-function saveHaloDocs(d) { localStorage.setItem('halo_documentos', JSON.stringify(d)); }
-function loadHaloAgendamentos() { return JSON.parse(localStorage.getItem('halo_agendamentos') || '[]'); }
-function saveHaloAgendamentos(d) { localStorage.setItem('halo_agendamentos', JSON.stringify(d)); }
-function loadHaloEventos() { return JSON.parse(localStorage.getItem('halo_eventos') || '[]'); }
-function saveHaloEventos(d) { localStorage.setItem('halo_eventos', JSON.stringify(d)); }
-
-let haloSubPage = 'dashboard';
-
 // SMARTMEDIA — DATA LAYER
 function loadSmClientes() { return JSON.parse(localStorage.getItem('sm_clientes') || '[]'); }
 function saveSmClientes(d) { localStorage.setItem('sm_clientes', JSON.stringify(d)); }
@@ -2692,8 +2565,7 @@ function saveReunioes(d) { localStorage.setItem('gestao_reunioes', JSON.stringif
 const DIAS_SEMANA = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 const REUNIAO_CORES = {
   'smartmedia': '#6B21A8', 'partido_novo': '#15803D',
-  'intheoffice': '#111111', 'zelar': '#1D4ED8', 'halo': '#F59E0B',
-  'pessoal': '#92400E', 'aguia': '#2563eb', 'pegaso': '#0ea5e9', 'b2bhalo': '#d97706',
+  'intheoffice': '#111111', 'zelar': '#1D4ED8', 'pessoal': '#92400E', 'aguia': '#2563eb', 'pegaso': '#0ea5e9', 'b2bhalo': '#d97706',
 };
 
 function seedReunioesSeAusente() {
@@ -2795,7 +2667,7 @@ function openReuniaoModal(id, dia) {
           <input id="reu-duracao" type="number" class="modal-input" value="${r ? r.duracao : 60}" min="15" step="15"/>
         </label>
         <label style="font-size:13px;font-weight:600">Empresa/Tag
-          <input id="reu-empresa" class="modal-input" value="${r ? r.empresa : ''}" placeholder="hrm, halo, zelar..."/>
+          <input id="reu-empresa" class="modal-input" value="${r ? r.empresa : ''}" placeholder="empresa"/>
         </label>
       </div>
       <label style="font-size:13px;font-weight:600">Local / Link
@@ -2859,254 +2731,13 @@ function deleteReuniao(id) {
   render();
 }
 
-function getHaloSheetURL() {
-  return `https://docs.google.com/spreadsheets/d/${HALO_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${HALO_SHEET_GID}`;
-}
-
-function parseCSV(text) {
-  const lines = text.split('\n').filter(l => l.trim());
-  return lines.map(line => {
-    const cells = [];
-    let current = '';
-    let inQuotes = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') { inQuotes = !inQuotes; }
-      else if (ch === ',' && !inQuotes) { cells.push(current.trim()); current = ''; }
-      else { current += ch; }
-    }
-    cells.push(current.trim());
-    return cells;
-  });
-}
-
 function parseBRL(str) {
   if (!str) return 0;
   return parseFloat(str.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
 }
 
-function parseHaloSales(rows) {
-  // Find the "Cliente" header row
-  let headerIdx = -1;
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i].map(c => c.toLowerCase().trim());
-    if (row.some(c => c === 'cliente')) {
-      headerIdx = i;
-      break;
-    }
-  }
-
-  if (headerIdx === -1) return null;
-
-  const header = rows[headerIdx];
-  const clienteCol = header.findIndex(c => c.toLowerCase().trim() === 'cliente');
-
-  // The spreadsheet has: Cliente | Valor | Comissão | Canal in columns 1,2,3,4
-  // Detect columns by header or use positional fallback
-  let valorCol = header.findIndex(c => c.toLowerCase().includes('valor'));
-  let comissaoCol = header.findIndex(c => c.toLowerCase().includes('comiss'));
-  let canalCol = header.findIndex(c => c.toLowerCase().includes('canal'));
-
-  // Positional fallback: Cliente is col X, then X+1=Valor, X+2=Comissão, X+3=Canal
-  if (valorCol === -1) valorCol = clienteCol + 1;
-  if (comissaoCol === -1) comissaoCol = clienteCol + 2;
-  if (canalCol === -1) canalCol = clienteCol + 3;
-
-  const vendas = [];
-  let totalRowBruto = null;
-  let totalRowComissao = null;
-
-  for (let i = headerIdx + 1; i < rows.length; i++) {
-    const row = rows[i];
-    const cliente = (row[clienteCol] || '').trim();
-    if (!cliente) continue;
-
-    if (cliente.toLowerCase() === 'total') {
-      totalRowBruto = parseBRL(row[valorCol]);
-      totalRowComissao = parseBRL(row[comissaoCol]);
-      continue;
-    }
-
-    const valor = parseBRL(row[valorCol]);
-    const comissao = parseBRL(row[comissaoCol]);
-    const canal = (row[canalCol] || '').trim();
-
-    if (valor > 0) {
-      vendas.push({ cliente, valor, comissao, canal });
-    }
-  }
-
-  if (vendas.length === 0) return null;
-
-  const sumBruto = vendas.reduce((s, v) => s + v.valor, 0);
-  const sumComissao = vendas.reduce((s, v) => s + v.comissao, 0);
-  const totalBruto = (totalRowBruto && totalRowBruto > sumBruto) ? totalRowBruto : sumBruto;
-  const totalComissao = (totalRowComissao && totalRowComissao > sumComissao) ? totalRowComissao : sumComissao;
-  const ticketMedio = totalBruto / vendas.length;
-
-  return { vendas, totalBruto, totalComissao, ticketMedio, qtdVendas: vendas.length };
-}
-
-function fetchHaloSales() {
-  if (haloSalesLoading) return;
-  haloSalesLoading = true;
-  haloSalesFetched = false;
-  haloSalesError = null;
-
-  fetch(getHaloSheetURL())
-    .then(r => {
-      if (!r.ok) throw new Error('Planilha não acessível');
-      return r.text();
-    })
-    .then(csv => {
-      const rows = parseCSV(csv);
-      const data = parseHaloSales(rows);
-      if (data) {
-        haloSalesCache = data;
-        haloSalesCache.lastUpdate = new Date();
-        haloSalesError = null;
-      } else {
-        haloSalesError = 'Estrutura da planilha não reconhecida';
-      }
-    })
-    .catch(err => {
-      // Use fallback data from PDF if no cache
-      if (!haloSalesCache) {
-        haloSalesCache = {
-          vendas: [
-            { cliente: 'Alliance Jiu Jitsu', valor: 761.43, comissao: 38.07, canal: '5%' },
-            { cliente: 'Gregory', valor: 447.90, comissao: 44.79, canal: '10%' },
-            { cliente: 'Dr. Vinicius', valor: 806.22, comissao: 80.62, canal: '10%' },
-            { cliente: 'CI&T', valor: 12541.20, comissao: 627.06, canal: '5%' },
-            { cliente: 'Meriene', valor: 403.11, comissao: 20.16, canal: '5%' },
-          ],
-          totalBruto: 14959.86,
-          totalComissao: 810.70,
-          ticketMedio: 2991.97,
-          qtdVendas: 5,
-          lastUpdate: null,
-          offline: true,
-        };
-      }
-      haloSalesError = null;
-    })
-    .finally(() => {
-      haloSalesLoading = false;
-      haloSalesFetched = true;
-      if (currentPage === 'empresa' && currentEmpresa === 'halo') render();
-      startHaloAutoRefresh();
-    });
-}
-
-function startHaloAutoRefresh() {
-  stopHaloAutoRefresh();
-  if (currentPage === 'empresa' && currentEmpresa === 'halo') {
-    haloAutoRefreshTimer = setInterval(() => {
-      if (currentPage === 'empresa' && currentEmpresa === 'halo') {
-        fetchHaloSales();
-      } else {
-        stopHaloAutoRefresh();
-      }
-    }, HALO_REFRESH_INTERVAL);
-  }
-}
-
-function stopHaloAutoRefresh() {
-  if (haloAutoRefreshTimer) {
-    clearInterval(haloAutoRefreshTimer);
-    haloAutoRefreshTimer = null;
-  }
-}
-
 function formatBRL(val) {
   return 'R$ ' + val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function renderHaloSalesDashboard() {
-  if (haloSalesLoading && !haloSalesCache) {
-    return `<div class="sales-dashboard"><div class="sales-loading">Carregando dados da planilha...</div></div>`;
-  }
-
-  const data = haloSalesCache;
-  if (!data) {
-    return `<div class="sales-dashboard"><div class="sales-error">
-      Não foi possível carregar os dados.<br>
-      <a onclick="fetchHaloSales()">Tentar novamente</a> ·
-      A planilha precisa estar compartilhada como "qualquer pessoa com o link".
-    </div></div>`;
-  }
-
-  const syncLabel = data.offline
-    ? '<span style="color:var(--text-muted);font-size:11px">Dados offline (PDF)</span>'
-    : data.lastUpdate
-      ? `<span style="color:var(--text-muted);font-size:11px">Atualizado ${data.lastUpdate.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'})}</span>`
-      : '';
-
-  let html = `<div class="sales-dashboard">
-    <div class="sales-header">
-      <div class="sales-header-title">
-        ${!data.offline ? '<span class="live-dot"></span>' : ''}
-        Dashboard Comercial — Março 2025
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        ${syncLabel}
-        <button class="btn btn-sm" onclick="fetchHaloSales()" style="font-size:11px">Atualizar</button>
-      </div>
-    </div>
-
-    <div class="sales-kpis">
-      <div class="sales-kpi">
-        <div class="sales-kpi-value" style="color:#fafafa">${formatBRL(data.totalBruto)}</div>
-        <div class="sales-kpi-label">Total Bruto</div>
-      </div>
-      <div class="sales-kpi">
-        <div class="sales-kpi-value" style="color:#F59E0B">${formatBRL(data.totalComissao)}</div>
-        <div class="sales-kpi-label">Comissões</div>
-      </div>
-      <div class="sales-kpi">
-        <div class="sales-kpi-value" style="color:#60a5fa">${data.qtdVendas}</div>
-        <div class="sales-kpi-label">Vendas</div>
-      </div>
-      <div class="sales-kpi">
-        <div class="sales-kpi-value" style="color:#4ade80">${formatBRL(data.ticketMedio)}</div>
-        <div class="sales-kpi-label">Ticket Médio</div>
-      </div>
-    </div>
-
-    <table class="sales-table">
-      <thead>
-        <tr>
-          <th>Cliente</th>
-          <th class="val">Valor da Venda</th>
-          <th class="val">Comissão</th>
-          <th class="canal">Canal</th>
-        </tr>
-      </thead>
-      <tbody>`;
-
-  data.vendas.forEach(v => {
-    html += `<tr>
-      <td class="cliente-name">${v.cliente}</td>
-      <td class="val">${formatBRL(v.valor)}</td>
-      <td class="val">${formatBRL(v.comissao)}</td>
-      <td class="canal">${v.canal}</td>
-    </tr>`;
-  });
-
-  html += `<tr>
-      <td class="cliente-name">TOTAL</td>
-      <td class="val">${formatBRL(data.totalBruto)}</td>
-      <td class="val">${formatBRL(data.totalComissao)}</td>
-      <td class="canal"></td>
-    </tr>
-    </tbody></table></div>`;
-
-  return html;
-}
-
-function setHaloTab(tab) {
-  haloSubPage = tab;
-  render();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -3814,56 +3445,6 @@ function renderPessoalAreas(tasks) {
   return html;
 }
 
-// ── HALO — Dashboard & Documentos ──
-function renderHaloDashboard(tasks) {
-  // Reuses the Google Sheets-powered sales dashboard
-  return renderHaloSalesDashboard();
-}
-
-function renderHaloDocumentos() {
-  const docs = loadHaloDocs();
-  let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <div style="font-size:13px;color:var(--text-muted)">Propostas, contratos, fichas t&eacute;cnicas e materiais</div>
-    <button class="btn btn-primary" onclick="openHaloDocModal()">+ Novo Documento</button>
-  </div>`;
-
-  if (docs.length === 0) {
-    html += '<div class="empty-state"><div class="icon">&mdash;</div><p>Nenhum documento registrado.</p></div>';
-    return html;
-  }
-
-  // Group by tipo
-  const grouped = {};
-  docs.forEach(d => {
-    const tipo = d.tipo || 'Outros';
-    if (!grouped[tipo]) grouped[tipo] = [];
-    grouped[tipo].push(d);
-  });
-
-  Object.entries(grouped).forEach(([tipo, items]) => {
-    html += `<div style="font-family:var(--font-sans);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);margin:14px 0 6px">${tipo}</div>`;
-    items.sort((a, b) => (b.data || '').localeCompare(a.data || ''));
-    items.forEach(d => {
-      const dataFmt = d.data ? new Date(d.data + 'T12:00').toLocaleDateString('pt-BR') : '';
-      html += `<div class="halo-doc-item">
-        <span class="halo-doc-type">${d.tipo || 'doc'}</span>
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:600;font-size:14px">${d.link ? `<a href="${d.link}" target="_blank" style="color:var(--text);text-decoration:underline">${d.nome}</a>` : d.nome}</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">
-            ${d.cliente || ''}${d.cliente && dataFmt ? ' &bull; ' : ''}${dataFmt}
-          </div>
-        </div>
-        <button class="task-action-btn" onclick="openHaloDocModal('${d.id}')" title="Editar">&starf;</button>
-        <button class="task-action-btn" onclick="deleteHaloDoc('${d.id}')" title="Excluir">&times;</button>
-      </div>`;
-    });
-  });
-
-  return html;
-}
-
-function setHaloTab(tab) { haloSubPage = tab; render(); }
-
 // ── Empresa Detail ──
 function renderEmpresa() {
   const emp = getEmpresa(currentEmpresa);
@@ -3886,29 +3467,8 @@ function renderEmpresa() {
     </div>
   </div>`;
 
-  // HALO — Full module with sub-navigation
-  if (emp.id === 'halo') {
-    if (!haloSalesFetched && !haloSalesLoading) fetchHaloSales();
-
-    const haloTabs = [
-      { id: 'dashboard', label: 'Dashboard' },
-      { id: 'documentos', label: 'Documentos' },
-    ];
-
-    html += '<div class="halo-subnav">';
-    haloTabs.forEach(t => {
-      html += `<button class="halo-subnav-btn ${haloSubPage === t.id ? 'active' : ''}" onclick="setHaloTab('${t.id}')">${t.label}</button>`;
-    });
-    html += '</div>';
-
-    switch (haloSubPage) {
-      case 'dashboard': html += renderHaloDashboard(tasks); break;
-      case 'documentos': html += renderHaloDocumentos(); break;
-      default: html += renderHaloDashboard(tasks);
-    }
-  }
   // SMARTMEDIA — Full module with sub-navigation
-  else if (emp.id === 'smartmedia') {
+  if (emp.id === 'smartmedia') {
     const smTabs = [
       { id: 'financeiro', label: 'Financeiro' },
       { id: 'clientes', label: 'Clientes' },
@@ -5200,369 +4760,16 @@ function saveAcompanhamento(candidatoId, mes) {
 }
 
 // ══════════════════════════════════════════════════════════
-// HALO — CRUD
+
 // ══════════════════════════════════════════════════════════
 
 // ── Clientes ──
-function openHaloClienteModal(editId) {
-  const clientes = loadHaloClientes();
-  const ed = editId ? clientes.find(c => c.id === editId) : null;
-
-  const segOpts = HALO_SEGMENTOS.map(s => `<option value="${s}" ${ed && ed.segmento === s ? 'selected' : ''}>${s}</option>`).join('');
-  const funilOpts = HALO_FUNNEL.map(s => `<option value="${s}" ${ed && ed.funil === s ? 'selected' : ''}>${HALO_FUNNEL_LABELS[s]}</option>`).join('');
-
-  showModal(ed ? 'Editar Cliente' : 'Novo Cliente / Lead', `
-    <div class="form-group">
-      <label class="form-label">Nome do Contato</label>
-      <input class="form-input" id="hcNome" value="${ed ? ed.nome : ''}" placeholder="Nome" autofocus>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Empresa</label>
-      <input class="form-input" id="hcEmpresa" value="${ed ? (ed.empresa || '') : ''}" placeholder="Nome da empresa">
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Segmento</label>
-        <select class="form-select" id="hcSegmento"><option value="">— Selecionar —</option>${segOpts}</select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Status no Funil</label>
-        <select class="form-select" id="hcFunil">${funilOpts}</select>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Volume Estimado (qtd anéis)</label>
-        <input class="form-input" type="number" id="hcVolume" value="${ed ? (ed.volume || '') : ''}" min="1" placeholder="Ex: 50" oninput="updateHaloCalc()">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Valor Estimado (auto)</label>
-        <input class="form-input" id="hcValor" value="${ed ? formatBRL(ed.valor_estimado || 0) : 'R$ 0,00'}" readonly style="color:var(--text-muted)">
-      </div>
-    </div>
-    <div id="hcDescontoInfo" style="font-size:12px;color:#F59E0B;margin-bottom:12px">${ed && ed.volume ? `Desconto: ${calcHaloDesconto(ed.volume)}% · Preço unitário: ${formatBRL(HALO_PRECO_BASE * (1 - calcHaloDesconto(ed.volume) / 100))}` : 'Base: R$ 447,90 por anel'}</div>
-    <div class="form-group">
-      <label class="form-label">Observação</label>
-      <textarea class="form-textarea" id="hcObs" placeholder="Contexto, próximo passo...">${ed ? (ed.observacao || '') : ''}</textarea>
-    </div>
-  `, [
-    { label: 'Cancelar', class: 'btn', action: 'closeModal()' },
-    { label: ed ? 'Salvar' : 'Criar', class: 'btn btn-primary', action: ed ? `saveHaloCliente('${editId}')` : 'saveHaloCliente()' },
-  ]);
-  setTimeout(() => document.getElementById('hcNome')?.focus(), 100);
-}
-
-function updateHaloCalc() {
-  const qty = parseInt(document.getElementById('hcVolume').value) || 0;
-  const valor = calcHaloValor(qty);
-  const desconto = calcHaloDesconto(qty);
-  document.getElementById('hcValor').value = formatBRL(valor);
-  document.getElementById('hcDescontoInfo').textContent = qty >= 10
-    ? `Desconto: ${desconto}% · Preço unitário: ${formatBRL(HALO_PRECO_BASE * (1 - desconto / 100))}`
-    : 'Base: R$ 447,90 por anel';
-}
-
-function saveHaloCliente(editId) {
-  const nome = document.getElementById('hcNome').value.trim();
-  if (!nome) return toast('Nome obrigatório', 'error');
-
-  const volume = parseInt(document.getElementById('hcVolume').value) || 0;
-  const data = {
-    nome,
-    empresa: document.getElementById('hcEmpresa').value.trim(),
-    segmento: document.getElementById('hcSegmento').value,
-    funil: document.getElementById('hcFunil').value,
-    volume,
-    valor_estimado: calcHaloValor(volume),
-    observacao: document.getElementById('hcObs').value.trim(),
-    status: 'ativo',
-  };
-
-  const clientes = loadHaloClientes();
-  if (editId) {
-    const idx = clientes.findIndex(c => c.id === editId);
-    if (idx >= 0) clientes[idx] = { ...clientes[idx], ...data };
-  } else {
-    clientes.push({ id: uuid(), ...data, criado_em: new Date().toISOString().slice(0, 10) });
-  }
-  saveHaloClientes(clientes);
-  closeModal();
-  render();
-  toast(editId ? 'Cliente atualizado' : 'Cliente cadastrado');
-}
-
-function cycleHaloFunil(id) {
-  const clientes = loadHaloClientes();
-  const c = clientes.find(cl => cl.id === id);
-  if (!c) return;
-  const idx = HALO_FUNNEL.indexOf(c.funil);
-  c.funil = HALO_FUNNEL[(idx + 1) % HALO_FUNNEL.length];
-  saveHaloClientes(clientes);
-  render();
-  toast(`Funil: ${HALO_FUNNEL_LABELS[c.funil]}`);
-}
-
-function archiveHaloCliente(id) {
-  if (!confirm('Arquivar este cliente?')) return;
-  const clientes = loadHaloClientes();
-  const c = clientes.find(cl => cl.id === id);
-  if (c) c.status = 'arquivado';
-  saveHaloClientes(clientes);
-  render();
-  toast('Cliente arquivado');
-}
 
 // ── Documentos ──
-function openHaloDocModal(editId) {
-  const docs = loadHaloDocs();
-  const ed = editId ? docs.find(d => d.id === editId) : null;
-
-  const tipoOpts = HALO_DOC_TIPOS.map(t => `<option value="${t}" ${ed && ed.tipo === t ? 'selected' : ''}>${t}</option>`).join('');
-
-  showModal(ed ? 'Editar Documento' : 'Novo Documento', `
-    <div class="form-group">
-      <label class="form-label">Nome do Documento</label>
-      <input class="form-input" id="hdNome" value="${ed ? ed.nome : ''}" placeholder="Ex: Proposta CI&T" autofocus>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Tipo</label>
-        <select class="form-select" id="hdTipo">${tipoOpts}</select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Cliente / Empresa</label>
-        <input class="form-input" id="hdCliente" value="${ed ? (ed.cliente || '') : ''}" placeholder="Associar a...">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Data</label>
-      <input class="form-input" type="date" id="hdData" value="${ed ? (ed.data || '') : new Date().toISOString().slice(0, 10)}">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Link Externo (Google Drive, URL)</label>
-      <input class="form-input" id="hdLink" value="${ed ? (ed.link || '') : ''}" placeholder="https://...">
-    </div>
-  `, [
-    { label: 'Cancelar', class: 'btn', action: 'closeModal()' },
-    { label: ed ? 'Salvar' : 'Criar', class: 'btn btn-primary', action: ed ? `saveHaloDoc('${editId}')` : 'saveHaloDoc()' },
-  ]);
-}
-
-function saveHaloDoc(editId) {
-  const nome = document.getElementById('hdNome').value.trim();
-  if (!nome) return toast('Nome obrigatório', 'error');
-
-  const data = {
-    nome,
-    tipo: document.getElementById('hdTipo').value,
-    cliente: document.getElementById('hdCliente').value.trim(),
-    data: document.getElementById('hdData').value,
-    link: document.getElementById('hdLink').value.trim(),
-  };
-
-  const docs = loadHaloDocs();
-  if (editId) {
-    const idx = docs.findIndex(d => d.id === editId);
-    if (idx >= 0) docs[idx] = { ...docs[idx], ...data };
-  } else {
-    docs.push({ id: uuid(), ...data });
-  }
-  saveHaloDocs(docs);
-  closeModal();
-  render();
-  toast(editId ? 'Documento atualizado' : 'Documento registrado');
-}
-
-function deleteHaloDoc(id) {
-  if (!confirm('Excluir este documento?')) return;
-  saveHaloDocs(loadHaloDocs().filter(d => d.id !== id));
-  render();
-  toast('Documento excluído');
-}
 
 // ── Agendamentos ──
-function openHaloAgendamentoModal(editId) {
-  const ags = loadHaloAgendamentos();
-  const ed = editId ? ags.find(a => a.id === editId) : null;
-
-  const tipoOpts = HALO_AG_TIPOS.map(t => `<option value="${t}" ${ed && ed.tipo === t ? 'selected' : ''}>${t}</option>`).join('');
-
-  showModal(ed ? 'Editar Agendamento' : 'Novo Agendamento', `
-    <div class="form-group">
-      <label class="form-label">Título</label>
-      <input class="form-input" id="haNome" value="${ed ? ed.titulo : ''}" placeholder="Ex: Reunião de apresentação" autofocus>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Contato / Empresa</label>
-      <input class="form-input" id="haContato" value="${ed ? (ed.contato || '') : ''}" placeholder="Nome do contato ou empresa">
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Data</label>
-        <input class="form-input" type="date" id="haData" value="${ed ? (ed.data || '') : ''}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Hora</label>
-        <input class="form-input" type="time" id="haHora" value="${ed ? (ed.hora || '') : ''}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Tipo</label>
-        <select class="form-select" id="haTipo">${tipoOpts}</select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Status</label>
-      <select class="form-select" id="haStatus">
-        ${['agendado','realizado','cancelado'].map(s => `<option value="${s}" ${ed && ed.status === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Observação</label>
-      <textarea class="form-textarea" id="haObs" placeholder="Observação...">${ed ? (ed.observacao || '') : ''}</textarea>
-    </div>
-  `, [
-    { label: 'Cancelar', class: 'btn', action: 'closeModal()' },
-    { label: ed ? 'Salvar' : 'Criar', class: 'btn btn-primary', action: ed ? `saveHaloAgendamento('${editId}')` : 'saveHaloAgendamento()' },
-  ]);
-}
-
-function saveHaloAgendamento(editId) {
-  const titulo = document.getElementById('haNome').value.trim();
-  if (!titulo) return toast('Título obrigatório', 'error');
-
-  const data = {
-    titulo,
-    contato: document.getElementById('haContato').value.trim(),
-    data: document.getElementById('haData').value,
-    hora: document.getElementById('haHora').value,
-    tipo: document.getElementById('haTipo').value,
-    status: document.getElementById('haStatus').value,
-    observacao: document.getElementById('haObs').value.trim(),
-  };
-
-  const ags = loadHaloAgendamentos();
-  if (editId) {
-    const idx = ags.findIndex(a => a.id === editId);
-    if (idx >= 0) ags[idx] = { ...ags[idx], ...data };
-  } else {
-    ags.push({ id: uuid(), ...data });
-  }
-  saveHaloAgendamentos(ags);
-  closeModal();
-  render();
-  toast(editId ? 'Agendamento atualizado' : 'Agendamento criado');
-}
-
-function marcarHaloAgRealizado(id) {
-  const ags = loadHaloAgendamentos();
-  const ag = ags.find(a => a.id === id);
-  if (ag) { ag.status = 'realizado'; saveHaloAgendamentos(ags); render(); toast('Marcado como realizado'); }
-}
-
-function deleteHaloAgendamento(id) {
-  if (!confirm('Excluir este agendamento?')) return;
-  saveHaloAgendamentos(loadHaloAgendamentos().filter(a => a.id !== id));
-  render();
-  toast('Agendamento excluído');
-}
 
 // ── Eventos ──
-function openHaloEventoModal(editId) {
-  const eventos = loadHaloEventos();
-  const ed = editId ? eventos.find(e => e.id === editId) : null;
-
-  const statusOpts = HALO_EVENTO_STATUS.map(s => `<option value="${s}" ${ed && ed.status_evento === s ? 'selected' : ''}>${HALO_EVENTO_STATUS_LABELS[s]}</option>`).join('');
-  const modeloOpts = HALO_EVENTO_MODELOS.map(m => `<option value="${m}" ${ed && ed.modelo === m ? 'selected' : ''}>${m}</option>`).join('');
-
-  showModal(ed ? 'Editar Evento' : 'Novo Evento', `
-    <div class="form-group">
-      <label class="form-label">Nome do Evento</label>
-      <input class="form-input" id="heNome" value="${ed ? ed.nome : ''}" placeholder="Ex: Congresso de Wellness" autofocus>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Organizador</label>
-        <input class="form-input" id="heOrg" value="${ed ? (ed.organizador || '') : ''}" placeholder="Quem organiza">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Contato</label>
-        <input class="form-input" id="heContato" value="${ed ? (ed.contato || '') : ''}" placeholder="Telefone/email">
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Data Prevista</label>
-        <input class="form-input" type="date" id="heData" value="${ed ? (ed.data_prevista || '') : ''}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Cidade</label>
-        <input class="form-input" id="heCidade" value="${ed ? (ed.cidade || '') : ''}" placeholder="Ex: Brasília">
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="heStatus">${statusOpts}</select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Modelo de Parceria</label>
-        <select class="form-select" id="heModelo"><option value="">—</option>${modeloOpts}</select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Qtd Anéis</label>
-        <input class="form-input" type="number" id="heQtd" value="${ed ? (ed.qtd_aneis || '') : ''}" min="1">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Contrapartidas Acordadas</label>
-      <textarea class="form-textarea" id="heContra" placeholder="Contrapartidas...">${ed ? (ed.contrapartidas || '') : ''}</textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Observações</label>
-      <textarea class="form-textarea" id="heObs" placeholder="Observações...">${ed ? (ed.observacoes || '') : ''}</textarea>
-    </div>
-  `, [
-    { label: 'Cancelar', class: 'btn', action: 'closeModal()' },
-    { label: ed ? 'Salvar' : 'Criar', class: 'btn btn-primary', action: ed ? `saveHaloEvento('${editId}')` : 'saveHaloEvento()' },
-  ]);
-}
-
-function saveHaloEvento(editId) {
-  const nome = document.getElementById('heNome').value.trim();
-  if (!nome) return toast('Nome obrigatório', 'error');
-
-  const data = {
-    nome,
-    organizador: document.getElementById('heOrg').value.trim(),
-    contato: document.getElementById('heContato').value.trim(),
-    data_prevista: document.getElementById('heData').value,
-    cidade: document.getElementById('heCidade').value.trim(),
-    status_evento: document.getElementById('heStatus').value,
-    modelo: document.getElementById('heModelo').value,
-    qtd_aneis: parseInt(document.getElementById('heQtd').value) || 0,
-    contrapartidas: document.getElementById('heContra').value.trim(),
-    observacoes: document.getElementById('heObs').value.trim(),
-  };
-
-  const eventos = loadHaloEventos();
-  if (editId) {
-    const idx = eventos.findIndex(e => e.id === editId);
-    if (idx >= 0) eventos[idx] = { ...eventos[idx], ...data };
-  } else {
-    eventos.push({ id: uuid(), ...data });
-  }
-  saveHaloEventos(eventos);
-  closeModal();
-  render();
-  toast(editId ? 'Evento atualizado' : 'Evento registrado');
-}
-
-function deleteHaloEvento(id) {
-  if (!confirm('Excluir este evento?')) return;
-  saveHaloEventos(loadHaloEventos().filter(e => e.id !== id));
-  render();
-  toast('Evento excluído');
-}
 
 // ══════════════════════════════════════════════════════════
 // ACTIONS
@@ -6055,7 +5262,7 @@ document.addEventListener('keydown', (e) => {
     } catch(e) {}
   }
   // localStorage is empty or corrupt — seed with backup data
-  const backupData = {"tarefas":[{"id":"0226-8f58","empresa_id":"smartmedia","titulo":"Reunião VIV","status":"pendente","semana":"2026-W13","observacao":"Possível fechamento de contrato e do Saas para todas franquias","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fa93-a6cd","empresa_id":"smartmedia","titulo":"Vídeos Recupefy","status":"pendente","semana":"2026-W13","observacao":"Edição dos vídeos captados","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b70-835b","empresa_id":"partido_novo","titulo":"Reagendamentos","status":"pendente","semana":"2026-W13","observacao":"Candidatos que não foram atendidos na semana 1","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a3b7-5630","empresa_id":"partido_novo","titulo":"Encontros individuais - Semana 2","status":"pendente","semana":"2026-W13","observacao":"Organizar atendimentos, contatos no grupo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"63c7-e4c0","empresa_id":"partido_novo","titulo":"Montar documento do primeiro coletivo presencial","status":"pendente","semana":"2026-W13","observacao":"Palestra, Traco - POV - SM, alinhar dinamicas, assuntos abordados, apresentações","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"013f-b141","empresa_id":"intheoffice","titulo":"Levantar caixa","status":"pendente","semana":"2026-W13","observacao":"Comprar camera 3","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"31e9-d454","empresa_id":"intheoffice","titulo":"Pegar cameras quebradas","status":"pendente","semana":"2026-W13","observacao":"1- Feira dos importados \n2- Thiago Corazza","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"80d0-8451","empresa_id":"pessoal","titulo":"2a via RG","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0da2-184a","empresa_id":"pessoal","titulo":"Arrumar CPF - Data de nascimento","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"22e6-6e42","empresa_id":"pessoal","titulo":"2a via Passaporte","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a431-b863","empresa_id":"pessoal","titulo":"Apagar conta INTER","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"220e-9e1e","empresa_id":"pessoal","titulo":"DETRAN","status":"pendente","semana":"2026-W13","observacao":"Conferir statuts atual","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"157d-d3f9","empresa_id":"pessoal","titulo":"Organizar alavancagem 10k","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"534c-afd3","empresa_id":"zelar","titulo":"Proposta - BEYOND","status":"em_andamento","semana":"2026-W13","observacao":"Começar negociação","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"e7cf-27b1","empresa_id":"zelar","titulo":"Reunião Robson","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"operacao"},{"id":"b872-c064","empresa_id":"zelar","titulo":"Gravação do criativo 1","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"436c-1841","empresa_id":"halo","titulo":"Pah Ferreira","status":"pendente","semana":"2026-W13","observacao":"Follow up sobre os vouchers","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b6f-af7e","empresa_id":"halo","titulo":"Fernando Colares","status":"pendente","semana":"2026-W13","observacao":"Elaborar proposta sobre o white label da versão 1 do aplicativo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"c5ea-9871","empresa_id":"halo","titulo":"CI&T","status":"pendente","semana":"2026-W13","observacao":"Follow up sobre o voucher \nData do evento \nPossibilidade de material midiático","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"f528-4ba6","empresa_id":"halo","titulo":"Kelly","status":"em_andamento","semana":"2026-W13","observacao":"Follow up sobre voucher \nMaterial midiático no evento \nExplicar que correios atrasou","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a36d-a78a","empresa_id":"halo","titulo":"Medicina Tática","status":"pendente","semana":"2026-W13","observacao":"Conferir possibilidade de enviar um halo","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"cb19-1a14","empresa_id":"halo","titulo":"Luis Guilhermo","status":"pendente","semana":"2026-W13","observacao":"Follow up para reunião","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"ebe0-9da4","empresa_id":"halo","titulo":"Soul Health","status":"pendente","semana":"2026-W13","observacao":"Mandar 2 opções de agendamentos","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"7b6b-55c9","empresa_id":"halo","titulo":"Sovitá Evento","status":"pendente","semana":"2026-W13","observacao":"Cobrar resposta","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fe33-bce9","empresa_id":"halo","titulo":"Dr Vinicius","status":"em_andamento","semana":"2026-W13","observacao":"Recebimento dos HALOS","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"7e37-3a94","empresa_id":"halo","titulo":"Evento Daniel Coimbra","status":"em_andamento","semana":"2026-W13","observacao":"Cobrar resposta","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"6072-2164","empresa_id":"halo","titulo":"Dr Renato","status":"pendente","semana":"2026-W13","observacao":"Follow up","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0942-8a87","empresa_id":"halo","titulo":"Dr Lucas Fraga","status":"pendente","semana":"2026-W13","observacao":"Cobrar posição","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"f4f4-2952","empresa_id":"halo","titulo":"Toshio Enokibara","status":"pendente","semana":"2026-W13","observacao":"Mandar proposta comercial","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"bc08-b9ba","empresa_id":"halo","titulo":"280 Leads Davi Chaves","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"1768-4599","empresa_id":"partido_novo","titulo":"Conta Caesb","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"6f93-abb7","empresa_id":"partido_novo","titulo":"Conta Claro","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"414e-ee9f","empresa_id":"partido_novo","titulo":"Boas vindas","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"},{"id":"35b5-b6ce","empresa_id":"partido_novo","titulo":"Inadimplentes","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"}],"semanas":[{"id":"2026-W12","label":"16/03 → 22/03","fechada":false,"diagnostico":""},{"id":"2026-W13","label":"23/03 → 29/03","fechada":false,"diagnostico":""}],"currentWeek":"2026-W13"};
+  const backupData = {"tarefas":[{"id":"0226-8f58","empresa_id":"smartmedia","titulo":"Reunião VIV","status":"pendente","semana":"2026-W13","observacao":"Possível fechamento de contrato e do Saas para todas franquias","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"fa93-a6cd","empresa_id":"smartmedia","titulo":"Vídeos Recupefy","status":"pendente","semana":"2026-W13","observacao":"Edição dos vídeos captados","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0b70-835b","empresa_id":"partido_novo","titulo":"Reagendamentos","status":"pendente","semana":"2026-W13","observacao":"Candidatos que não foram atendidos na semana 1","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a3b7-5630","empresa_id":"partido_novo","titulo":"Encontros individuais - Semana 2","status":"pendente","semana":"2026-W13","observacao":"Organizar atendimentos, contatos no grupo.","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"63c7-e4c0","empresa_id":"partido_novo","titulo":"Montar documento do primeiro coletivo presencial","status":"pendente","semana":"2026-W13","observacao":"Palestra, Traco - POV - SM, alinhar dinamicas, assuntos abordados, apresentações","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"013f-b141","empresa_id":"intheoffice","titulo":"Levantar caixa","status":"pendente","semana":"2026-W13","observacao":"Comprar camera 3","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"31e9-d454","empresa_id":"intheoffice","titulo":"Pegar cameras quebradas","status":"pendente","semana":"2026-W13","observacao":"1- Feira dos importados \n2- Thiago Corazza","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"80d0-8451","empresa_id":"pessoal","titulo":"2a via RG","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"0da2-184a","empresa_id":"pessoal","titulo":"Arrumar CPF - Data de nascimento","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"22e6-6e42","empresa_id":"pessoal","titulo":"2a via Passaporte","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"a431-b863","empresa_id":"pessoal","titulo":"Apagar conta INTER","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"220e-9e1e","empresa_id":"pessoal","titulo":"DETRAN","status":"pendente","semana":"2026-W13","observacao":"Conferir statuts atual","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"157d-d3f9","empresa_id":"pessoal","titulo":"Organizar alavancagem 10k","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1},{"id":"534c-afd3","empresa_id":"zelar","titulo":"Proposta - BEYOND","status":"em_andamento","semana":"2026-W13","observacao":"Começar negociação","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"e7cf-27b1","empresa_id":"zelar","titulo":"Reunião Robson","status":"em_andamento","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"operacao"},{"id":"b872-c064","empresa_id":"zelar","titulo":"Gravação do criativo 1","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_zelar":"marketing"},{"id":"1768-4599","empresa_id":"partido_novo","titulo":"Conta Caesb","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"6f93-abb7","empresa_id":"partido_novo","titulo":"Conta Claro","status":"concluido","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":"2026-03-22","semanas_acumuladas":1},{"id":"414e-ee9f","empresa_id":"partido_novo","titulo":"Boas vindas","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"},{"id":"35b5-b6ce","empresa_id":"partido_novo","titulo":"Inadimplentes","status":"pendente","semana":"2026-W13","observacao":"","criado_em":"2026-03-22","concluido_em":null,"semanas_acumuladas":1,"area_pn":"gestao_filiados"}],"semanas":[{"id":"2026-W12","label":"16/03 → 22/03","fechada":false,"diagnostico":""},{"id":"2026-W13","label":"23/03 → 29/03","fechada":false,"diagnostico":""}],"currentWeek":"2026-W13"};
   DATA = backupData;
   saveData(DATA);
 })();
