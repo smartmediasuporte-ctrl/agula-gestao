@@ -1909,6 +1909,16 @@ async function initialSyncFromFirestore() {
       const localTs = localTimestamps[key] || 0;
       const cloudTs = cloudDoc && cloudDoc.updated_at ? new Date(cloudDoc.updated_at).getTime() : 0;
 
+      // SPECIAL: if STORAGE_KEY and we have seed data, ALWAYS use cloud if it exists
+      if (key === STORAGE_KEY && isUsingSeedData && cloudDoc && cloudDoc.value !== undefined) {
+        const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
+        _origSetItem(key, val);
+        localTimestamps[key] = cloudTs;
+        try { DATA = JSON.parse(val); } catch(e) {}
+        isUsingSeedData = false; // we now have real data
+        continue;
+      }
+
       if (cloudTs > localTs && cloudDoc && cloudDoc.value !== undefined) {
         // Cloud is newer — pull from cloud
         const val = typeof cloudDoc.value === 'string' ? cloudDoc.value : JSON.stringify(cloudDoc.value);
@@ -1935,6 +1945,7 @@ async function initialSyncFromFirestore() {
     }
     // Re-render with fresh data
     render();
+    hideLoadingOverlay();
 
     // Save updated timestamps
     Object.getPrototypeOf(localStorage).setItem.call(localStorage, SYNC_TIMESTAMPS_KEY, JSON.stringify(localTimestamps));
@@ -1945,18 +1956,15 @@ async function initialSyncFromFirestore() {
     console.warn('Initial Firestore sync failed, using localStorage:', err);
     syncStatus = 'offline';
     updateSyncIndicator();
+    hideLoadingOverlay();
   } finally {
     syncInProgress = false;
-    // CRITICAL: cloud sync done — release queued saves
+    // CRITICAL: cloud sync done — allow saves
     cloudSyncReady = true;
-    if (pendingSaves.length > 0) {
-      // Process the LATEST pending save (with all accumulated changes)
-      const latest = pendingSaves[pendingSaves.length - 1];
-      pendingSaves = [];
-      doSave(latest);
+    // Now safe to ensure recurring tasks (after we have real cloud data, NOT seed)
+    if (!isUsingSeedData) {
+      try { ensureRecurringTasks(); } catch(e) {}
     }
-    // Now safe to ensure recurring tasks (after we have real cloud data)
-    try { ensureRecurringTasks(); } catch(e) {}
   }
 }
 
@@ -2100,27 +2108,33 @@ function uuid() {
 
 const STORAGE_KEY = 'aguia_gestao_v1';
 
-// Block writes until cloud sync finishes (prevents seed from overwriting cloud)
+// CRITICAL: Block writes when DATA is seed (prevents seed from overwriting cloud)
 let cloudSyncReady = false;
-let pendingSaves = [];
+let isUsingSeedData = false;
 
 function loadData() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw) {
     try {
       const parsed = JSON.parse(raw);
-      if (parsed && parsed.tarefas && Array.isArray(parsed.tarefas)) return parsed;
+      if (parsed && parsed.tarefas && Array.isArray(parsed.tarefas)) {
+        isUsingSeedData = false;
+        return parsed;
+      }
     } catch(e) {}
   }
-  // localStorage empty — return seed in memory ONLY (don't save anywhere)
-  // Cloud sync will overwrite if cloud has real data
+  // localStorage empty — using seed data in memory only
+  // CRITICAL: mark this so saveData refuses to write until cloud sync confirms
+  isUsingSeedData = true;
   return initializeDataInMemory();
 }
 
 function saveData(data) {
-  // If cloud sync hasn't finished yet, queue the save
-  if (!cloudSyncReady) {
-    pendingSaves.push(data);
+  // If we're showing seed data and haven't confirmed with cloud yet, BLOCK the save
+  // Otherwise we'd overwrite cloud (real data) with seed + this one change
+  if (isUsingSeedData && !cloudSyncReady) {
+    console.warn('Save blocked: waiting for cloud sync to confirm data state');
+    showLoadingOverlay('Sincronizando dados do servidor...');
     return;
   }
   doSave(data);
@@ -2135,6 +2149,24 @@ function doSave(data) {
     db.collection('data').doc(STORAGE_KEY).set({ value: data, updated_at: ts, device_id: DEVICE_ID }).catch(() => {});
   } catch(e) {}
   try { syncToFirestore(STORAGE_KEY, data); } catch(e) {}
+}
+
+// Loading overlay shown when waiting for cloud sync
+function showLoadingOverlay(msg) {
+  let overlay = document.getElementById('loadingOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'loadingOverlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(7,9,12,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;backdrop-filter:blur(8px)';
+    overlay.innerHTML = '<div style="width:32px;height:32px;border:2px solid #1A1F2A;border-top-color:#7DA3FF;border-radius:50%;animation:spin 0.8s linear infinite"></div><div id="loadingMsg" style="color:#8B92A0;font-size:13px;font-family:Inter,sans-serif">Carregando...</div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('loadingMsg').textContent = msg || 'Carregando...';
+  overlay.style.display = 'flex';
+}
+function hideLoadingOverlay() {
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) overlay.style.display = 'none';
 }
 
 // Device ID — to skip our own writes in realtime listener
@@ -5312,9 +5344,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ══════════════════════════════════════════════════════════
-// INIT — Auto-restore backup if localStorage is empty
+// INIT — DISABLED auto-restore (was overwriting cloud data with seed)
+// Cloud sync handles initial data loading now
 // ══════════════════════════════════════════════════════════
 (function autoRestoreCheck() {
+  return; // Disabled — cloud sync is the source of truth now
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw) {
     try {
@@ -5328,13 +5362,21 @@ document.addEventListener('keydown', (e) => {
   saveData(DATA);
 })();
 
+// If we're using seed data, show loading overlay BEFORE first render
+if (isUsingSeedData) {
+  // Don't render yet - wait for cloud sync to know real data
+  setTimeout(() => showLoadingOverlay('Carregando dados do servidor...'), 0);
+}
+
 render();
 
-// Sync from Firestore after initial render (non-blocking)
-setTimeout(() => {
-  initialSyncFromFirestore();
+// Sync from Firestore IMMEDIATELY (no 500ms delay)
+// This is critical: until this finishes, we don't know if user has real data
+initialSyncFromFirestore().then(() => {
   updateSyncIndicator();
-}, 500);
+  // Re-render to ensure UI matches the now-correct DATA
+  render();
+});
 
 // REAL-TIME SYNC — listen for changes from other devices
 (function setupRealtimeSync() {
