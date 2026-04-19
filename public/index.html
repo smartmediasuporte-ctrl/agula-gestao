@@ -1961,8 +1961,9 @@ async function initialSyncFromFirestore() {
     syncInProgress = false;
     // CRITICAL: cloud sync done — allow saves
     cloudSyncReady = true;
-    // Now safe to ensure recurring tasks (after we have real cloud data, NOT seed)
+    // Now safe to ensure recurring tasks AND sync week (after we have real cloud data, NOT seed)
     if (!isUsingSeedData) {
+      try { syncCurrentWeekToToday(); } catch(e) {}
       try { ensureRecurringTasks(); } catch(e) {}
     }
   }
@@ -2088,6 +2089,41 @@ function getWeekId(date) {
   const week1 = new Date(d.getFullYear(), 0, 4);
   const weekNum = 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
   return `${d.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+}
+
+// Get current week ID in São Paulo / Brasília timezone (UTC-3)
+function getCurrentBrasiliaWeek() {
+  // Convert UTC to Brasília time (UTC-3)
+  const now = new Date();
+  const brasiliaOffset = -3 * 60; // Brasília is UTC-3 (no daylight saving since 2019)
+  const utcOffset = now.getTimezoneOffset();
+  const brasiliaTime = new Date(now.getTime() + (brasiliaOffset - utcOffset * -1) * -60000);
+  // Simpler approach: just use Intl to get Brasília date
+  const brasiliaDateStr = now.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+  // brasiliaDateStr format: YYYY-MM-DD
+  return getWeekId(brasiliaDateStr + 'T12:00:00');
+}
+
+// Auto-sync currentWeek to today's Brasília week
+function syncCurrentWeekToToday() {
+  if (!DATA) return;
+  const todayWeek = getCurrentBrasiliaWeek();
+  if (DATA.currentWeek === todayWeek) return;
+  DATA.currentWeek = todayWeek;
+  // Make sure the week exists in DATA.semanas
+  if (!DATA.semanas.find(s => s.id === todayWeek)) {
+    const monday = getWeekMonday(todayWeek);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+    DATA.semanas.push({
+      id: todayWeek,
+      label: `${fmt(monday)} → ${fmt(sunday)}`,
+      fechada: false,
+      diagnostico: ''
+    });
+  }
+  if (!isUsingSeedData) saveData(DATA);
 }
 
 function getWeekDates(weekId) {
