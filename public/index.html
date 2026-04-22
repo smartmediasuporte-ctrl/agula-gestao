@@ -1952,20 +1952,34 @@ async function initialSyncFromFirestore() {
 
     syncStatus = 'synced';
     updateSyncIndicator();
-  } catch(err) {
-    console.warn('Initial Firestore sync failed, using localStorage:', err);
-    syncStatus = 'offline';
-    updateSyncIndicator();
-    hideLoadingOverlay();
-  } finally {
-    syncInProgress = false;
-    // CRITICAL: cloud sync done — allow saves
+    // CRITICAL: only allow saves AFTER successful cloud sync
     cloudSyncReady = true;
     // Now safe to ensure recurring tasks AND sync week (after we have real cloud data, NOT seed)
     if (!isUsingSeedData) {
       try { syncCurrentWeekToToday(); } catch(e) {}
       try { ensureRecurringTasks(); } catch(e) {}
     }
+  } catch(err) {
+    console.warn('Initial Firestore sync failed:', err);
+    syncStatus = 'offline';
+    updateSyncIndicator();
+    hideLoadingOverlay();
+    // CRITICAL: If cloud sync failed AND we're showing seed data,
+    // DO NOT allow saves. The seed would overwrite real cloud data on next retry.
+    // Instead, retry the cloud sync after 3 seconds
+    if (isUsingSeedData) {
+      console.warn('Cloud sync failed with seed data — retrying in 3s');
+      showLoadingOverlay('Sem conexão — tentando novamente...');
+      setTimeout(() => {
+        syncInProgress = false;
+        initialSyncFromFirestore();
+      }, 3000);
+      return; // Don't set cloudSyncReady = true
+    }
+    // If we have real local data, allow saves (offline mode)
+    cloudSyncReady = true;
+  } finally {
+    syncInProgress = false;
   }
 }
 
@@ -2166,11 +2180,16 @@ function loadData() {
 }
 
 function saveData(data) {
-  // If we're showing seed data and haven't confirmed with cloud yet, BLOCK the save
-  // Otherwise we'd overwrite cloud (real data) with seed + this one change
-  if (isUsingSeedData && !cloudSyncReady) {
-    console.warn('Save blocked: waiting for cloud sync to confirm data state');
-    showLoadingOverlay('Sincronizando dados do servidor...');
+  // CRITICAL: if we're still showing seed data, BLOCK the save regardless of cloudSyncReady
+  // This prevents overwriting real cloud data with seed + a single change
+  if (isUsingSeedData) {
+    console.warn('Save blocked: still using seed data, cloud sync must confirm real data first');
+    showLoadingOverlay('Sincronizando dados do servidor... Aguarde.');
+    return;
+  }
+  if (!cloudSyncReady) {
+    console.warn('Save blocked: waiting for cloud sync');
+    showLoadingOverlay('Sincronizando...');
     return;
   }
   doSave(data);
